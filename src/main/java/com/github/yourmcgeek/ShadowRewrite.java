@@ -39,6 +39,8 @@ public class ShadowRewrite {
         setupBot();
     }
 
+
+
     private static void setupBot() {
         try {
             Config config = Variables.getInstance().getConfig();
