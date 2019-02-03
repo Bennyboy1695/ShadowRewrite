@@ -11,3 +11,6 @@ gradle-app.setting
 .idea
 .idea/modules/**
 .idea/**
+
+/out/**/
+config.json

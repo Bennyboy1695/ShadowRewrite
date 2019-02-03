@@ -28,27 +28,13 @@ public class SettingsManager {
     public SettingsManager() {
         if (!configFile.toFile().exists()) {
             System.out.println("Creating default settings!\nPlease edit the config file with the correct information");
-            this.config = getDefaultSettings();
+            System.out.println("this.config = getDefaultSettings()");
             saveSettings();
             System.exit(0);
         }
         loadSettings();
     }
 
-    private Config getDefaultSettings() {
-        Config newConfig = new Config();
-
-        final Config.discord discord = new Config.discord();
-        final Config.discord.Game game = new Config.discord.Game();
-        game.name = "play.shadownode.ca";
-        game.type = 0;
-        discord.game = game;
-        discord.botOwnerId = "102762443767287808";
-        discord.prefix = "?";
-        discord.token = "";
-
-        return newConfig;
-    }
 
     private void loadSettings() {
         try {

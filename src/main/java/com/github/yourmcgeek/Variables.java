@@ -12,8 +12,6 @@ public final class Variables {
 
     private static Variables instance;
     private Config config;
-    private final String googleBaseUrl;
-
     private Variables() {
         try {
             final String json = Files.asCharSource(new File("config.json"), StandardCharsets.UTF_8).read();
@@ -23,17 +21,13 @@ public final class Variables {
         } if (this.config == null) {
             System.exit(0);
         }
-        this.googleBaseUrl = "https:///www.googleapis.com/customsearch/v1?q%s&cx=012048784535646064391:v-fxkttbw54" +
-                "&h1=en&searchType=image&key=" + this.config.apis.google + "&safe=off";
+
     }
 
     public Config getConfig() {
         return config;
     }
 
-    public String getGoogleBaseUrl() {
-        return this.googleBaseUrl;
-    }
 
     public static synchronized Variables getInstance() {
         if (instance == null) {

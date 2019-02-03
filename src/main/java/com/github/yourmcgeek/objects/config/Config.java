@@ -1,27 +1,32 @@
 package com.github.yourmcgeek.objects.config;
 
 public class Config {
-    public Apis apis;
-    public discord discord;
+    public Config() {}
 
-    public static class Apis {
-        public String google;
+    private String prefix = "";
+    private String botOwnerId = "";
+    private String token = "";
+    private int color = 0;
+    private String name = "";
+
+
+    public String getPrefix() {
+        return this.prefix;
     }
 
-    public static class discord {
+    public String getBotOwnerId() {
+        return this.botOwnerId;
+    }
 
-        public String prefix;
-        public String botOwnerId;
-        public String token;
-        public int color;
-        public String name;
-        public Game game;
+    public String getToken() {
+        return this.token;
+    }
 
-        public static class Game {
-            public String streamUrl;
-            public String name;
-            public int type;
-        }
+    public int getColor() {
+        return this.color;
+    }
 
+    public String getName() {
+        return this.name;
     }
 }
