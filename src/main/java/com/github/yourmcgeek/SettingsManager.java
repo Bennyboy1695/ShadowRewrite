@@ -6,78 +6,52 @@ import com.google.gson.GsonBuilder;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class SettingsManager {
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
+    private Config loadedConf;
+    private final Path confPath;
     private static SettingsManager instance;
-    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    private Config config;
-    private final Path configFile = new File(".").toPath().resolve("config.json");
-    public static SettingsManager getInstance() {
-        if (instance == null) {
-            instance = new SettingsManager();
+
+
+    public SettingsManager (Path conf) {
+        this.confPath = conf;
+        try {
+            if (!Files.exists(conf)) {
+                try (BufferedWriter writer = Files.newBufferedWriter(conf, StandardCharsets.UTF_8)) {
+                    loadedConf = new Config();
+                    gson.toJson(loadedConf, writer);
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+
+        loadConfig();
+    }
+
+    public static SettingsManager getInstance() {
         return instance;
     }
 
-    public SettingsManager() {
-        if (!configFile.toFile().exists()) {
-            System.out.println("Creating default settings!\nPlease edit the config file with the correct information");
-            System.out.println("this.config = getDefaultSettings()");
-            saveSettings();
-            System.exit(0);
-        }
-        loadSettings();
-    }
-
-
-    private void loadSettings() {
-        try {
-            checkBadEscapes(configFile);
-
-            BufferedReader reader = Files.newBufferedReader(configFile, StandardCharsets.UTF_8);
-            this.config = gson.fromJson(reader, Config.class);
-            reader.close();
-            System.out.println("Loaded settings!");
+    public void loadConfig() {
+        Config loaded = null;
+        try (BufferedReader reader = Files.newBufferedReader(confPath, StandardCharsets.UTF_8)) {
+            loaded = gson.fromJson(reader, Config.class);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-    }
-
-    public void saveSettings() {
-        String jsonOut = gson.toJson(this.config);
-        try {
-            BufferedWriter writer = Files.newBufferedWriter(configFile, StandardCharsets.UTF_8);
-            writer.append(jsonOut);
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void checkBadEscapes(Path filePath) throws IOException {
-        final byte FORWARD_SLASH = 47;
-        final byte BACK_SLASH = 92;
-
-        boolean modified = false;
-        byte[] bytes = Files.readAllBytes(filePath);
-        for (int i = 0; i < bytes.length; i++) {
-            if (bytes[i] == BACK_SLASH) {
-                modified = true;
-                bytes[i] = FORWARD_SLASH;
-            }
-        }
-        if (modified) {
-            Files.write(filePath, bytes);
-        }
+        if (loaded == null)
+            loaded = new Config();
+        this.loadedConf = loaded;
     }
 
     public Config getConfig() {
-        return config;
+        return this.loadedConf;
     }
 }
