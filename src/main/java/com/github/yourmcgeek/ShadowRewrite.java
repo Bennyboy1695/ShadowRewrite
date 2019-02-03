@@ -17,29 +17,26 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+
 public class ShadowRewrite {
 
     private static JDA api;
     private static ShadowRewrite instance;
 
     public static void main(final String[] args) {
-        try {
-            Path file = new File(".").toPath().resolve("config.json");
-            final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            BufferedReader reader = Files.newBufferedReader(file, StandardCharsets.UTF_8);
-
-            if (!file.toFile().exists()) {
-                System.out.println("Creating a config file. Please edit it with the appropriate information.");
-                Config config = gson.fromJson(reader, Config.class);
-                System.exit(0);
+        Config config = new Config();
+        Path file = new File(".").toPath().resolve("config.json");
+        if (!file.toFile().exists()) {
+            try {
+                BufferedWriter writer = Files.newBufferedWriter(file, StandardCharsets.UTF_8);
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                writer.write(gson.toJson(config));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         setupBot();
     }
-
-
 
     private static void setupBot() {
         try {
@@ -62,7 +59,6 @@ public class ShadowRewrite {
             e.printStackTrace();
         }
     }
-
 
     public static JDA getApi() {
         return api;
