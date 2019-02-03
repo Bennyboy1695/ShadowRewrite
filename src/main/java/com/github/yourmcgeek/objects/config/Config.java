@@ -1,15 +1,18 @@
 package com.github.yourmcgeek.objects.config;
 
 public class Config {
-    private String prefix = "";
-    private String botOwnerId = "";
-    private String token = "";
+    private String prefix = "/";
+    private String botOwnerId = "0";
+    private String token = "0";
     private int color = 0;
 
-    public Config() {
-    }
+    public Config() {}
 
     public Config(String prefix, int color, String token, String botOwnerId) {
+        this.prefix = prefix;
+        this.color = color;
+        this.token = token;
+        this.botOwnerId = botOwnerId;
     }
 
     @Override
