@@ -1,0 +1,45 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '4.0.4'
+}
+
+apply plugin: 'java'
+
+mainClassName = 'com.github.yourmcgeek.ShadowRewrite'
+
+group 'com.github.yourmcgeek'
+version '1.0'
+
+sourceCompatibility = targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    jcenter()
+    jcenter {
+        url = "http://jitpack.io"
+    }
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
+}
+
+dependencies {
+//    JDA
+    compile 'net.dv8tion:JDA:3.8.2_459'
+    compile 'com.jagrosh:jda-utilities:2.1'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+//   Google
+    implementation group: 'com.google.inject', name: 'guice', version: '4.1.0'
+    implementation group: 'com.google.guava', name: 'guava', version: '24.0-jre'
+    compile 'com.google.code.gson:gson:2.8.1'
+//    Logger
+    implementation group: "ch.qos.logback", name: "logback-classic", version: "1.2.3"
+//    Utils
+    compileOnly 'org.projectlombok:lombok:1.16.20'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.1'
+    compile group: 'commons-io', name: 'commons-io', version: '2.6'
+    compile group: 'org.reflections', name: 'reflections', version: '0.9.5-RC2'
+}
+
+compileJava.options.encoding = 'UTF-8'
