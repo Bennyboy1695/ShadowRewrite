@@ -16,8 +16,6 @@ public class SettingsManager {
 
     private Config loadedConf;
     private final Path confPath;
-    private static SettingsManager instance;
-
 
     public SettingsManager (Path conf) {
         this.confPath = conf;
@@ -35,10 +33,6 @@ public class SettingsManager {
         loadConfig();
     }
 
-    public static SettingsManager getInstance() {
-        return instance;
-    }
-
     public void loadConfig() {
         Config loaded = null;
         try (BufferedReader reader = Files.newBufferedReader(confPath, StandardCharsets.UTF_8)) {
@@ -54,4 +48,5 @@ public class SettingsManager {
     public Config getConfig() {
         return this.loadedConf;
     }
+
 }

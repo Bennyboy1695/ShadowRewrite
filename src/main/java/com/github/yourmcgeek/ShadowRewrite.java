@@ -16,27 +16,28 @@ import java.nio.file.Paths;
 
 public class ShadowRewrite {
 
-    private static JDA api;
-    private static ShadowRewrite instance;
-    private static Config config;
+    private JDA api;
+    private ShadowRewrite instance;
+    private Config config;
+    public SettingsManager mgr = new SettingsManager(Paths.get(".").resolve("conf.json"));
 
     public static void main(final String[] args) {
         Path p = Paths.get(".").resolve("conf.json");
 
         SettingsManager sm = new SettingsManager(p);
-        setupBot();
+        new ShadowRewrite().setupBot();
     }
 
 
-    private static void setupBot() {
+    private void setupBot() {
         try {
-            Config config = SettingsManager.getInstance().getConfig();
+            Config config = mgr.getConfig();
             CommandClientBuilder builder = new CommandClientBuilder();
             builder.setPrefix(config.getPrefix());
             builder.setGame(Game.playing("play.shadownode.ca"));
             builder.setOwnerId(config.getBotOwnerId());
 
-            builder.addCommands(new SupportSetup());
+            builder.addCommands(new SupportSetup(this));
 
             CommandClient client = builder.build();
             new JDABuilder(AccountType.BOT)
@@ -48,12 +49,16 @@ public class ShadowRewrite {
         }
     }
 
-    public static JDA getApi() {
+    public JDA getApi() {
         return api;
     }
 
-    public static ShadowRewrite getInstance() {
+    public ShadowRewrite getInstance() {
         return instance;
+    }
+
+    public SettingsManager getSettingsManager() {
+        return mgr;
     }
 
 }
