@@ -31,10 +31,14 @@ public class PrivateMessageListener extends ListenerAdapter {
 
         String userMessage = event.getMessage().getContentRaw();
         System.out.println(userMessage);
-
+<<<<<<< HEAD
         System.out.println(main.mgr.getConfig().getGuildID());
         Member member = event.getJDA().getGuildById(main.getGuildID()).getMember(event.getAuthor());
-		
+
+=======
+        System.out.println(main.mgr.getConfig().getGuildId());
+        Member member = event.getJDA().getGuildById(main.getGuildId()).getMember(event.getAuthor());
+>>>>>>> 62a18445caabb52b1ccf90ca3f80c9dc7e3e48ed
         System.out.println(member);
 
         for (Guild.Ban bans : event.getJDA().getGuildById(main.getGuildId()).getBanList().complete()) {
