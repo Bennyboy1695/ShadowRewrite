@@ -1,46 +1,47 @@
 package com.github.yourmcgeek.commands.support;
 
 import com.github.yourmcgeek.ShadowRewrite;
+import com.jagrosh.jdautilities.command.Command;
+import com.jagrosh.jdautilities.command.CommandEvent;
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.ChannelType;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import net.dv8tion.jda.core.requests.restaction.ChannelAction;
+import net.dv8tion.jda.core.entities.PrivateChannel;
+import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.requests.RestAction;
 
-import java.time.LocalDateTime;
+import java.awt.*;
 
-public class SupportCommand extends ListenerAdapter {
+public class SupportCommand extends Command {
 
     private ShadowRewrite main;
 
-    @Override
-    public void onMessageRecievedEvent(MessageReceivedEvent event, ShadowRewrite main) {
+    public SupportCommand(ShadowRewrite main) {
         this.main = main;
-        User author = event.getAuthor();
-        String message = event.getMessage().getContentDisplay();
-
-        if (event.isFromType(ChannelType.TEXT)) {
-             if (event.getChannel().equals(main.mgr.getConfig().getSupportId())) {
-                 EmbedBuilder builder = new EmbedBuilder()
-                         .setColor(Integer.parseInt(main.mgr.getConfig().getColor()))
-                         .setAuthor(author.getName(), "<%s>", String.valueOf(author.getIdLong()))
-                         .setDescription(message + "\n\nWhen you are ready to close this message, please do /close." +
-                                 "People with the following roles can close the ticket as well if necessary: Owner, " +
-                                 "Senior-Advisor, Senior-Admin, Admin, Senior-Moderator, Moderator, Developer, Helper")
-                         .setTimestamp(LocalDateTime.now());
-                 event.getMessage().delete().queue();
-                 String supportCategoryId = main.mgr.getConfig().getSupportCategoryId();
-                 ChannelAction textChannel = main.getApi().getCategoryById(Integer.parseInt(supportCategoryId)).createTextChannel("ticket-" +
-                         author.getId());
-                 textChannel.complete();
-                 MessageChannel channel = (MessageChannel) textChannel;
-                 channel.sendMessage(builder.build()).complete();
-             }
-             else { return; }
-        }
-
+        this.name = "support";
+        this.help = "Create a new support ticket";
+        this.aliases = new String[]{"ticket"};
+        this.guildOnly = true;
     }
 
+    @Override
+    protected void execute(CommandEvent event) {
+        TextChannel channel = (TextChannel) event.getChannel();
+        RestAction<PrivateChannel> pmChannel = event.getMember().getUser().openPrivateChannel();
+        EmbedBuilder embedBuilder = new EmbedBuilder()
+                .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorBlue(), main.mgr.getConfig().getColorGreen()))
+                .setTitle("Support Ticket")
+                .setDescription("Click the link to open your private message in order to create the ticket!\n" +
+                        "Make sure you have private messages turned on for this server to receive a message from the bot!")
+                .addField("Private Message", "https://discordapp.com/channels/@me/" + pmChannel.complete()
+                .getIdLong(), false);
+
+        main.getMessenger().sendEmbed(channel, embedBuilder.build(), 30);
+
+        main.getMessenger().sendPrivateMessage(event.getAuthor(), new EmbedBuilder()
+        .setTitle("Support Ticket Creation")
+        .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorBlue(), main.mgr.getConfig().getColorGreen()))
+        .setDescription("To create a ticket, please respond here and a channel will be created." +
+                "\nNote: Multiple messages will not be combined, so please type only one message.\n" +
+                "Also, if you upload a file, the file will be taken and sent in the support channel also!").build());
+        event.getMessage().delete().complete();
+    }
 }

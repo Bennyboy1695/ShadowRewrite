@@ -6,6 +6,8 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
 
+import java.awt.*;
+
 public class SupportSetup extends Command {
 
     private ShadowRewrite main;
@@ -23,12 +25,23 @@ public class SupportSetup extends Command {
     protected void execute(CommandEvent event) {
         event.getMessage().delete().complete();
         EmbedBuilder builder = new EmbedBuilder();
-        builder.setColor(Integer.parseInt(main.mgr.getConfig().getColor()));
+        builder.setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorBlue(), main.mgr.getConfig().getColorGreen()));
         builder.setDescription("To make a support ticket please type your message in this channel that describes your issue fully. Please remember to always include the name of the server you are needing support on. When you do this a dedicated channel will be created for your issue. Once this is done Staff will contact you to try and resolve your issue.\n" +
                 "\n" +
                 "Tickets are not to be used for small questions that can be easily answered for these please use the <#379181828302700547> channel. Anything that requires in-depth staff interaction warrants creating a ticket. DO NOT abuse our ticket system doing so will result in a mute, kick or ban from our Discord.");
         event.reply(builder.build());
-        main.mgr.getConfig().setSupportId(event.getChannel().getId());
-        main.mgr.getConfig().setSupportCategoryId(event.getMessage().getCategory().getId());
+        EmbedBuilder pmBuilder = new EmbedBuilder()
+                .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorBlue(), main.mgr.getConfig().getColorGreen()))
+                .addField("SupportId", event.getChannel().getId(), true)
+                .addField("SupportCategoryId", event.getMessage().getCategory().getId(), true)
+                .addField("GuildID", String.valueOf(event.getGuild().getIdLong()), true)
+                .setDescription("Add these values in their corresponding places in your config file. Save the config," +
+                        " then restart the bot!");
+
+        try {
+            event.getAuthor().openPrivateChannel().complete().sendMessage(pmBuilder.build()).complete();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 }
