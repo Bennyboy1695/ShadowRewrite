@@ -31,8 +31,9 @@ public class PrivateMessageListener extends ListenerAdapter {
 
         String userMessage = event.getMessage().getContentRaw();
         System.out.println(userMessage);
+        System.out.println(main.mgr.getConfig().getGuildID());
+        Member member = event.getJDA().getGuildById(main.getGuildID()).getMember(event.getAuthor());
 
-        Member member = event.getJDA().getGuildById(main.getGuildId()).getMember(event.getAuthor());
         System.out.println(member);
 
         for (Guild.Ban bans : event.getJDA().getGuildById(main.getGuildId()).getBanList().complete()) {
