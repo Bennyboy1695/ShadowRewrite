@@ -14,3 +14,5 @@ gradle-app.setting
 
 /out/**/
 conf.json
+logs/
+logs/**

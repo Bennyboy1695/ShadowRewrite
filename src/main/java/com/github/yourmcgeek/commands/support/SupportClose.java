@@ -25,14 +25,14 @@ public class SupportClose extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        List<Message> messageHistory = event.getChannel().getHistory().retrievePast(event.getChannel().getHistory().size()).complete();
+        List<Message> messageHistory = event.getChannel().getHistory().retrievePast(1).complete();
         String[] chanName = event.getChannel().getName().split("-");
         String nameId = chanName[1];
         event.getJDA().getUserById(nameId).openPrivateChannel().complete().sendMessage(new EmbedBuilder()
                 .setTitle("Issue Completed")
                 .setDescription("Due to the ticket being closed, here is a log of conversation.")
                 .addField("Next Step: ", "If your issue still continues, create a new ticket", false)
-                .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorBlue(), main.mgr.getConfig().getColorGreen()))
+                .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()))
                 .build()).complete();
         Message message = new MessageBuilder().append(messageHistory).build();
 

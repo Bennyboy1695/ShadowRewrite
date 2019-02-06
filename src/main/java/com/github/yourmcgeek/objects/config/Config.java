@@ -6,8 +6,8 @@ public class Config {
     private String token = "changeme";
     private String supportId = "changeme";
     private String supportCategoryId = "changeme";
-    private long guildID = 0L;
-    private long logChannelID = 0L;
+    private String guildID = "";
+    private String logChannelID = "";
     private int colorRed = 0;
     private int colorBlue = 0;
     private int colorGreen = 0;
@@ -15,7 +15,7 @@ public class Config {
     public Config() {}
 
     public Config(String prefix, String token, String botOwnerId, String supportId, String supportCategoryId
-    , long guildID, long logChannelID, int colorRed, int colorBlue, int colorGreen) {
+    , String guildID, String logChannelID, int colorRed, int colorBlue, int colorGreen) {
         this.prefix = prefix;
         this.token = token;
         this.botOwnerId = botOwnerId;
@@ -23,9 +23,9 @@ public class Config {
         this.supportCategoryId = supportCategoryId;
         this.guildID = guildID;
         this.logChannelID = logChannelID;
-        this.colorBlue = colorBlue;
-        this.colorGreen = colorGreen;
         this.colorRed = colorRed;
+        this.colorGreen = colorGreen;
+        this.colorBlue = colorBlue;
     }
 
     @Override
@@ -38,8 +38,8 @@ public class Config {
                 ", guildId='" + guildID + '\'' +
                 ", logChannelId='" + logChannelID + '\'' +
                 ", colorRed='" + colorRed + '\'' +
-                ", colorBlue='" + colorBlue + '\'' +
                 ", colorGreen='" + colorGreen + '\'' +
+                ", colorBlue='" + colorBlue + '\'' +
                 '}';
     }
 
@@ -63,11 +63,11 @@ public class Config {
         return supportCategoryId;
     }
 
-    public long getGuildID() {
+    public String getGuildID() {
         return guildID;
     }
 
-    public long getLogChannelID() {
+    public String getLogChannelID() {
         return logChannelID;
     }
 

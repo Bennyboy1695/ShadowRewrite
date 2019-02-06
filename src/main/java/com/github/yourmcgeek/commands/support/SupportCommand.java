@@ -27,7 +27,7 @@ public class SupportCommand extends Command {
         TextChannel channel = (TextChannel) event.getChannel();
         RestAction<PrivateChannel> pmChannel = event.getMember().getUser().openPrivateChannel();
         EmbedBuilder embedBuilder = new EmbedBuilder()
-                .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorBlue(), main.mgr.getConfig().getColorGreen()))
+                .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()))
                 .setTitle("Support Ticket")
                 .setDescription("Click the link to open your private message in order to create the ticket!\n" +
                         "Make sure you have private messages turned on for this server to receive a message from the bot!")
@@ -38,7 +38,7 @@ public class SupportCommand extends Command {
 
         main.getMessenger().sendPrivateMessage(event.getAuthor(), new EmbedBuilder()
         .setTitle("Support Ticket Creation")
-        .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorBlue(), main.mgr.getConfig().getColorGreen()))
+                .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()))
         .setDescription("To create a ticket, please respond here and a channel will be created." +
                 "\nNote: Multiple messages will not be combined, so please type only one message.\n" +
                 "Also, if you upload a file, the file will be taken and sent in the support channel also!").build());

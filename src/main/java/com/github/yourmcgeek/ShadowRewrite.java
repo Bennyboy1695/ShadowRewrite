@@ -29,9 +29,10 @@ public class ShadowRewrite {
     private Path directory;
     public static void main(final String[] args) {
         Path p = Paths.get(".").resolve("conf.json");
+        Path p1 = Paths.get(".");
 
         SettingsManager sm = new SettingsManager(p);
-        new ShadowRewrite().setupBot(p);
+        new ShadowRewrite().setupBot(p1);
     }
 
 
@@ -85,7 +86,7 @@ public class ShadowRewrite {
         return mgr;
     }
 
-    public long getGuildId() {
+    public String getGuildId() {
         return mgr.getConfig().getGuildID();
     }
 
@@ -95,5 +96,9 @@ public class ShadowRewrite {
 
     public Messenger getMessenger() {
         return messenger;
+    }
+
+    public long getGuildID() {
+        return Long.valueOf(mgr.getConfig().getGuildID());
     }
 }

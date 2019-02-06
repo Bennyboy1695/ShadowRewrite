@@ -12,6 +12,8 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import java.awt.*;
 import java.io.File;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -53,19 +55,17 @@ public class PrivateMessageListener extends ListenerAdapter {
         }
 
         TextChannel supportChannel = (TextChannel) event.getJDA().getCategoryById(main.mgr.getConfig().getSupportCategoryId())
-                .createTextChannel(event.getAuthor().getName() + "-" + ThreadLocalRandom.current().nextInt(99999)).complete();
+                .createTextChannel(member.getEffectiveName() + "-" + ThreadLocalRandom.current().nextInt(99999)).complete();
 
-//        supportChannel.createPermissionOverride(member).setAllow(101440).complete();
-        supportChannel.getManager().setTopic("Creation date: "+ supportChannel.getCreationTime().format(dateFormat) + " Creation Time: " + supportChannel.getCreationTime().format(timeFormat) + "GMT").complete();
-        Message message = new MessageBuilder()
-                .append("**Author:** " + member.getAsMention())
-                .append("\n")
-                .append("**Message:** " + userMessage)
-                .append("\n")
-                .append("\n")
-                .append("_To close this ticket please react with a \u2705 to this message!_")
-                .build();
-        Message supportMessage = main.getMessenger().sendMessage(supportChannel, message, 0);
+        supportChannel.getManager().setTopic(event.getAuthor().getIdLong() + " Creation date: "+ supportChannel.getCreationTime().format(dateFormat) + " Creation Time: " + supportChannel.getCreationTime().format(timeFormat) + "GMT").complete();
+
+        EmbedBuilder message = new EmbedBuilder()
+                .setDescription(member.getAsMention())
+                .addField("Ticket: ", userMessage, false)
+                .addField("Finished? ", "If you are finished with this ticket, please click \u2705. _All staff and developers can close the ticket also_", true)
+                .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()));
+
+        Message supportMessage = main.getMessenger().sendEmbed(supportChannel, message.build(), 0);
         for (Message.Attachment attachment : event.getMessage().getAttachments()) {
             try {
                 if (!new File(main.getLogDirectory().toFile(), "tmp").exists()) {
@@ -83,7 +83,7 @@ public class PrivateMessageListener extends ListenerAdapter {
         event.getAuthor().openPrivateChannel().complete().sendMessage(new EmbedBuilder()
                 .setTitle("Support Channel")
                 .setDescription("https://discordapp.com/channels/" + main.getGuildId()  + "/" + supportChannel.getIdLong())
-                .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorBlue(), main.mgr.getConfig().getColorGreen()))
+                .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()))
                 .build()).complete();
     }
 }
