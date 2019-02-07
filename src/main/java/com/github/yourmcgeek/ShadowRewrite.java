@@ -1,5 +1,6 @@
 package com.github.yourmcgeek;
 
+import com.github.yourmcgeek.commands.restricted.EvalCommand;
 import com.github.yourmcgeek.commands.support.LogChannelCommand;
 import com.github.yourmcgeek.commands.support.SupportClose;
 import com.github.yourmcgeek.commands.support.SupportCommand;
@@ -52,7 +53,9 @@ public class ShadowRewrite {
                     new SupportSetup(this),
                     new SupportClose(this),
                     new SupportCommand(this),
-                    new LogChannelCommand(this));
+                    new LogChannelCommand(this),
+                    new EvalCommand(this)
+            );
 
             CommandClient client = builder.build();
             new JDABuilder(AccountType.BOT)

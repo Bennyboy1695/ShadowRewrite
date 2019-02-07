@@ -67,14 +67,20 @@ public class PrivateMessageListener extends ListenerAdapter {
 
         Message supportMessage = main.getMessenger().sendEmbed(supportChannel, message.build(), 0);
         for (Message.Attachment attachment : event.getMessage().getAttachments()) {
-            try {
-                if (!new File(main.getLogDirectory().toFile(), "tmp").exists()) {
-                    new File(main.getLogDirectory().toFile(), "tmp").mkdir();
+            String[] fileName = attachment.getFileName().split(".");
+            if (fileName[1].equalsIgnoreCase("bat") || fileName[1].equalsIgnoreCase("sh") || fileName[1].equalsIgnoreCase("exe")) {
+                try {
+                    if (!new File(main.getLogDirectory().toFile(), "attachments").exists()) {
+                        new File(main.getLogDirectory().toFile(), "attachments").mkdir();
+                    }
+                    attachment.download(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName() + ".log"));
+                    supportChannel.sendFile(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName() + ".log")).complete();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                attachment.download(new File(main.getLogDirectory().toFile() + "/tmp/", supportChannel.getName() + ".log"));
-                supportChannel.sendFile(new File(main.getLogDirectory().toFile() + "/tmp/", supportChannel.getName() + ".log")).complete();
-            } catch (Exception e) {
-                e.printStackTrace();
+            } else {
+                attachment.download(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName()));
+                supportChannel.sendFile(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName())).complete();
             }
         }
         supportMessage.pin().complete();
