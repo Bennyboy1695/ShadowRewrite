@@ -2,7 +2,6 @@ package com.github.yourmcgeek.listeners;
 
 import com.github.yourmcgeek.ShadowRewrite;
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
@@ -12,8 +11,6 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import java.awt.*;
 import java.io.File;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -67,20 +64,22 @@ public class PrivateMessageListener extends ListenerAdapter {
 
         Message supportMessage = main.getMessenger().sendEmbed(supportChannel, message.build(), 0);
         for (Message.Attachment attachment : event.getMessage().getAttachments()) {
-            String[] fileName = attachment.getFileName().split(".");
-            if (fileName[1].equalsIgnoreCase("bat") || fileName[1].equalsIgnoreCase("sh") || fileName[1].equalsIgnoreCase("exe")) {
+            String[] fileName = attachment.getFileName().split("\\.");
+            if (main.mgr.getConfig().getBlacklistFiles().contains(fileName[1])) {
                 try {
                     if (!new File(main.getLogDirectory().toFile(), "attachments").exists()) {
                         new File(main.getLogDirectory().toFile(), "attachments").mkdir();
                     }
                     attachment.download(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName() + ".log"));
                     supportChannel.sendFile(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName() + ".log")).complete();
+                    main.getMessenger().sendMessage((TextChannel) event.getChannel(), event.getMessage().getAuthor() + " has sent a file called " + attachment.getFileName() + ".log");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else {
                 attachment.download(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName()));
                 supportChannel.sendFile(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName())).complete();
+                    main.getMessenger().sendMessage((TextChannel) event.getChannel(), event.getMessage().getAuthor() + " has sent a file called " + attachment.getFileName());
             }
         }
         supportMessage.pin().complete();

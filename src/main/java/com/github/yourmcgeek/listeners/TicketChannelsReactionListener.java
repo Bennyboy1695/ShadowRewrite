@@ -43,8 +43,7 @@ public void onMessageReactionAdd(MessageReactionAddEvent event) {
                                 .sendFile(main.getLogDirectory().resolve(channel.getName()+ ".log").toFile(), new MessageBuilder().append("`").append(channel.getName()).append("` has been closed! Here's a log to reference")
                                         .build())
                                 .complete();
-                        main.getMessenger().sendMessage((TextChannel) event.getChannel(), "Deleting channel and sending logs in 30 seconds...");
-                        ((TextChannel) event.getChannel()).delete().completeAfter(30, TimeUnit.SECONDS);
+                        ((TextChannel) event.getChannel()).delete().complete();
                     }
                     }
                 }

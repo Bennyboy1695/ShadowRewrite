@@ -1,6 +1,7 @@
 package com.github.yourmcgeek;
 
-import com.github.yourmcgeek.commands.restricted.EvalCommand;
+import com.github.yourmcgeek.commands.role.RolesAdd;
+import com.github.yourmcgeek.commands.role.RolesView;
 import com.github.yourmcgeek.commands.support.LogChannelCommand;
 import com.github.yourmcgeek.commands.support.SupportClose;
 import com.github.yourmcgeek.commands.support.SupportCommand;
@@ -54,7 +55,8 @@ public class ShadowRewrite {
                     new SupportClose(this),
                     new SupportCommand(this),
                     new LogChannelCommand(this),
-                    new EvalCommand(this)
+                    new RolesView(this),
+                    new RolesAdd(this)
             );
 
             CommandClient client = builder.build();

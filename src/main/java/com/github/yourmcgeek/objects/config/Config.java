@@ -1,5 +1,8 @@
 package com.github.yourmcgeek.objects.config;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Config {
     private String prefix = "/";
     private String botOwnerId = "changeme";
@@ -11,11 +14,12 @@ public class Config {
     private int colorRed = 0;
     private int colorBlue = 0;
     private int colorGreen = 0;
+    private ArrayList<String> blacklistFiles = new ArrayList<>();
 
     public Config() {}
 
     public Config(String prefix, String token, String botOwnerId, String supportId, String supportCategoryId
-    , String guildID, String logChannelID, int colorRed, int colorBlue, int colorGreen) {
+    , String guildID, String logChannelID, int colorRed, int colorBlue, int colorGreen, ArrayList<String> blacklistFiles) {
         this.prefix = prefix;
         this.token = token;
         this.botOwnerId = botOwnerId;
@@ -26,6 +30,7 @@ public class Config {
         this.colorRed = colorRed;
         this.colorGreen = colorGreen;
         this.colorBlue = colorBlue;
+        this.blacklistFiles = blacklistFiles;
     }
 
     @Override
@@ -40,7 +45,7 @@ public class Config {
                 ", colorRed='" + colorRed + '\'' +
                 ", colorGreen='" + colorGreen + '\'' +
                 ", colorBlue='" + colorBlue + '\'' +
-                '}';
+                ", blacklistFiles: ['" + Arrays.toString(blacklistFiles.toArray()) + "']";
     }
 
     public String getPrefix() {
@@ -81,5 +86,9 @@ public class Config {
 
     public int getColorGreen() {
         return colorGreen;
+    }
+
+    public ArrayList<String> getBlacklistFiles() {
+        return blacklistFiles;
     }
 }
