@@ -29,7 +29,9 @@ public class RolesView extends Command {
             main.getMessenger().sendEmbed((TextChannel) event.getChannel(), embed.build(), 15);
             event.getMessage().delete().complete();
         } catch (IndexOutOfBoundsException e) {
-            embed.appendDescription(String.format("You need to mention a user in order to see their roles. Try again with the command %sroles @ShadowBot#7402", main.mgr.getConfig().getPrefix()));
+            embed.appendDescription(("__**Available Roles__**"));
+            main.mgr.getConfig().getServerRoles().forEach(l -> embed.appendDescription(l + "\n"));
+            embed.appendDescription("\nIf you would like to see the roles of a specific user, mention the user!");
             main.getMessenger().sendEmbed((TextChannel) event.getChannel(), embed.build(), 10);
         }
         event.getMessage().delete().complete();

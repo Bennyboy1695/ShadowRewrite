@@ -1,11 +1,16 @@
 package com.github.yourmcgeek;
 
-import com.github.yourmcgeek.commands.role.RolesAdd;
+import com.github.yourmcgeek.commands.role.AddRole;
+import com.github.yourmcgeek.commands.role.RemoveRole;
 import com.github.yourmcgeek.commands.role.RolesView;
+import com.github.yourmcgeek.commands.role.admin.AdminAddRole;
+import com.github.yourmcgeek.commands.role.admin.AdminRemoveRole;
 import com.github.yourmcgeek.commands.support.LogChannelCommand;
 import com.github.yourmcgeek.commands.support.SupportClose;
 import com.github.yourmcgeek.commands.support.SupportCommand;
 import com.github.yourmcgeek.commands.support.SupportSetup;
+import com.github.yourmcgeek.commands.wiki.CrashReport;
+import com.github.yourmcgeek.commands.wiki.LinkAccount;
 import com.github.yourmcgeek.listeners.PrivateMessageListener;
 import com.github.yourmcgeek.listeners.SupportCategoryListener;
 import com.github.yourmcgeek.listeners.TicketChannelsReactionListener;
@@ -56,7 +61,12 @@ public class ShadowRewrite {
                     new SupportCommand(this),
                     new LogChannelCommand(this),
                     new RolesView(this),
-                    new RolesAdd(this)
+                    new AddRole(this),
+                    new RemoveRole(this),
+                    new AdminAddRole(this),
+                    new AdminRemoveRole(this),
+                    new LinkAccount(this),
+                    new CrashReport(this)
             );
 
             CommandClient client = builder.build();

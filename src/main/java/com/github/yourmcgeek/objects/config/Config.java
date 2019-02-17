@@ -15,11 +15,15 @@ public class Config {
     private int colorBlue = 0;
     private int colorGreen = 0;
     private ArrayList<String> blacklistFiles = new ArrayList<>();
+    private ArrayList<String> serverRoles = new ArrayList<>();
+    private String linkingURL = "Change this to the proper \"Linking Accounts\" wiki page url";
+    private String crashURL = "Change this to the proper \"Crash Reports\" wiki page url";
 
     public Config() {}
 
     public Config(String prefix, String token, String botOwnerId, String supportId, String supportCategoryId
-    , String guildID, String logChannelID, int colorRed, int colorBlue, int colorGreen, ArrayList<String> blacklistFiles) {
+    , String guildID, String logChannelID, int colorRed, int colorBlue, int colorGreen, ArrayList<String> blacklistFiles
+    , ArrayList<String> serverRoles, String linkingURL, String crashURL) {
         this.prefix = prefix;
         this.token = token;
         this.botOwnerId = botOwnerId;
@@ -31,6 +35,9 @@ public class Config {
         this.colorGreen = colorGreen;
         this.colorBlue = colorBlue;
         this.blacklistFiles = blacklistFiles;
+        this.serverRoles = serverRoles;
+        this.linkingURL = linkingURL;
+        this.crashURL = crashURL;
     }
 
     @Override
@@ -45,7 +52,10 @@ public class Config {
                 ", colorRed='" + colorRed + '\'' +
                 ", colorGreen='" + colorGreen + '\'' +
                 ", colorBlue='" + colorBlue + '\'' +
-                ", blacklistFiles: ['" + Arrays.toString(blacklistFiles.toArray()) + "']";
+                ", crashURL='" + crashURL + '\'' +
+                ", linkingURL='" + linkingURL + '\'' +
+                ", blacklistFiles: ['" + Arrays.toString(blacklistFiles.toArray()) + "']" +
+                ", serverRoles: ['" + Arrays.toString(serverRoles.toArray()) + "']";
     }
 
     public String getPrefix() {
@@ -90,5 +100,15 @@ public class Config {
 
     public ArrayList<String> getBlacklistFiles() {
         return blacklistFiles;
+    }
+
+    public ArrayList<String> getServerRoles() { return serverRoles; }
+
+    public String getCrashURL() {
+        return crashURL;
+    }
+
+    public String getLinkingURL() {
+        return linkingURL;
     }
 }
