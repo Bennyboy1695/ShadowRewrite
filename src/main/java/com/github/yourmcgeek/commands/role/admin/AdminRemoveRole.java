@@ -22,7 +22,7 @@ public class AdminRemoveRole extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        String[] args = event.getMessage().getContentDisplay().split(" ");;
+        String[] args = event.getMessage().getContentDisplay().split(" ");
         EmbedBuilder embedSuc = new EmbedBuilder()
                 .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()))
                 .setTitle("Success!")

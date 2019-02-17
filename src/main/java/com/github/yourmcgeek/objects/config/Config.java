@@ -18,12 +18,18 @@ public class Config {
     private ArrayList<String> serverRoles = new ArrayList<>();
     private String linkingURL = "Change this to the proper \"Linking Accounts\" wiki page url";
     private String crashURL = "Change this to the proper \"Crash Reports\" wiki page url";
+    private String tqURL = "Change this to the proper \"Claiming\" wiki page url";
+    private String claimURL = "Change this to the proper \"Tiqaulity Tile Entity Claiming\" wiki page url";
+    private String clURL = "Change this to the proper \"Chunk Loading\" wiki page url";
+    private String restartURL = "Change this to the proper \"Restart and Wipe\" wiki page url";
+
 
     public Config() {}
 
     public Config(String prefix, String token, String botOwnerId, String supportId, String supportCategoryId
     , String guildID, String logChannelID, int colorRed, int colorBlue, int colorGreen, ArrayList<String> blacklistFiles
-    , ArrayList<String> serverRoles, String linkingURL, String crashURL) {
+    , ArrayList<String> serverRoles, String linkingURL, String crashURL, String tqURL, String claimURL, String clURL,
+                  String restartURL) {
         this.prefix = prefix;
         this.token = token;
         this.botOwnerId = botOwnerId;
@@ -38,6 +44,10 @@ public class Config {
         this.serverRoles = serverRoles;
         this.linkingURL = linkingURL;
         this.crashURL = crashURL;
+        this.clURL = clURL;
+        this.tqURL = tqURL;
+        this.claimURL = claimURL;
+        this.restartURL = restartURL;
     }
 
     @Override
@@ -54,6 +64,10 @@ public class Config {
                 ", colorBlue='" + colorBlue + '\'' +
                 ", crashURL='" + crashURL + '\'' +
                 ", linkingURL='" + linkingURL + '\'' +
+                ", tqURL='" + tqURL + '\'' +
+                ", claimURL='" + claimURL + '\'' +
+                ", chunkURL='" + clURL + '\'' +
+                ", restartURL='" + restartURL + '\'' +
                 ", blacklistFiles: ['" + Arrays.toString(blacklistFiles.toArray()) + "']" +
                 ", serverRoles: ['" + Arrays.toString(serverRoles.toArray()) + "']";
     }
@@ -110,5 +124,21 @@ public class Config {
 
     public String getLinkingURL() {
         return linkingURL;
+    }
+
+    public String getTQURL() {
+        return tqURL;
+    }
+
+    public String getClaimURL() {
+        return claimURL;
+    }
+
+    public String getCLURL() {
+        return clURL;
+    }
+
+    public String getRestartURL() {
+        return restartURL;
     }
 }

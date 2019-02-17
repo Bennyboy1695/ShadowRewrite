@@ -9,8 +9,7 @@ import com.github.yourmcgeek.commands.support.LogChannelCommand;
 import com.github.yourmcgeek.commands.support.SupportClose;
 import com.github.yourmcgeek.commands.support.SupportCommand;
 import com.github.yourmcgeek.commands.support.SupportSetup;
-import com.github.yourmcgeek.commands.wiki.CrashReport;
-import com.github.yourmcgeek.commands.wiki.LinkAccount;
+import com.github.yourmcgeek.commands.wiki.*;
 import com.github.yourmcgeek.listeners.PrivateMessageListener;
 import com.github.yourmcgeek.listeners.SupportCategoryListener;
 import com.github.yourmcgeek.listeners.TicketChannelsReactionListener;
@@ -66,7 +65,11 @@ public class ShadowRewrite {
                     new AdminAddRole(this),
                     new AdminRemoveRole(this),
                     new LinkAccount(this),
-                    new CrashReport(this)
+                    new CrashReport(this),
+                    new Restart(this),
+                    new Claiming(this),
+                    new Tiquality(this),
+                    new ChunkLoading(this)
             );
 
             CommandClient client = builder.build();
