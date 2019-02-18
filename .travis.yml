@@ -21,11 +21,11 @@ after_failure:
 - "./send.sh failure $WEBHOOK_URL"
 
 before_deploy:
-  - git config --global user.name
-  - git config --global user.email
-  - export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%m%d')-$(git log --format=%h -1)}
-  - git tag $TRAVIS_TAG
-  - "echo 'Starting Deployment'"
+    - git config --global user.name
+    - git config --global user.email
+    - export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)}
+    - git tag $TRAVIS_TAG
+    - "echo 'Starting Deployment'"
 
 deploy:
   provider: releases
