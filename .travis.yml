@@ -1,16 +1,44 @@
 language: java
+
 jdk:
-  - oraclejdk8
-  - openjdk8
+- oraclejdk8
+- openjdk8
+
 before_install:
-  - chmod +x gradlew
+- chmod +x gradlew
+
 script:
-  - "./gradlew shadowJar"
-after_success:
-  - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
-  - chmod +x send.sh
-  - "./send.sh success $WEBHOOK_URL"
+- "./gradlew shadowJar"
+
+fter_success:
+- wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+- chmod +x send.sh
+- "./send.sh success $WEBHOOK_URL"
+
 after_failure:
-  - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
-  - chmod +x send.sh
-  - "./send.sh failure $WEBHOOK_URL"
+- wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+- chmod +x send.sh
+- "./send.sh failure $WEBHOOK_URL"
+
+before_deploy:
+  - git config --global user.name
+  - git config --global user.email
+  - export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%m%d')-$(git log --format=%h -1)}
+  - git tag $TRAVIS_TAG
+  - "echo 'Starting Deployment'"
+
+deploy:
+  provider: releases
+  api_key:
+    secure: "$API_KEY"
+  file: ShadowRewrite-1.0-all.jar
+  skip_cleanup: true
+  on:
+    tags: true
+
+after_deploy:
+  - "echo 'Deploy Ended'"
+
+env:
+  global:
+    secure: JZg1YLlb07EPoLgWgqt9WKdA6SWgl9c3JKH+vXr+TRdWqoK5ZtR0+6P5j2pBpfxjDroiTznpY/QhJxGoUsC8WxkkoeGlT1VMzujx4WrtarcZoxDYZCqNwU7LnWk6Rkir+lh2Iiu9QwEgKuOdS/RUcGalZvmzNo9hC3XwPYjXNQuIWt76sH279BDaVoPH9wZw1yEQ3ie2WjC6ASOj7UOW4MQybbYmLl0MEnOIT19XXaYtWPN3TdZhGK7vKCFKvnxXa/P+XXGxwo0wGoVhL53yaDOJJzrPg5ica990Pn/qkQa2aEQXw+z5KDGK9R/vvdPeS7om2GgHBJQfCKVJLmEopE8Y/rnqKSfRFaFJacWtOL0THgX23kP8JhzoeRc5tDkpdxgjT3oVKWb1KscmkK4+7QGgfmrSz5QVY+E+y46kqjuZEnaJIp+cgQskpeSqV7D4QELEd7wPOSmQ3u60gK53QGLnYzPlAznl7e6UAg2kTETv8jJvvjcN2p4GaSNbMwrDbzm+xCyRA0iIfs1OZ+Sbu0CFP1H3Z0m8/McpPAj5X0dtwWAYjNKssMcjdQyLvokIKuy58djtFe9Y/+jvnU1xpbqGshBVqqBFOlABKQOHA86QfS0JMZUzrY1yWGfMCluEjVCxTOcqxvdecbVNAQIXsPDv0N7G129C6OFJu8OkPWg=
