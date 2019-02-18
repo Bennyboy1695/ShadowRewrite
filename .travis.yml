@@ -36,7 +36,7 @@ deploy:
   provider: releases
   api_key:
     secure: "$API_KEY"
-  file: "build/libs/**.jar"
+  file: "build/libs/ShadowRewrite-1.0-all.jar"
   skip_cleanup: true
   on:
     branch: "release"
