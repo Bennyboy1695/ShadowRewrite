@@ -1,10 +1,10 @@
 language: java
 
 jdk:
-- oraclejdk8
+  - oraclejdk8
 
 bfore_install:
-- chmod +x gradlew
+  - chmod +x gradlew
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -15,29 +15,28 @@ cache:
     - $HOME/.gradle/wrapper/
 
 script:
-- "./gradlew shadowJar"
+  - "./gradlew shadowJar"
 
 fter_success:
-- wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
-- chmod +x send.sh
-- "./send.sh success $WEBHOOK_URL"
+  - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+  - chmod +x send.sh
+  - "./send.sh success $WEBHOOK_URL"
 
 after_failure:
-- wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
-- chmod +x send.sh
-- "./send.sh failure $WEBHOOK_URL"
+  - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+  - chmod +x send.sh
+  - "./send.sh failure $WEBHOOK_URL"
 
 before_deploy:
-    - git config --global user.name
-    - git config --global user.email
-    - git tag $TRAVIS_TAG
-    - "echo 'Starting Deployment'"
+  - git config --global user.name
+  - git config --global user.email
+  - "echo 'Starting Deployment'"
 
 deploy:
   provider: releases
   api_key:
     secure: "$API_KEY"
-  file: "build/libs/**-all.jar"
+  file: "build/libs/**.jar"
   skip_cleanup: true
   on:
     branch: "release"
