@@ -2,10 +2,17 @@ language: java
 
 jdk:
 - oraclejdk8
-- openjdk8
 
-before_install:
+bfore_install:
 - chmod +x gradlew
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
 
 script:
 - "./gradlew shadowJar"
@@ -23,7 +30,6 @@ after_failure:
 before_deploy:
     - git config --global user.name
     - git config --global user.email
-    - export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)}
     - git tag $TRAVIS_TAG
     - "echo 'Starting Deployment'"
 
@@ -31,9 +37,10 @@ deploy:
   provider: releases
   api_key:
     secure: "$API_KEY"
-  file: "ShadowRewrite-1.0-all.jar"
+  file: "build/libs/**-all.jar"
   skip_cleanup: true
   on:
+    branch: "release"
     tags: true
 
 after_deploy:
