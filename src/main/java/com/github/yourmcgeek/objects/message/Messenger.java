@@ -1,3 +1,10 @@
+/*
+ *
+ * Original file from NetBans Support Bot. Used with permission, original source here
+ * https://github.com/NetBans/SupportBot/
+ *
+ */
+
 package com.github.yourmcgeek.objects.message;
 
 import net.dv8tion.jda.core.MessageBuilder;

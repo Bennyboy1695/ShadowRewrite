@@ -1,14 +1,23 @@
+/*
+ *
+ * Original file from NetBans Support Bot. Used with permission, original source here
+ * https://github.com/NetBans/SupportBot/
+ *
+ */
+
 package com.github.yourmcgeek.listeners;
 
 import com.github.yourmcgeek.ShadowRewrite;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.MessageBuilder;
-import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.entities.ChannelType;
+import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.Role;
+import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import java.awt.*;
-import java.util.concurrent.TimeUnit;
 
 public class TicketChannelsReactionListener extends ListenerAdapter {
 
