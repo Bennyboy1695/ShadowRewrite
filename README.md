@@ -1,4 +1,4 @@
-# ShadowRewrite
+# ShadowRewrite [![Build Status](https://travis-ci.org/YourMCGeek/ShadowRewrite.svg?branch=release)](https://travis-ci.org/YourMCGeek/ShadowRewrite)
 
 ShadowRewrite is a rewrite of the Discord bot used in the community Discord server for [ShadowNode](https://shadownode.ca). The rewrite modernizes the bot with the use of embeds, file uploaders, and private messaging. 
 
