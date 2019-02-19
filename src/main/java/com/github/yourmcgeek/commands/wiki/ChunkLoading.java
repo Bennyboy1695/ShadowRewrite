@@ -15,7 +15,7 @@ public class ChunkLoading extends Command {
         this.main = main;
         this.name = "cl";
         this.aliases = new String[]{"chunks", "chunkload", "chunkloading"};
-        this.help = "Displays wiki link to show how to properly find and share crash reports";
+        this.help = "Displays the wiki link about chunkloading";
     }
 
     @Override

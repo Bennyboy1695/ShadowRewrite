@@ -32,7 +32,7 @@ dependencies {
 //   Google
     implementation group: 'com.google.inject', name: 'guice', version: '4.1.0'
     implementation group: 'com.google.guava', name: 'guava', version: '24.0-jre'
-    compile 'com.googlecode.json-simple:json-simple:1.1.1'
+//    compile 'com.googlecode.json-simple:json-simple:1.1.1'
     compile 'com.google.code.gson:gson:2.8.1'
 //    Logger
     implementation group: "ch.qos.logback", name: "logback-classic", version: "1.2.3"
