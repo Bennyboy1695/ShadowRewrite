@@ -58,7 +58,7 @@ public class SuggestionListener extends ListenerAdapter {
                                 .replaceAll("<prefix>", main.mgr.getConfig().getPrefix())
                                 .replaceAll("<forum>", "https://shadownode.ca")
                                 .replaceAll("<wiki>", "https://shadownode.ca/wiki")
-                                .replaceAll("<support>", "If you need support, create a new ticket with by running " +  main.mgr.getConfig().getPrefix() + "ticket")
+                                .replaceAll("<support>", "If you need support, create a new ticket by running " +  main.mgr.getConfig().getPrefix() + "ticket")
                         ).build()).queue(x -> {
                     messageId.set(x.getIdLong());
                     hasSent.set(true);
