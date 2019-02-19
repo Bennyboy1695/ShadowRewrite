@@ -1,6 +1,6 @@
 # ShadowRewrite
 
-ShadowRewrite is a rewrite of the Discord bot used in the community Discord server for [ShdowNode](https://shadownode.ca). The rewrite modernizes the bot with the use of embeds, file uploaders, and private messaging. 
+ShadowRewrite is a rewrite of the Discord bot used in the community Discord server for [ShadowNode](https://shadownode.ca). The rewrite modernizes the bot with the use of embeds, file uploaders, and private messaging. 
 
 ## Installation
 
@@ -30,7 +30,7 @@ From there, copy your token and add it to the `config.json`. Be mindful never to
 ```
 https://discordapp.com/oauth2/authorize?client_id=INSERT_CLIENT_ID_HERE&scope=bot&permissions=8
 ```
-In order for the bot to run, you will need to enable [2-Factor Authentication](https://support.discordapp.com/hc/en-us/articles/219576828-Setting-up-Two-Factor-Authentication) enabled.
+In order for the bot to run, you will need to have [2-Factor Authentication](https://support.discordapp.com/hc/en-us/articles/219576828-Setting-up-Two-Factor-Authentication) enabled.
 
 Once the bot is properly running, the following category and channels will need to be created. 
 ```
