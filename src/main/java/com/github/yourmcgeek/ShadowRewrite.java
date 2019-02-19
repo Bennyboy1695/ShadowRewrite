@@ -113,7 +113,7 @@ public class ShadowRewrite {
     }
 
     public List<String[]> getTips() throws IOException, ParseException {
-        JsonReader reader = new JsonReader(Files.newBufferedReader(Paths.get("C:\\Users\\tucke\\Desktop\\Dev New\\ShadowRewrite3\\conf.json")));
+        JsonReader reader = new JsonReader(Files.newBufferedReader(Paths.get(".").resolve("conf.json")));
         JsonParser parser = new JsonParser();
         JsonObject result = parser.parse(reader).getAsJsonObject();
         JsonArray tips = result.get("tips").getAsJsonArray();
