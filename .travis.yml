@@ -26,7 +26,7 @@ before_deploy:
     git config --global user.email &&
     git tag $TRAVIS_TAG;
     fi
-  - "echo 'Starting Deployment'"
+  "echo 'Starting Deployment'"
 
 deploy:
   provider: releases
