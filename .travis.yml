@@ -30,13 +30,14 @@ after_failure:
 before_deploy:
   - git config --global user.name
   - git config --global user.email
+  - git tag $TRAVIS_TAG
   - "echo 'Starting Deployment'"
 
 deploy:
   provider: releases
   api_key:
     secure: "$API_KEY"
-  file: "build/libs/ShadowRewrite-1.0-all.jar"
+  file: "build/libs/**.jar"
   skip_cleanup: true
   on:
     branch: "release"
