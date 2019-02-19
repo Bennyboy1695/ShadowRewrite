@@ -21,12 +21,12 @@ after_failure:
 - "./send.sh failure $WEBHOOK_URL"
 
 before_deploy:
+  - "echo 'Starting Deployment'"
   if ![[ $TRAVIS_TAG ]]; then
     git config --global user.name &&
     git config --global user.email &&
     git tag $TRAVIS_TAG;
-    fi
-  "echo 'Starting Deployment'"
+  fi
 
 deploy:
   provider: releases
