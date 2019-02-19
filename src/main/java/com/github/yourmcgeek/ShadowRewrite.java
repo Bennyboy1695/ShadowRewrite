@@ -11,19 +11,31 @@ import com.github.yourmcgeek.commands.support.SupportCommand;
 import com.github.yourmcgeek.commands.support.SupportSetup;
 import com.github.yourmcgeek.commands.wiki.*;
 import com.github.yourmcgeek.listeners.PrivateMessageListener;
+import com.github.yourmcgeek.listeners.SuggestionListener;
 import com.github.yourmcgeek.listeners.SupportCategoryListener;
 import com.github.yourmcgeek.listeners.TicketChannelsReactionListener;
 import com.github.yourmcgeek.objects.config.Config;
 import com.github.yourmcgeek.objects.message.Messenger;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
+import org.json.JSONObject;
 
 import javax.security.auth.login.LoginException;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ShadowRewrite {
@@ -78,6 +90,7 @@ public class ShadowRewrite {
                     .addEventListener(new PrivateMessageListener(this))
                     .addEventListener(new SupportCategoryListener(this))
                     .addEventListener(new TicketChannelsReactionListener(this))
+                    .addEventListener(new SuggestionListener(this))
                     .setToken(config.getToken())
                     .build();
 
@@ -98,6 +111,30 @@ public class ShadowRewrite {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    /*
+     *
+     * Original method from NetBans Support Bot. Used with permission, original source here
+     * https://github.com/NetBans/SupportBot/
+     *
+     */
+
+    public List<String[]> getTips() throws IOException, ParseException {
+        JsonReader reader = new JsonReader(Files.newBufferedReader(Paths.get("C:\\Users\\tucke\\Desktop\\Dev New\\ShadowRewrite3\\conf.json")));
+        JsonParser parser = new JsonParser();
+        JsonObject result = parser.parse(reader).getAsJsonObject();
+        JsonArray tips = result.get("tips").getAsJsonArray();
+        List<String[]> tipArray = new ArrayList<>();
+        for (JsonElement obj : tips) {
+            JsonObject jsonObject = obj.getAsJsonObject();
+            String word = jsonObject.get("word").getAsString();
+            String suggestion = jsonObject.get("suggestion").getAsString();
+            String[] put = new String[]{word, suggestion};
+            tipArray.add(put);
+        }
+        return tipArray;
     }
 
     public SettingsManager getSettingsManager() {
