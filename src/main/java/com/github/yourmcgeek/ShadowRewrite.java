@@ -26,7 +26,6 @@ import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
-import org.json.JSONObject;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
@@ -112,14 +111,6 @@ public class ShadowRewrite {
             e.printStackTrace();
         }
     }
-
-
-    /*
-     *
-     * Original method from NetBans Support Bot. Used with permission, original source here
-     * https://github.com/NetBans/SupportBot/
-     *
-     */
 
     public List<String[]> getTips() throws IOException, ParseException {
         JsonReader reader = new JsonReader(Files.newBufferedReader(Paths.get("C:\\Users\\tucke\\Desktop\\Dev New\\ShadowRewrite3\\conf.json")));
