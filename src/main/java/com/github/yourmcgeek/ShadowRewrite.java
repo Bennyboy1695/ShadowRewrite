@@ -113,14 +113,6 @@ public class ShadowRewrite {
         }
     }
 
-
-    /*
-     *
-     * Original method from NetBans Support Bot. Used with permission, original source here
-     * https://github.com/NetBans/SupportBot/
-     *
-     */
-
     public List<String[]> getTips() throws IOException, ParseException {
         JsonReader reader = new JsonReader(Files.newBufferedReader(Paths.get("C:\\Users\\tucke\\Desktop\\Dev New\\ShadowRewrite3\\conf.json")));
         JsonParser parser = new JsonParser();
