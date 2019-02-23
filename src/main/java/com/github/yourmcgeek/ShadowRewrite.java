@@ -1,5 +1,6 @@
 package com.github.yourmcgeek;
 
+import com.github.yourmcgeek.commands.remind.Remind;
 import com.github.yourmcgeek.commands.role.AddRole;
 import com.github.yourmcgeek.commands.role.RemoveRole;
 import com.github.yourmcgeek.commands.role.RolesView;
@@ -16,6 +17,7 @@ import com.github.yourmcgeek.listeners.SupportCategoryListener;
 import com.github.yourmcgeek.listeners.TicketChannelsReactionListener;
 import com.github.yourmcgeek.objects.config.Config;
 import com.github.yourmcgeek.objects.message.Messenger;
+import com.github.yourmcgeek.objects.remind.Reminders;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -44,9 +46,11 @@ public class ShadowRewrite {
     private Path logDirectory;
     private Messenger messenger;
     private Path directory;
-    public static void main(final String[] args) {
+
+    public static void main(String[] args) {
         Path p = Paths.get(".").resolve("conf.json");
         Path p1 = Paths.get(".");
+
 
         SettingsManager sm = new SettingsManager(p);
         new ShadowRewrite().setupBot(p1);
@@ -80,7 +84,8 @@ public class ShadowRewrite {
                     new Restart(this),
                     new Claiming(this),
                     new Tiquality(this),
-                    new ChunkLoading(this)
+                    new ChunkLoading(this),
+                    new Remind(this)
             );
 
             CommandClient client = builder.build();
