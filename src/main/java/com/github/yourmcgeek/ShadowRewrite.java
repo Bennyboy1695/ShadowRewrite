@@ -17,7 +17,6 @@ import com.github.yourmcgeek.listeners.SupportCategoryListener;
 import com.github.yourmcgeek.listeners.TicketChannelsReactionListener;
 import com.github.yourmcgeek.objects.config.Config;
 import com.github.yourmcgeek.objects.message.Messenger;
-import com.github.yourmcgeek.objects.remind.Reminders;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
