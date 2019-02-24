@@ -15,20 +15,22 @@ public class Config {
     private int colorBlue = 0;
     private int colorGreen = 0;
     private ArrayList<String> blacklistFiles = new ArrayList<>();
-    private ArrayList<String> serverRoles = new ArrayList<>();
     private String linkingURL = "Change this to the proper \"Linking Accounts\" wiki page url";
     private String crashURL = "Change this to the proper \"Crash Reports\" wiki page url";
     private String tqURL = "Change this to the proper \"Claiming\" wiki page url";
     private String claimURL = "Change this to the proper \"Tiqaulity Tile Entity Claiming\" wiki page url";
     private String clURL = "Change this to the proper \"Chunk Loading\" wiki page url";
     private String restartURL = "Change this to the proper \"Restart and Wipe\" wiki page url";
+    private String wikiURL = "Change this to the proper \"Wiki\" direct url";
+    private String crateURL = "Change this to the proper \"Crates\" wiki page url";
+    private String relocateURL = "Change this to the proper \"Relocation\" wiki page url";
 
     public Config() {}
 
     public Config(String prefix, String token, String botOwnerId, String supportId, String supportCategoryId
-    , String guildID, String logChannelID, int colorRed, int colorBlue, int colorGreen, ArrayList<String> blacklistFiles
-    , ArrayList<String> serverRoles, String linkingURL, String crashURL, String tqURL, String claimURL, String clURL,
-                  String restartURL) {
+    , String guildID, String logChannelID, int colorRed, int colorBlue, int colorGreen, ArrayList<String> blacklistFiles,
+                  String linkingURL, String crashURL, String tqURL, String claimURL, String clURL,
+                  String restartURL, String wikiURL, String crateURL, String relocateURL) {
         this.prefix = prefix;
         this.token = token;
         this.botOwnerId = botOwnerId;
@@ -40,13 +42,15 @@ public class Config {
         this.colorGreen = colorGreen;
         this.colorBlue = colorBlue;
         this.blacklistFiles = blacklistFiles;
-        this.serverRoles = serverRoles;
         this.linkingURL = linkingURL;
         this.crashURL = crashURL;
         this.clURL = clURL;
         this.tqURL = tqURL;
         this.claimURL = claimURL;
         this.restartURL = restartURL;
+        this.wikiURL = wikiURL;
+        this.crateURL = crateURL;
+        this.relocateURL = relocateURL;
     }
 
     @Override
@@ -67,8 +71,11 @@ public class Config {
                 ", claimURL='" + claimURL + '\'' +
                 ", chunkURL='" + clURL + '\'' +
                 ", restartURL='" + restartURL + '\'' +
-                ", blacklistFiles: ['" + Arrays.toString(blacklistFiles.toArray()) + "']" +
-                ", serverRoles: ['" + Arrays.toString(serverRoles.toArray()) + "']";
+                ", wikiURL='" + wikiURL + '\'' +
+                ", crateURL='" + crateURL + '\'' +
+                ", relocateURL='" + relocateURL + '\'' +
+                ", blacklistFiles: ['" + Arrays.toString(blacklistFiles.toArray()) + "']"
+                + "}";
     }
 
     public String getPrefix() {
@@ -115,7 +122,6 @@ public class Config {
         return blacklistFiles;
     }
 
-    public ArrayList<String> getServerRoles() { return serverRoles; }
 
     public String getCrashURL() {
         return crashURL;
@@ -139,5 +145,17 @@ public class Config {
 
     public String getRestartURL() {
         return restartURL;
+    }
+
+    public String getWikiURL() {
+        return wikiURL;
+    }
+
+    public String getCrateURL() {
+        return crateURL;
+    }
+
+    public String getRelocateURL() {
+        return relocateURL;
     }
 }

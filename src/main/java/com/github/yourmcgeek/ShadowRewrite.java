@@ -1,11 +1,6 @@
 package com.github.yourmcgeek;
 
 import com.github.yourmcgeek.commands.remind.Remind;
-import com.github.yourmcgeek.commands.role.AddRole;
-import com.github.yourmcgeek.commands.role.RemoveRole;
-import com.github.yourmcgeek.commands.role.RolesView;
-import com.github.yourmcgeek.commands.role.admin.AdminAddRole;
-import com.github.yourmcgeek.commands.role.admin.AdminRemoveRole;
 import com.github.yourmcgeek.commands.support.LogChannelCommand;
 import com.github.yourmcgeek.commands.support.SupportClose;
 import com.github.yourmcgeek.commands.support.SupportCommand;
@@ -69,18 +64,16 @@ public class ShadowRewrite {
                     new SupportClose(this),
                     new SupportCommand(this),
                     new LogChannelCommand(this),
-                    new RolesView(this),
-                    new AddRole(this),
-                    new RemoveRole(this),
-                    new AdminAddRole(this),
-                    new AdminRemoveRole(this),
                     new LinkAccount(this),
                     new CrashReport(this),
                     new Restart(this),
                     new Claiming(this),
                     new Tiquality(this),
                     new ChunkLoading(this),
-                    new Remind(this)
+                    new Remind(this),
+                    new Wiki(this),
+                    new Relocate(this),
+                    new Crate(this)
             );
 
             CommandClient client = builder.build();

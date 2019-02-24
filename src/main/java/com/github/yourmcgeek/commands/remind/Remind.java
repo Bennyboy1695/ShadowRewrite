@@ -57,6 +57,16 @@ public class Remind extends Command {
             argsList.remove(0);
             String content = String.join(",", argsList);
             content = content.replaceAll(",", " ");
+
+            EmbedBuilder confirm = new EmbedBuilder()
+                    .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()))
+                    .setTitle("Please Confirm")
+                    .addField("Remind in", timeAmt + timeUnit, true)
+                    .addField("Reminder", content, true)
+                    .setDescription("Please confirm by reacting with a \u2705 within 15 seconds");
+            main.getMessenger().sendEmbed((TextChannel) event.getChannel(), confirm.build(), 15).addReaction("\u2705").complete();
+
+
             EmbedBuilder embed = new EmbedBuilder()
                     .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()))
                     .setTitle("Reminder")
