@@ -3,7 +3,6 @@ package com.github.yourmcgeek.objects.message;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.*;
 
-
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -62,5 +61,4 @@ public class Messenger {
         PrivateChannel channel = user.openPrivateChannel().complete();
         return channel.sendMessage(new MessageBuilder().append(message).build()).complete();
     }
-
 }

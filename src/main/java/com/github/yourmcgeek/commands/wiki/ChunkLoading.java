@@ -11,6 +11,7 @@ import java.awt.*;
 public class ChunkLoading extends Command {
 
     private ShadowRewrite main;
+
     public ChunkLoading(ShadowRewrite main) {
         this.main = main;
         this.name = "cl";

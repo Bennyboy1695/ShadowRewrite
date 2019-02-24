@@ -55,8 +55,6 @@ public class AdminRemoveRole extends Command {
                 main.getMessenger().sendEmbed((TextChannel) event.getChannel(), embedFail.build(), 10);
                 break;
         }
-
-
         event.getMessage().delete().complete();
     }
 }

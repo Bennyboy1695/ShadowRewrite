@@ -23,7 +23,6 @@ public class Config {
     private String clURL = "Change this to the proper \"Chunk Loading\" wiki page url";
     private String restartURL = "Change this to the proper \"Restart and Wipe\" wiki page url";
 
-
     public Config() {}
 
     public Config(String prefix, String token, String botOwnerId, String supportId, String supportCategoryId

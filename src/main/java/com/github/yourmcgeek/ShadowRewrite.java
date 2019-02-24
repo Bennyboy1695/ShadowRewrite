@@ -37,9 +37,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ShadowRewrite {
-
 
     public SettingsManager mgr = new SettingsManager(Paths.get(".").resolve("conf.json"));
     private Path logDirectory;
@@ -50,11 +48,9 @@ public class ShadowRewrite {
         Path p = Paths.get(".").resolve("conf.json");
         Path p1 = Paths.get(".");
 
-
         SettingsManager sm = new SettingsManager(p);
         new ShadowRewrite().setupBot(p1);
     }
-
 
     private void setupBot(Path directory) {
         this.directory = directory;
