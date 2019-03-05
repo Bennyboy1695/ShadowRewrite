@@ -6,10 +6,6 @@ ShadowRewrite is a rewrite of the Discord bot used in the community Discord serv
 
 To install, visit the [TeamCity](https://ci.bhop.me/viewType.html?buildTypeId=yourmcgeek_ShadowRewrite&tab=buildTypeStatusDiv&state=successful) project. All releases are built using [TeamCity](https://www.jetbrains.com/teamcity/)
 
-## Travis-CI
-
-Travis-CI is responsible for building the jar for releases. The Travis-CI site dedicated to this project can be found [here](https://travis-ci.org/YourMCGeek/ShadowRewrite).
-
 ## Usage
 
 To use, download the jar file, and create the following script and run it in the same directory as the jar file. 
