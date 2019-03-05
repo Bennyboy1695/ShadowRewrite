@@ -1,22 +1,19 @@
 package com.github.yourmcgeek.commands.remind;
 
 import com.github.yourmcgeek.ShadowRewrite;
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.TextChannel;
 
 import java.awt.*;
-import java.io.BufferedWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class Remind extends Command {
 
@@ -80,6 +77,7 @@ public class Remind extends Command {
                 object.addProperty("userID", userID);
                 object.addProperty("messageID", messageID);
                 object.addProperty("time", timeAmt);
+                object.addProperty("unit", timeUnit);
                 object.add("content", new JsonParser().parse(content).getAsJsonObject());
                 main.getConfirmMessages().add(object);
             } catch (Exception e) {

@@ -14,5 +14,6 @@ public class ShutdownListener extends ListenerAdapter {
 
     public void onShutdown(ShutdownEvent event) {
         main.saveMessages();
+        main.saveTasks();
     }
 }

@@ -29,18 +29,18 @@ public class ShadowRewrite {
 
     public SettingsManager mgr = new SettingsManager(Paths.get(".").resolve("conf.json"));
     public JsonArray confirmMessages = new JsonArray();
+    public JsonArray remindersJson = new JsonArray();
 
     private Path logDirectory;
     private Path remindDirectory;
     private Path confirmFile;
+    private Path remindersFile;
     private Messenger messenger;
     private Path directory;
 
     public static void main(String[] args) {
-//        Path p = Paths.get(".").resolve("conf.json");
         Path p1 = Paths.get(".");
 
-//        SettingsManager sm = new SettingsManager(p);
         new ShadowRewrite().setupBot(p1);
     }
 
@@ -104,7 +104,8 @@ public class ShadowRewrite {
 
         try {
             Path path = Paths.get(directory + "/reminders");
-            Path file = Paths.get(directory + "/reminders/confirm.json");
+            Path file = Paths.get(path + "/confirm.json");
+            Path reminder = Paths.get(path + "/ActiveReminders.json");
             if (!path.toFile().exists()) {
                 path.toFile().mkdir();
                 remindDirectory = path;
@@ -113,12 +114,18 @@ public class ShadowRewrite {
                 Files.createFile(file);
                 confirmFile = file;
             }
+            if (!Files.exists(reminder)) {
+                Files.createFile(reminder);
+                remindersFile = reminder;
+            }
             remindDirectory = path;
             confirmFile = file;
+            remindersFile = reminder;
         } catch (Exception e) {
             e.printStackTrace();
         }
         loadMessages();
+        loadTasks();
     }
 
 
@@ -157,25 +164,44 @@ public class ShadowRewrite {
         }
     }
 
+    public void saveTasks() {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try (BufferedWriter writer = Files.newBufferedWriter(this.getRemindersFile())) {
+            writer.write(gson.toJson(this.getRemindersJson()));
+            writer.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadTasks() {
+        try (BufferedReader reader = Files.newBufferedReader(this.getRemindersFile())) {
+            JsonParser parser = new JsonParser();
+            remindersJson = parser.parse(reader).getAsJsonArray();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public SettingsManager getSettingsManager() {
         return mgr;
     }
 
-    public JsonArray getConfirmMessages() {
-        return confirmMessages;
-    }
+    public JsonArray getConfirmMessages() { return confirmMessages; }
+
+    public JsonArray getRemindersJson() { return remindersJson; }
 
     public Path getConfirmFile() { return confirmFile; }
 
-    public String getGuildId() {
-        return mgr.getConfig().getGuildID();
-    }
+    public String getGuildId() { return mgr.getConfig().getGuildID(); }
 
-    public Path getLogDirectory() {
-        return logDirectory;
-    }
+    public Path getLogDirectory() { return logDirectory; }
 
     public Path getRemindDirectory() { return remindDirectory; }
+
+    public Path getRemindersFile() {
+        return remindersFile;
+    }
 
     public Messenger getMessenger() {
         return messenger;
