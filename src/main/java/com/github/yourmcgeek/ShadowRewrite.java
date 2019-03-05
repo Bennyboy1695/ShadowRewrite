@@ -42,17 +42,34 @@ public class ShadowRewrite {
 
     public SettingsManager mgr = new SettingsManager(Paths.get(".").resolve("conf.json"));
     public JsonArray confirmMessages = new JsonArray();
+    public JsonArray remindersJson = new JsonArray();
 
     private Path logDirectory;
+<<<<<<< HEAD
     private Path attachmentDir;
+=======
+    private Path remindDirectory;
+    private Path confirmFile;
+    private Path remindersFile;
+>>>>>>> Development Branch for Remind Command
     private Messenger messenger;
     private CommandHandlerBuilder handlerBuilder;
     private Path directory;
     private Logger logger;
     private JDA jda;
 
+<<<<<<< HEAD
 
     public void init(Path directory) throws Exception {
+=======
+    public static void main(String[] args) {
+        Path p1 = Paths.get(".");
+
+        new ShadowRewrite().setupBot(p1);
+    }
+
+    private void setupBot(Path directory) {
+>>>>>>> Development Branch for Remind Command
         this.directory = directory;
         logger = LoggerFactory.getLogger("ShadowBot");
         try {
@@ -106,11 +123,20 @@ public class ShadowRewrite {
         }
 
         try {
+<<<<<<< HEAD
             logger.info("Checking Log directories...");
             Path logs = Paths.get(directory + "/logs");
             if (!Files.exists(logs)) {
                 Files.createDirectories(logs);
                 logDirectory = logs;
+=======
+            Path path = Paths.get(directory + "/reminders");
+            Path file = Paths.get(path + "/confirm.json");
+            Path reminder = Paths.get(path + "/ActiveReminders.json");
+            if (!path.toFile().exists()) {
+                path.toFile().mkdir();
+                remindDirectory = path;
+>>>>>>> Development Branch for Remind Command
             }
             logDirectory = logs;
             Path attachments = logs.resolve("attachments");
@@ -118,10 +144,27 @@ public class ShadowRewrite {
                 Files.createDirectories(attachments);
                 attachmentDir = attachments;
             }
+<<<<<<< HEAD
             attachmentDir = attachments;
         } catch (IOException e) {
             logger.error("Error creating directories!", e);
         }
+=======
+            if (!Files.exists(reminder)) {
+                Files.createFile(reminder);
+                remindersFile = reminder;
+            }
+            remindDirectory = path;
+            confirmFile = file;
+            remindersFile = reminder;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        loadMessages();
+        loadTasks();
+    }
+
+>>>>>>> Development Branch for Remind Command
 
         logger.info("Everything Loaded Successfully | Ready to accept input!");
     }
@@ -151,25 +194,60 @@ public class ShadowRewrite {
         return this.jda;
     }
 
+<<<<<<< HEAD
     public Logger getLogger() {
         return logger;
     }
+=======
+    public void saveTasks() {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try (BufferedWriter writer = Files.newBufferedWriter(this.getRemindersFile())) {
+            writer.write(gson.toJson(this.getRemindersJson()));
+            writer.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadTasks() {
+        try (BufferedReader reader = Files.newBufferedReader(this.getRemindersFile())) {
+            JsonParser parser = new JsonParser();
+            remindersJson = parser.parse(reader).getAsJsonArray();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+>>>>>>> Development Branch for Remind Command
     public SettingsManager getSettingsManager() {
         return mgr;
     }
 
-    public JsonArray getConfirmMessages() {
-        return confirmMessages;
-    }
+    public JsonArray getConfirmMessages() { return confirmMessages; }
 
+    public JsonArray getRemindersJson() { return remindersJson; }
+
+<<<<<<< HEAD
     public String getGuildId() {
         return mgr.getConfig().getGuildID();
     }
+=======
+    public Path getConfirmFile() { return confirmFile; }
 
-    public Path getLogDirectory() {
-        return logDirectory;
+    public String getGuildId() { return mgr.getConfig().getGuildID(); }
+>>>>>>> Development Branch for Remind Command
+
+    public Path getLogDirectory() { return logDirectory; }
+
+<<<<<<< HEAD
+=======
+    public Path getRemindDirectory() { return remindDirectory; }
+
+    public Path getRemindersFile() {
+        return remindersFile;
     }
 
+>>>>>>> Development Branch for Remind Command
     public Messenger getMessenger() {
         return messenger;
     }
