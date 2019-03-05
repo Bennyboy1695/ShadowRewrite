@@ -21,7 +21,7 @@ public class LogChannelCommand extends Command {
     protected void execute(CommandEvent event) {
         main.getMessenger().sendEmbed((TextChannel) event.getChannel(), new EmbedBuilder()
             .setTitle("Log Channel ID")
-                .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()))
+            .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()))
             .addField("ID", String.valueOf(Long.valueOf(event.getChannel().getIdLong())), true)
             .setDescription("Add this in its corresponding place in your config file. Save the config," +
                     " then restart the bot!").build(), 30);
