@@ -1,12 +1,17 @@
 package com.github.yourmcgeek;
 
-import com.github.yourmcgeek.commands.remind.*;
-import com.github.yourmcgeek.commands.support.*;
+import com.github.yourmcgeek.commands.support.LogChannelCommand;
+import com.github.yourmcgeek.commands.support.SupportClose;
+import com.github.yourmcgeek.commands.support.SupportCommand;
+import com.github.yourmcgeek.commands.support.SupportSetup;
 import com.github.yourmcgeek.commands.wiki.*;
 import com.github.yourmcgeek.listeners.*;
 import com.github.yourmcgeek.objects.config.Config;
 import com.github.yourmcgeek.objects.message.Messenger;
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
@@ -15,8 +20,6 @@ import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
 
 import javax.security.auth.login.LoginException;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -31,16 +34,12 @@ public class ShadowRewrite {
     public JsonArray confirmMessages = new JsonArray();
 
     private Path logDirectory;
-    private Path remindDirectory;
-    private Path confirmFile;
     private Messenger messenger;
     private Path directory;
 
     public static void main(String[] args) {
-//        Path p = Paths.get(".").resolve("conf.json");
         Path p1 = Paths.get(".");
 
-//        SettingsManager sm = new SettingsManager(p);
         new ShadowRewrite().setupBot(p1);
     }
 
@@ -66,7 +65,6 @@ public class ShadowRewrite {
                     new Claiming(this),
                     new Tiquality(this),
                     new ChunkLoading(this),
-                    new Remind(this),
                     new Wiki(this),
                     new Relocate(this),
                     new Crate(this)
@@ -79,8 +77,6 @@ public class ShadowRewrite {
                     .addEventListener(new SupportCategoryListener(this))
                     .addEventListener(new TicketChannelsReactionListener(this))
                     .addEventListener(new SuggestionListener(this))
-                    .addEventListener(new ShutdownListener(this))
-                    .addEventListener(new RemindConfirmListener(this))
                     .setToken(config.getToken())
                     .build();
 
@@ -101,27 +97,7 @@ public class ShadowRewrite {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        try {
-            Path path = Paths.get(directory + "/reminders");
-            Path file = Paths.get(directory + "/reminders/confirm.json");
-            if (!path.toFile().exists()) {
-                path.toFile().mkdir();
-                remindDirectory = path;
-            }
-            if (!Files.exists(file)) {
-                Files.createFile(file);
-                confirmFile = file;
-            }
-            remindDirectory = path;
-            confirmFile = file;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        loadMessages();
     }
-
-
     public List<String[]> getTips() throws IOException, ParseException {
         JsonReader reader = new JsonReader(Files.newBufferedReader(Paths.get(".").resolve("conf.json")));
         JsonParser parser = new JsonParser();
@@ -138,25 +114,6 @@ public class ShadowRewrite {
         return tipArray;
     }
 
-    public void saveMessages() {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        try (BufferedWriter writer = Files.newBufferedWriter(this.getConfirmFile())) {
-            writer.write(gson.toJson(this.getConfirmMessages()));
-            writer.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void loadMessages() {
-        try (BufferedReader reader = Files.newBufferedReader(this.getConfirmFile())) {
-            JsonParser parser = new JsonParser();
-            confirmMessages = parser.parse(reader).getAsJsonArray();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public SettingsManager getSettingsManager() {
         return mgr;
     }
@@ -165,8 +122,6 @@ public class ShadowRewrite {
         return confirmMessages;
     }
 
-    public Path getConfirmFile() { return confirmFile; }
-
     public String getGuildId() {
         return mgr.getConfig().getGuildID();
     }
@@ -174,8 +129,6 @@ public class ShadowRewrite {
     public Path getLogDirectory() {
         return logDirectory;
     }
-
-    public Path getRemindDirectory() { return remindDirectory; }
 
     public Messenger getMessenger() {
         return messenger;
