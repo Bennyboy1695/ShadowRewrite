@@ -1,5 +1,6 @@
 package com.github.yourmcgeek;
 
+import com.github.yourmcgeek.commands.LMGTFYCommand;
 import com.github.yourmcgeek.commands.support.LogChannelCommand;
 import com.github.yourmcgeek.commands.support.SupportClose;
 import com.github.yourmcgeek.commands.support.SupportCommand;
@@ -8,7 +9,6 @@ import com.github.yourmcgeek.commands.wiki.*;
 import com.github.yourmcgeek.listeners.*;
 import com.github.yourmcgeek.objects.config.Config;
 import com.github.yourmcgeek.objects.message.Messenger;
-import com.github.yourmcgeek.objects.util.FormatUtil;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -68,7 +68,8 @@ public class ShadowRewrite {
                     new ChunkLoading(this),
                     new Wiki(this),
                     new Relocate(this),
-                    new Crate(this)
+                    new Crate(this),
+                    new LMGTFYCommand(this)
             );
 
             CommandClient client = builder.build();
@@ -78,7 +79,6 @@ public class ShadowRewrite {
                     .addEventListener(new SupportCategoryListener(this))
                     .addEventListener(new TicketChannelsReactionListener(this))
                     .addEventListener(new SuggestionListener(this))
-                    .addEventListener(new MentionListener(this))
                     .setToken(config.getToken())
                     .build();
 
@@ -139,6 +139,5 @@ public class ShadowRewrite {
     public long getGuildID() {
         return Long.valueOf(mgr.getConfig().getGuildID());
     }
-
 
 }

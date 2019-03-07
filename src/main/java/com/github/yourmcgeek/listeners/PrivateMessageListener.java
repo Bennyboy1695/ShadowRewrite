@@ -18,6 +18,7 @@ public class PrivateMessageListener extends ListenerAdapter {
 
     private ShadowRewrite main;
     private int userCount;
+
     public PrivateMessageListener(ShadowRewrite main) {
         this.main = main;
     }
@@ -33,7 +34,7 @@ public class PrivateMessageListener extends ListenerAdapter {
 
         System.out.println(main.mgr.getConfig().getGuildID());
         Member member = event.getJDA().getGuildById(main.getGuildID()).getMember(event.getAuthor());
-		
+
         System.out.println(member);
 
         for (Guild.Ban bans : event.getJDA().getGuildById(main.getGuildId()).getBanList().complete()) {
@@ -51,44 +52,64 @@ public class PrivateMessageListener extends ListenerAdapter {
             }
         }
 
-        TextChannel supportChannel = (TextChannel) event.getJDA().getCategoryById(main.mgr.getConfig().getSupportCategoryId())
-                .createTextChannel(member.getEffectiveName() + "-" + ThreadLocalRandom.current().nextInt(99999)).complete();
+        String[] userMessageSplit = userMessage.split(" ");
 
-        supportChannel.getManager().setTopic(event.getAuthor().getIdLong() + " Creation date: "+ supportChannel.getCreationTime().format(dateFormat) + " Creation Time: " + supportChannel.getCreationTime().format(timeFormat) + "GMT").complete();
+        boolean clean = false;
 
-        EmbedBuilder message = new EmbedBuilder()
-                .setDescription(member.getAsMention())
-                .addField("Ticket: ", userMessage, false)
-                .addField("Finished? ", "If you are finished with this ticket, please click \u2705. _All staff and developers can close the ticket also_", true)
-                .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()));
-
-        Message supportMessage = main.getMessenger().sendEmbed(supportChannel, message.build(), 0);
-        for (Message.Attachment attachment : event.getMessage().getAttachments()) {
-            String[] fileName = attachment.getFileName().split("\\.");
-            if (main.mgr.getConfig().getBlacklistFiles().contains(fileName[1])) {
-                try {
-                    if (!new File(main.getLogDirectory().toFile(), "attachments").exists()) {
-                        new File(main.getLogDirectory().toFile(), "attachments").mkdir();
-                    }
-                    attachment.download(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName() + ".log"));
-                    supportChannel.sendFile(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName() + ".log")).complete();
-                    main.getMessenger().sendMessage((TextChannel) event.getChannel(), event.getMessage().getAuthor() + " has sent a file called " + attachment.getFileName() + ".log");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        for (int x = 0; x != userMessageSplit.length; x++) {
+            if (!main.mgr.getConfig().getSwearWords().contains(userMessageSplit[x])) {
+                clean = true;
             } else {
-                attachment.download(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName()));
-                supportChannel.sendFile(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName())).complete();
-                    main.getMessenger().sendMessage((TextChannel) event.getChannel(), event.getMessage().getAuthor() + " has sent a file called " + attachment.getFileName());
+                clean = false;
             }
         }
-        supportMessage.pin().complete();
-        supportChannel.getHistory().retrievePast(1).queue(l -> l.forEach(m -> m.delete().queue()));
-        supportMessage.addReaction("\u2705").complete();
-        event.getAuthor().openPrivateChannel().complete().sendMessage(new EmbedBuilder()
-                .setTitle("Support Channel")
-                .setDescription("https://discordapp.com/channels/" + main.getGuildId()  + "/" + supportChannel.getIdLong())
-                .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()))
-                .build()).complete();
+
+        if (clean) {
+            TextChannel supportChannel = (TextChannel) event.getJDA().getCategoryById(main.mgr.getConfig().getSupportCategoryId())
+                    .createTextChannel(member.getEffectiveName() + "-" + ThreadLocalRandom.current().nextInt(99999)).complete();
+
+            supportChannel.getManager().setTopic(event.getAuthor().getIdLong() + " Creation date: " + supportChannel.getCreationTime().format(dateFormat) + " Creation Time: " + supportChannel.getCreationTime().format(timeFormat) + "GMT").complete();
+
+            EmbedBuilder message = new EmbedBuilder()
+                    .setDescription(member.getAsMention())
+                    .addField("Ticket: ", userMessage, false)
+                    .addField("Finished? ", "If you are finished with this ticket, please click \u2705. _All staff and developers can close the ticket also_", true)
+                    .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()));
+
+            Message supportMessage = main.getMessenger().sendEmbed(supportChannel, message.build(), 0);
+            for (Message.Attachment attachment : event.getMessage().getAttachments()) {
+                String[] fileName = attachment.getFileName().split("\\.");
+                if (main.mgr.getConfig().getBlacklistFiles().contains(fileName[1])) {
+                    try {
+                        if (!new File(main.getLogDirectory().toFile(), "attachments").exists()) {
+                            new File(main.getLogDirectory().toFile(), "attachments").mkdir();
+                        }
+                        attachment.download(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName() + ".log"));
+                        supportChannel.sendFile(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName() + ".log")).complete();
+                        main.getMessenger().sendMessage((TextChannel) event.getChannel(), event.getMessage().getAuthor() + " has sent a file called " + attachment.getFileName() + ".log");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    attachment.download(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName()));
+                    supportChannel.sendFile(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName())).complete();
+                    main.getMessenger().sendMessage((TextChannel) event.getChannel(), event.getMessage().getAuthor() + " has sent a file called " + attachment.getFileName());
+                }
+            }
+            supportMessage.pin().complete();
+            supportChannel.getHistory().retrievePast(1).queue(l -> l.forEach(m -> m.delete().queue()));
+            supportMessage.addReaction("\u2705").complete();
+            event.getAuthor().openPrivateChannel().complete().sendMessage(new EmbedBuilder()
+                    .setTitle("Support Channel")
+                    .setDescription("https://discordapp.com/channels/" + main.getGuildId() + "/" + supportChannel.getIdLong())
+                    .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()))
+                    .build()).complete();
+        } else {
+            EmbedBuilder message = new EmbedBuilder()
+                    .setTitle("Error!")
+                    .setDescription("Cannot create a support ticket with swear words. Send the command again in the Discord to create a new ticket. Don't cuss this time.")
+                    .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()));
+            event.getAuthor().openPrivateChannel().complete().sendMessage(message.build()).queue();
+        }
     }
 }

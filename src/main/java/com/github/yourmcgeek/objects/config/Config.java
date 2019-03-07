@@ -15,6 +15,7 @@ public class Config {
     private int colorBlue = 0;
     private int colorGreen = 0;
     private ArrayList<String> blacklistFiles = new ArrayList<>();
+    private ArrayList<String> swearWords = new ArrayList<>();
     private String linkingURL = "Change this to the proper \"Linking Accounts\" wiki page url";
     private String crashURL = "Change this to the proper \"Crash Reports\" wiki page url";
     private String tqURL = "Change this to the proper \"Claiming\" wiki page url";
@@ -30,7 +31,7 @@ public class Config {
     public Config(String prefix, String token, String botOwnerId, String supportId, String supportCategoryId
     , String guildID, String logChannelID, int colorRed, int colorBlue, int colorGreen, ArrayList<String> blacklistFiles,
                   String linkingURL, String crashURL, String tqURL, String claimURL, String clURL,
-                  String restartURL, String wikiURL, String crateURL, String relocateURL) {
+                  String restartURL, String wikiURL, String crateURL, String relocateURL, ArrayList<String> swearWords) {
         this.prefix = prefix;
         this.token = token;
         this.botOwnerId = botOwnerId;
@@ -51,6 +52,7 @@ public class Config {
         this.wikiURL = wikiURL;
         this.crateURL = crateURL;
         this.relocateURL = relocateURL;
+        this.swearWords = swearWords;
     }
 
     @Override
@@ -74,7 +76,8 @@ public class Config {
                 ", wikiURL='" + wikiURL + '\'' +
                 ", crateURL='" + crateURL + '\'' +
                 ", relocateURL='" + relocateURL + '\'' +
-                ", blacklistFiles: ['" + Arrays.toString(blacklistFiles.toArray()) + "']"
+                ", blacklistFiles: ['" + Arrays.toString(blacklistFiles.toArray()) + "']" +
+                ", swearWords: ['" + Arrays.toString(swearWords.toArray()) + "']"
                 + "}";
     }
 
@@ -157,5 +160,9 @@ public class Config {
 
     public String getRelocateURL() {
         return relocateURL;
+    }
+
+    public ArrayList<String> getSwearWords() {
+        return swearWords;
     }
 }
