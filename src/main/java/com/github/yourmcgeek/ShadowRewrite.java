@@ -2,7 +2,6 @@ package com.github.yourmcgeek;
 
 import com.github.yourmcgeek.commands.LMGTFYCommand;
 import com.github.yourmcgeek.commands.support.LogChannelCommand;
-import com.github.yourmcgeek.commands.support.SupportClose;
 import com.github.yourmcgeek.commands.support.SupportCommand;
 import com.github.yourmcgeek.commands.support.SupportSetup;
 import com.github.yourmcgeek.commands.wiki.*;
@@ -57,7 +56,6 @@ public class ShadowRewrite {
 
             builder.addCommands(
                     new SupportSetup(this),
-                    new SupportClose(this),
                     new SupportCommand(this),
                     new LogChannelCommand(this),
                     new LinkAccount(this),
