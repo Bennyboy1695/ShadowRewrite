@@ -46,13 +46,8 @@ public class ShadowRewrite {
     private Logger logger;
     private JDA jda;
 
-    public static void main(String[] args) {
-        Path p1 = Paths.get(".");
 
-        new ShadowRewrite().setupBot(p1);
-    }
-
-    private void setupBot(Path directory) {
+    public void setupBot(Path directory) throws Exception {
         this.directory = directory;
         logger = LoggerFactory.getLogger("ShadowBot");
         try {

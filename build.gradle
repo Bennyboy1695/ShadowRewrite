@@ -6,7 +6,7 @@ plugins {
 
 apply plugin: 'java'
 
-mainClassName = 'com.github.yourmcgeek.ShadowRewrite'
+mainClassName = 'com.github.yourmcgeek.Main'
 
 group 'com.github.yourmcgeek'
 version '1.0'
