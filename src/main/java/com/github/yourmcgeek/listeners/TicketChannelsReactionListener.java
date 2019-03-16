@@ -37,15 +37,15 @@ public void onMessageReactionAdd(MessageReactionAddEvent event) {
                                 .setDescription("Because of this we have sent you a log file containing the history, so that you may look at it in case you encounter the issue again!")
                                 .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()))
                                 .addField("Next Step: ", "If the issue still persists, please create a new ticket!", false)
-                                .build()).complete();
+                                .build()).queue();
                         event.getJDA().getUserById(Long.valueOf(topicID)).openPrivateChannel().complete()
                                 .sendFile(main.getLogDirectory().resolve(channel.getName() + ".log").toFile())
-                                .complete();
+                                .queue();
                         event.getJDA().getGuildById(main.getGuildId()).getTextChannelById(main.mgr.getConfig().getLogChannelID())
                                 .sendFile(main.getLogDirectory().resolve(channel.getName()+ ".log").toFile(), new MessageBuilder().append("`").append(channel.getName()).append("` has been closed! Here's a log to reference")
                                         .build())
-                                .complete();
-                        ((TextChannel) event.getChannel()).delete().complete();
+                                .queue();
+                        ((TextChannel) event.getChannel()).delete().queue();
                     }
                     }
                 }

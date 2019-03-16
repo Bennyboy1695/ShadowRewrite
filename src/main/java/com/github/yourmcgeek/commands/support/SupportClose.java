@@ -39,6 +39,6 @@ public class SupportClose extends Command {
         TextChannel channel = (TextChannel) event.getChannel();
         MessageAction messageAction = channel.sendFile(new File("%s.log"), event.getChannel().getName(), message);
         messageAction.complete();
-        event.getJDA().getTextChannelById(event.getChannel().getId()).delete().complete();
+        event.getJDA().getTextChannelById(event.getChannel().getId()).delete().queue();
     }
 }

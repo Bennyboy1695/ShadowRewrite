@@ -25,15 +25,15 @@ public class SupportSetup extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        event.getMessage().delete().complete();
+        event.getMessage().delete().queue();
         EmbedBuilder builder = new EmbedBuilder();
         builder.setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()));
         builder.setDescription("To make a support ticket please type /support. Please remember to always include the name of the server you are needing support on. When you do this a dedicated channel will be created for your issue. Once this is done Staff will contact you to try and resolve your issue.\n" +
                 "\n" +
                 "Tickets are not to be used for small questions that can be easily answered for these please use the this channel. Anything that requires in-depth staff interaction warrants creating a ticket. DO NOT abuse our ticket system doing so will result in a mute, kick or ban from our Discord.");
         Message message = main.getMessenger().sendEmbed((TextChannel) event.getChannel(), builder.build(), 0);
-        message.pin().complete();
-        ((TextChannel) event.getChannel()).getManager().setTopic("Read the pinned message to learn how to get support!").complete();
+        message.pin().queue();
+        ((TextChannel) event.getChannel()).getManager().setTopic("Read the pinned message to learn how to get support!").queue();
         EmbedBuilder pmBuilder = new EmbedBuilder()
                 .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()))
                 .addField("SupportId", event.getChannel().getId(), true)
@@ -43,7 +43,7 @@ public class SupportSetup extends Command {
                         " then restart the bot!");
 
         try {
-            event.getAuthor().openPrivateChannel().complete().sendMessage(pmBuilder.build()).complete();
+            event.getAuthor().openPrivateChannel().complete().sendMessage(pmBuilder.build()).queue();
         } catch (NullPointerException e) {
             e.printStackTrace();
         }

@@ -46,7 +46,7 @@ public class PrivateMessageListener extends ListenerAdapter {
             if (channel.getName().startsWith(event.getAuthor().getName())) {
                 userCount++;
                 if (userCount >= 3) {
-                    member.getUser().openPrivateChannel().complete().sendMessage("No channel has been created because you multiple channels open already. Please complete these issue first!").complete();
+                    member.getUser().openPrivateChannel().complete().sendMessage("No channel has been created because you multiple channels open already. Please complete these issue first!").queue();
                     return;
                 }
             }
@@ -68,7 +68,7 @@ public class PrivateMessageListener extends ListenerAdapter {
             TextChannel supportChannel = (TextChannel) event.getJDA().getCategoryById(main.mgr.getConfig().getSupportCategoryId())
                     .createTextChannel(member.getEffectiveName() + "-" + ThreadLocalRandom.current().nextInt(99999)).complete();
 
-            supportChannel.getManager().setTopic(event.getAuthor().getIdLong() + " Creation date: " + supportChannel.getCreationTime().format(dateFormat) + " Creation Time: " + supportChannel.getCreationTime().format(timeFormat) + "GMT").complete();
+            supportChannel.getManager().setTopic(event.getAuthor().getIdLong() + " Creation date: " + supportChannel.getCreationTime().format(dateFormat) + " Creation Time: " + supportChannel.getCreationTime().format(timeFormat) + "GMT").queue();
 
             EmbedBuilder message = new EmbedBuilder()
                     .setDescription(member.getAsMention())
@@ -85,25 +85,25 @@ public class PrivateMessageListener extends ListenerAdapter {
                             new File(main.getLogDirectory().toFile(), "attachments").mkdir();
                         }
                         attachment.download(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName() + ".log"));
-                        supportChannel.sendFile(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName() + ".log")).complete();
+                        supportChannel.sendFile(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName() + ".log")).queue();
                         main.getMessenger().sendMessage((TextChannel) event.getChannel(), event.getMessage().getAuthor() + " has sent a file called " + attachment.getFileName() + ".log");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else {
                     attachment.download(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName()));
-                    supportChannel.sendFile(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName())).complete();
+                    supportChannel.sendFile(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName())).queue();
                     main.getMessenger().sendMessage((TextChannel) event.getChannel(), event.getMessage().getAuthor() + " has sent a file called " + attachment.getFileName());
                 }
             }
-            supportMessage.pin().complete();
+            supportMessage.pin().queue();
             supportChannel.getHistory().retrievePast(1).queue(l -> l.forEach(m -> m.delete().queue()));
-            supportMessage.addReaction("\u2705").complete();
+            supportMessage.addReaction("\u2705").queue();
             event.getAuthor().openPrivateChannel().complete().sendMessage(new EmbedBuilder()
                     .setTitle("Support Channel")
                     .setDescription("https://discordapp.com/channels/" + main.getGuildId() + "/" + supportChannel.getIdLong())
                     .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()))
-                    .build()).complete();
+                    .build()).queue();
         } else {
             EmbedBuilder message = new EmbedBuilder()
                     .setTitle("Error!")

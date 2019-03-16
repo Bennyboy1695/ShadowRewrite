@@ -26,6 +26,6 @@ public class Tiquality extends Command {
                 .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()));
 
         main.getMessenger().sendEmbed((TextChannel) event.getChannel(), embed.build(), 10);
-        event.getMessage().delete().complete();
+        event.getMessage().delete().queue();
     }
 }

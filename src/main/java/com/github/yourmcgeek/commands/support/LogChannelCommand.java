@@ -25,6 +25,6 @@ public class LogChannelCommand extends Command {
             .addField("ID", String.valueOf(Long.valueOf(event.getChannel().getIdLong())), true)
             .setDescription("Add this in its corresponding place in your config file. Save the config," +
                     " then restart the bot!").build(), 30);
-        event.getMessage().delete().complete();
+        event.getMessage().delete().queue();
     }
 }

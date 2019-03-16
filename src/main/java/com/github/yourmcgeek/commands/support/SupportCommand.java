@@ -42,6 +42,6 @@ public class SupportCommand extends Command {
         .setDescription("To create a ticket, please respond here and a channel will be created." +
                 "\nNote: Multiple messages will not be combined, so please type only one message.\n" +
                 "Also, if you upload a file, the file will be taken and sent in the support channel also!").build());
-        event.getMessage().delete().complete();
+        event.getMessage().delete().queue();
     }
 }

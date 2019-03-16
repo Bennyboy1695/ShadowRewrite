@@ -56,7 +56,7 @@ public class SuggestionListener extends ListenerAdapter {
                     messageId.set(x.getIdLong());
                     hasSent.set(true);
                     executorService.schedule(()-> {
-                        event.getChannel().getMessageById(messageId.get()).complete().delete().complete();
+                        event.getChannel().getMessageById(messageId.get()).complete().delete().queue();
                         hasSent.set(false);
                         messageId.set(0L);
                     },10, TimeUnit.SECONDS);
