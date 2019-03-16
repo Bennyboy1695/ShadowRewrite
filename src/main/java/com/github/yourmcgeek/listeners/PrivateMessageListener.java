@@ -11,6 +11,8 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import java.awt.*;
 import java.io.File;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -31,7 +33,6 @@ public class PrivateMessageListener extends ListenerAdapter {
 
         String userMessage = event.getMessage().getContentRaw();
 
-        System.out.println(main.mgr.getConfig().getGuildID());
         Member member = event.getJDA().getGuildById(main.getGuildID()).getMember(event.getAuthor());
 
 
@@ -41,7 +42,7 @@ public class PrivateMessageListener extends ListenerAdapter {
         }
 
         for (TextChannel channel : event.getJDA().getCategoryById(Long.valueOf(main.mgr.getConfig().getSupportCategoryId())).getTextChannels()) {
-            if (channel.getName().startsWith(event.getAuthor().getName())) {
+            if (channel.getName().startsWith(member.getEffectiveName())) {
                 userCount++;
                 if (userCount == 1) {
                     member.getUser().openPrivateChannel().complete().sendMessage("No channel has been created because you already have a ticket open! Please respond within the ticket to resolve that issue first!").queue();
@@ -69,9 +70,9 @@ public class PrivateMessageListener extends ListenerAdapter {
             supportChannel.getManager().setTopic(event.getAuthor().getIdLong() + " Creation date: " + supportChannel.getCreationTime().format(dateFormat) + " Creation Time: " + supportChannel.getCreationTime().format(timeFormat) + "GMT").queue();
 
             EmbedBuilder message = new EmbedBuilder()
-                    .setDescription(member.getAsMention())
-                    .addField("Ticket: ", userMessage, false)
-                    .addField("Finished? ", "If you are finished with this ticket, please click \u2705. _All staff and developers can close the ticket also_", true)
+                    .addField("Author: ", member.getAsMention(), true)
+                    .addField("Ticket: ", userMessage, true)
+                    .setFooter("If you are finished with this ticket, please click \u2705. All staff and developers can close the ticket also", event.getJDA().getSelfUser().getEffectiveAvatarUrl())
                     .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()));
 
             Message supportMessage = main.getMessenger().sendEmbed(supportChannel, message.build(), 0);
@@ -83,18 +84,26 @@ public class PrivateMessageListener extends ListenerAdapter {
                             new File(main.getLogDirectory().toFile(), "attachments").mkdir();
                         }
                         attachment.download(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName() + ".log"));
-                        supportChannel.sendFile(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName() + ".log")).queue();
+                        supportChannel.sendFile(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName() + ".log")).complete();
                         main.getMessenger().sendMessage((TextChannel) event.getChannel(), event.getMessage().getAuthor() + " has sent a file called " + attachment.getFileName() + ".log");
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        main.getLogger().error("Error with PrivateMessageListener ", e);
                     }
                 } else {
-                    attachment.download(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName()));
-                    supportChannel.sendFile(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName())).queue();
-                    main.getMessenger().sendMessage((TextChannel) event.getChannel(), event.getMessage().getAuthor() + " has sent a file called " + attachment.getFileName());
+                    if (Files.exists(main.getAttachmentDir().resolve(attachment.getFileName()))) {
+                        main.getLogger().info("Renaming attachment as one already exists!");
+                        String rename = fileName [0] + ThreadLocalRandom.current().nextInt(99999) + "." + fileName[1];
+
+                        attachment.download(new File(String.valueOf(main.getAttachmentDir().resolve(rename))));
+                        supportChannel.sendFile(new File(String.valueOf(main.getAttachmentDir().resolve(rename)))).complete();
+                        main.getLogger().info(attachment.getFileName() + " was renamed to " + rename);
+                    } else {
+                        attachment.download(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName()));
+                        supportChannel.sendFile(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName())).complete();
+                    }
                 }
             }
-            supportMessage.pin().queue();
+            supportMessage.pin().complete();
             supportChannel.getHistory().retrievePast(1).queue(l -> l.forEach(m -> m.delete().queue()));
             supportMessage.addReaction("\u2705").queue();
             event.getAuthor().openPrivateChannel().complete().sendMessage(new EmbedBuilder()

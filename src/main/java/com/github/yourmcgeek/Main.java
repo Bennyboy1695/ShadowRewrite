@@ -30,6 +30,6 @@ public class Main extends ListenerAdapter {
             bot.shutdown();
            System.exit(0);
         });
-        bot.setupBot(mainDirectory);
+        bot.init(mainDirectory);
     }
 }

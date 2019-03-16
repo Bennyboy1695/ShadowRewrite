@@ -41,13 +41,14 @@ public class ShadowRewrite {
     public JsonArray confirmMessages = new JsonArray();
 
     private Path logDirectory;
+    private Path attachmentDir;
     private Messenger messenger;
     private Path directory;
     private Logger logger;
     private JDA jda;
 
 
-    public void setupBot(Path directory) throws Exception {
+    public void init(Path directory) throws Exception {
         this.directory = directory;
         logger = LoggerFactory.getLogger("ShadowBot");
         try {
@@ -93,16 +94,25 @@ public class ShadowRewrite {
         } catch (LoginException e) {
             e.printStackTrace();
         }
+
         try {
-            Path path = Paths.get(directory + "/logs");
-            if (!path.toFile().exists()) {
-                path.toFile().mkdir();
-                logDirectory = path;
+            logger.info("Checking Logs directories");
+            Path logs = Paths.get(directory + "/logs");
+            if (!Files.exists(logs)) {
+                Files.createDirectories(logs);
+                logDirectory = logs;
             }
-            logDirectory = path;
-        } catch (Exception e) {
-            e.printStackTrace();
+            logDirectory = logs;
+            Path attachments = logs.resolve("attachments");
+            if (!Files.exists(attachments)) {
+                Files.createDirectories(attachments);
+                attachmentDir = attachments;
+            }
+            attachmentDir = attachments;
+        } catch (IOException e) {
+            logger.error("Error creating directories!", e);
         }
+
         logger.info("Ready to accept input!");
     }
     public List<String[]> getTips() throws IOException, ParseException {
@@ -126,7 +136,6 @@ public class ShadowRewrite {
         getJDA().shutdown();
         logger.info("Shutdown Complete.");
     }
-
 
     public JDA getJDA() {
         return this.jda;
@@ -157,6 +166,10 @@ public class ShadowRewrite {
 
     public long getGuildID() {
         return Long.valueOf(mgr.getConfig().getGuildID());
+    }
+
+    public Path getAttachmentDir() {
+        return attachmentDir;
     }
 
     private final class ThreadedEventManager extends InterfacedEventManager {

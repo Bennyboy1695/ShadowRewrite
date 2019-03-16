@@ -26,8 +26,8 @@ repositories {
 
 dependencies {
 //    JDA
-    compile 'net.dv8tion:JDA:3.8.3_460'
-    compile 'com.jagrosh:jda-utilities:2.1'
+    compile 'net.dv8tion:JDA:3.8.3_462'
+    compile 'com.jagrosh:jda-utilities:2.1.5'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
 //   Google
     implementation group: 'com.google.inject', name: 'guice', version: '4.1.0'
