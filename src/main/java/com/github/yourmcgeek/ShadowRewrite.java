@@ -16,6 +16,7 @@ import com.google.gson.stream.JsonReader;
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import net.dv8tion.jda.core.AccountType;
+import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
 
@@ -114,6 +115,13 @@ public class ShadowRewrite {
         return tipArray;
     }
 
+    public void shutdown() {
+        getJDA().shutdown();
+    }
+
+    public JDA getJDA() {
+        return this.getJDA();
+    }
     public SettingsManager getSettingsManager() {
         return mgr;
     }
