@@ -19,6 +19,10 @@ import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.core.events.Event;
+import net.dv8tion.jda.core.hooks.InterfacedEventManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
@@ -28,6 +32,8 @@ import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ShadowRewrite {
 
@@ -37,6 +43,8 @@ public class ShadowRewrite {
     private Path logDirectory;
     private Messenger messenger;
     private Path directory;
+    private Logger logger;
+    private JDA jda;
 
     public static void main(String[] args) {
         Path p1 = Paths.get(".");
@@ -46,6 +54,7 @@ public class ShadowRewrite {
 
     private void setupBot(Path directory) {
         this.directory = directory;
+        logger = LoggerFactory.getLogger("ShadowBot");
         try {
             Config config = mgr.getConfig();
             CommandClientBuilder builder = new CommandClientBuilder();
@@ -78,6 +87,7 @@ public class ShadowRewrite {
                     .addEventListener(new SupportCategoryListener(this))
                     .addEventListener(new TicketChannelsReactionListener(this))
                     .addEventListener(new SuggestionListener(this))
+                    .setEventManager(new ThreadedEventManager())
                     .setToken(config.getToken())
                     .build();
 
@@ -98,6 +108,7 @@ public class ShadowRewrite {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        logger.info("Ready to accept input!");
     }
     public List<String[]> getTips() throws IOException, ParseException {
         JsonReader reader = new JsonReader(Files.newBufferedReader(Paths.get(".").resolve("conf.json")));
@@ -116,11 +127,18 @@ public class ShadowRewrite {
     }
 
     public void shutdown() {
+        logger.info("Initiating Shutdown...");
         getJDA().shutdown();
+        logger.info("Shutdown Complete.");
     }
 
+
     public JDA getJDA() {
-        return this.getJDA();
+        return this.jda;
+    }
+
+    public Logger getLogger() {
+        return logger;
     }
     public SettingsManager getSettingsManager() {
         return mgr;
@@ -146,4 +164,12 @@ public class ShadowRewrite {
         return Long.valueOf(mgr.getConfig().getGuildID());
     }
 
+    private final class ThreadedEventManager extends InterfacedEventManager {
+        private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()+1);
+
+        @Override
+        public void handle(Event e) {
+            executor.submit(() -> super.handle(e));
+        }
+    }
 }

@@ -17,7 +17,7 @@ public class Main extends ListenerAdapter {
 
             String cmd;
             do {
-                cmd = input.next();
+                cmd = input.nextLine();
                 switch (cmd) {
                     default:
                         System.out.println("Invalid command!");
