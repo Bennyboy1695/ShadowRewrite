@@ -1,6 +1,7 @@
 package com.github.yourmcgeek.listeners;
 
 import com.github.yourmcgeek.ShadowRewrite;
+import me.bhop.bjdautilities.EditableMessage;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
@@ -11,7 +12,6 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import java.awt.*;
 import java.io.File;
-import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ThreadLocalRandom;
@@ -75,7 +75,8 @@ public class PrivateMessageListener extends ListenerAdapter {
                     .setFooter("If you are finished with this ticket, please click \u2705. All staff and developers can close the ticket also", event.getJDA().getSelfUser().getEffectiveAvatarUrl())
                     .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()));
 
-            Message supportMessage = main.getMessenger().sendEmbed(supportChannel, message.build(), 0);
+            EditableMessage supportMessageEdit = main.getMessenger().sendEmbed(supportChannel, message.build(), 0);
+            Message supportMessage = supportMessageEdit.getMessage();
             for (Message.Attachment attachment : event.getMessage().getAttachments()) {
                 String[] fileName = attachment.getFileName().split("\\.");
                 if (main.mgr.getConfig().getBlacklistFiles().contains(fileName[1])) {

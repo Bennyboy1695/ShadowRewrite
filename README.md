@@ -68,7 +68,7 @@ Portions of the bot have been taken from NetBans Supportbot. Credit has been giv
 
 Original source can be viewed [here](https://github.com/netbans/supportbot). 
 
-The bot is built on the public Discord API known as [JDA](https://github.com/DV8FromTheWorld/JDA) with the 3rd party library of [JDA-Utilities](https://github.com/JDA-Applications/JDA-Utilities)
+The bot is built on the public Discord API known as [JDA](https://github.com/DV8FromTheWorld/JDA) with the 3rd party library of [bJdaUtilities](https://github.com/bhopahk/bJdaUtilities/)
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

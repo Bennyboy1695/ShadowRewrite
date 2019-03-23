@@ -1,33 +1,37 @@
 package com.github.yourmcgeek.commands.wiki;
 
 import com.github.yourmcgeek.ShadowRewrite;
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
+
+import me.bhop.bjdautilities.command.CommandResult;
+import me.bhop.bjdautilities.command.annotation.Command;
+import me.bhop.bjdautilities.command.annotation.Execute;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
 
 import java.awt.*;
+import java.util.List;
 
-public class ChunkLoading extends Command {
+@Command(label = {"chunkloading", "cl"}, usage = "cl", description = "Displays wiki link for ChunkLoading")
+public class ChunkLoading {
 
     private ShadowRewrite main;
 
     public ChunkLoading(ShadowRewrite main) {
         this.main = main;
-        this.name = "cl";
-        this.aliases = new String[]{"chunks", "chunkload", "chunkloading"};
-        this.help = "Displays the wiki link about chunkloading";
+
     }
 
-    @Override
-    protected void execute(CommandEvent event) {
+    @Execute
+    public CommandResult onExecute(Member member, TextChannel channel, Message message, String label, List<String> args) {
         EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("Chunk Loading")
                 .setDescription("Use this link to see how to chunk load land\n" + main.mgr.getConfig().getCLURL())
                 .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()));
 
-        main.getMessenger().sendEmbed((TextChannel) event.getChannel(), embed.build(), 10);
-        event.getMessage().delete().queue();
+        main.getMessenger().sendEmbed(channel, embed.build(), 10);
+        message.delete().queue();
+        return CommandResult.SUCCESS;
     }
-
 }

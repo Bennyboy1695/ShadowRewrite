@@ -1,31 +1,31 @@
 package com.github.yourmcgeek.commands.support;
 
 import com.github.yourmcgeek.ShadowRewrite;
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
+import me.bhop.bjdautilities.command.CommandResult;
+import me.bhop.bjdautilities.command.annotation.Command;
+import me.bhop.bjdautilities.command.annotation.Execute;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.PrivateChannel;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.requests.RestAction;
 
 import java.awt.*;
+import java.util.List;
 
-public class SupportCommand extends Command {
+@Command(label = {"support", "ticket"}, usage = "support", description = "Opens a support ticket")
+public class SupportCommand {
 
     private ShadowRewrite main;
 
     public SupportCommand(ShadowRewrite main) {
         this.main = main;
-        this.name = "support";
-        this.help = "Create a new support ticket";
-        this.aliases = new String[]{"ticket"};
-        this.guildOnly = true;
     }
 
-    @Override
-    protected void execute(CommandEvent event) {
-        TextChannel channel = (TextChannel) event.getChannel();
-        RestAction<PrivateChannel> pmChannel = event.getMember().getUser().openPrivateChannel();
+    @Execute
+    public CommandResult onExecute(Member member, TextChannel channel, Message message, String label, List<String> args) {
+        RestAction<PrivateChannel> pmChannel = member.getUser().openPrivateChannel();
         EmbedBuilder embedBuilder = new EmbedBuilder()
                 .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()))
                 .setTitle("Support Ticket")
@@ -36,12 +36,13 @@ public class SupportCommand extends Command {
 
         main.getMessenger().sendEmbed(channel, embedBuilder.build(), 30);
 
-        main.getMessenger().sendPrivateMessage(event.getAuthor(), new EmbedBuilder()
-        .setTitle("Support Ticket Creation")
+        message.getAuthor().openPrivateChannel().complete().sendMessage(new EmbedBuilder()
+                .setTitle("Support Ticket Creation")
                 .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()))
-        .setDescription("To create a ticket, please respond here and a channel will be created." +
-                "\nNote: Multiple messages will not be combined, so please type only one message.\n" +
-                "Also, if you upload a file, the file will be taken and sent in the support channel also!").build());
-        event.getMessage().delete().queue();
+                .setDescription("To create a ticket, please respond here and a channel will be created." +
+                        "\nNote: Multiple messages will not be combined, so please type only one message.\n" +
+                        "Also, if you upload a file, the file will be taken and sent in the support channel also!").build()).complete();
+        message.delete().queue();
+        return CommandResult.SUCCESS;
     }
 }

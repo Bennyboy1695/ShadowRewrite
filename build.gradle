@@ -27,7 +27,7 @@ repositories {
 dependencies {
 //    JDA
     compile 'net.dv8tion:JDA:3.8.3_462'
-    compile 'com.jagrosh:jda-utilities:2.1.5'
+//    compile 'com.jagrosh:jda-utilities:2.1.5'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
 //   Google
     implementation group: 'com.google.inject', name: 'guice', version: '4.1.0'
@@ -36,6 +36,8 @@ dependencies {
 //    Logger
     compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.8.0-beta4'
 //    Utils
+    compile 'org.reflections:reflections:0.9.11'
+    compile group: 'me.bhop', name: 'bJdaUtilities', version: '1.0.6'
     compileOnly 'org.projectlombok:lombok:1.16.20'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
     compile group: 'commons-io', name: 'commons-io', version: '2.6'

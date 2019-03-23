@@ -5,33 +5,42 @@ import com.github.yourmcgeek.commands.support.LogChannelCommand;
 import com.github.yourmcgeek.commands.support.SupportCommand;
 import com.github.yourmcgeek.commands.support.SupportSetup;
 import com.github.yourmcgeek.commands.wiki.*;
-import com.github.yourmcgeek.listeners.*;
+import com.github.yourmcgeek.listeners.PrivateMessageListener;
+import com.github.yourmcgeek.listeners.SuggestionListener;
+import com.github.yourmcgeek.listeners.SupportCategoryListener;
+import com.github.yourmcgeek.listeners.TicketChannelsReactionListener;
 import com.github.yourmcgeek.objects.config.Config;
-import com.github.yourmcgeek.objects.message.Messenger;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
-import com.jagrosh.jdautilities.command.CommandClient;
-import com.jagrosh.jdautilities.command.CommandClientBuilder;
+import me.bhop.bjdautilities.Messenger;
+import me.bhop.bjdautilities.command.CommandHandler;
+import me.bhop.bjdautilities.command.CommandHandlerBuilder;
+import me.bhop.bjdautilities.command.annotation.Command;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.hooks.InterfacedEventManager;
+import org.reflections.Reflections;
+import org.reflections.scanners.MethodAnnotationsScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -43,6 +52,7 @@ public class ShadowRewrite {
     private Path logDirectory;
     private Path attachmentDir;
     private Messenger messenger;
+    private CommandHandlerBuilder handlerBuilder;
     private Path directory;
     private Logger logger;
     private JDA jda;
@@ -53,44 +63,51 @@ public class ShadowRewrite {
         logger = LoggerFactory.getLogger("ShadowBot");
         try {
             Config config = mgr.getConfig();
-            CommandClientBuilder builder = new CommandClientBuilder();
-            builder.setPrefix(config.getPrefix());
-            builder.setGame(Game.playing("play.shadownode.ca"));
-            builder.setOwnerId(config.getBotOwnerId());
-
-            this.messenger = new Messenger();
-
-            builder.addCommands(
-                    new SupportSetup(this),
-                    new SupportCommand(this),
-                    new LogChannelCommand(this),
-                    new LinkAccount(this),
-                    new CrashReport(this),
-                    new Restart(this),
-                    new Claiming(this),
-                    new Tiquality(this),
-                    new ChunkLoading(this),
-                    new Wiki(this),
-                    new Relocate(this),
-                    new Crate(this),
-                    new LMGTFYCommand(this)
-            );
-
-            CommandClient client = builder.build();
-            new JDABuilder(AccountType.BOT)
-                    .addEventListener(client)
-                    .addEventListener(new PrivateMessageListener(this))
-                    .addEventListener(new SupportCategoryListener(this))
-                    .addEventListener(new TicketChannelsReactionListener(this))
-                    .addEventListener(new SuggestionListener(this))
-                    .setEventManager(new ThreadedEventManager())
-                    .setToken(config.getToken())
-                    .build();
-
-            if (mgr.getConfig().getToken().equalsIgnoreCase("changeme")) {
+            if (config.getToken().equalsIgnoreCase("changeme")) {
                 System.out.println("Please add the bot token into the config.");
                 System.exit(1);
             }
+            this.jda = new JDABuilder(AccountType.BOT)
+                    .setToken(config.getToken())
+                    .setEventManager(new ThreadedEventManager())
+                    .setGame(Game.playing("play.shadownode.ca"))
+                    .build();
+            jda.awaitReady();
+
+            logger.info("Setting Preferences...");
+            CommandHandler handler = new CommandHandlerBuilder(jda)
+                .setPrefix(config.getPrefix())
+                .setDeleteCommands(true)
+                .setDeleteResponse(false)
+                .setGenerateHelp(true)
+                .setSendTyping(true)
+            .build();
+
+            logger.info("Starting Messenger...");
+            this.messenger = new Messenger();
+
+            logger.info("Registering Commands...");
+            handler.register(new SupportSetup(this));
+            handler.register(new SupportCommand(this));
+            handler.register(new LogChannelCommand(this));
+            handler.register(new LinkAccount(this));
+            handler.register(new CrashReport(this));
+            handler.register(new Restart(this));
+            handler.register(new Claiming(this));
+            handler.register(new Tiquality(this));
+            handler.register(new ChunkLoading(this));
+            handler.register(new Wiki(this));
+            handler.register(new Relocate(this));
+            handler.register(new Crate(this));
+            handler.register(new LMGTFYCommand(this));
+
+            logger.info("Registering Listeners...");
+            this.jda.addEventListener(new PrivateMessageListener(this));
+            this.jda.addEventListener(new SupportCategoryListener(this));
+            this.jda.addEventListener(new TicketChannelsReactionListener(this));
+            this.jda.addEventListener(new SuggestionListener(this));
+
+
         } catch (LoginException e) {
             e.printStackTrace();
         }
@@ -170,6 +187,10 @@ public class ShadowRewrite {
 
     public Path getAttachmentDir() {
         return attachmentDir;
+    }
+
+    public CommandHandlerBuilder getHandlerBuilder() {
+        return handlerBuilder;
     }
 
     private final class ThreadedEventManager extends InterfacedEventManager {

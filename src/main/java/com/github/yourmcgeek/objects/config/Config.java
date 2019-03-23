@@ -125,7 +125,6 @@ public class Config {
         return blacklistFiles;
     }
 
-
     public String getCrashURL() {
         return crashURL;
     }

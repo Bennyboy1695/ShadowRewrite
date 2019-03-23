@@ -1,32 +1,35 @@
 package com.github.yourmcgeek.commands.wiki;
 
 import com.github.yourmcgeek.ShadowRewrite;
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
+import me.bhop.bjdautilities.command.CommandResult;
+import me.bhop.bjdautilities.command.annotation.Command;
+import me.bhop.bjdautilities.command.annotation.Execute;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
 
 import java.awt.*;
+import java.util.List;
 
-public class Restart extends Command {
+@Command(label = {"resets", "restarts", "reset", "wipes"}, usage = "restart", description = "Displays information about wipes and restarts")
+
+public class Restart {
 
     private ShadowRewrite main;
-
     public Restart(ShadowRewrite main) {
         this.main = main;
-        this.name = "restart";
-        this.aliases = new String[]{"wipes", "reset", "restarts", "resets"};
-        this.help = "Displays information about wipes and restarts";
     }
 
-    @Override
-    protected void execute(CommandEvent event) {
+    @Execute
+    public CommandResult onExecute(Member member, TextChannel channel, Message message, String label, List<String> args) {
         EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("Wipes and Restarts")
                 .setDescription("Use this link to see how often and when the servers restart/wipe\n" + main.mgr.getConfig().getRestartURL())
                 .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()));
 
-        main.getMessenger().sendEmbed((TextChannel) event.getChannel(), embed.build(), 10);
-        event.getMessage().delete().queue();
+        main.getMessenger().sendEmbed(channel, embed.build(), 10);
+        message.delete().queue();
+        return CommandResult.SUCCESS;
     }
 }
