@@ -64,8 +64,7 @@ Follow the format in order to add more words that the bot will respond to with t
 |   <tag>     	|                              Tags the user                                  |
 
 ## Credit
-Portions of the bot have been taken from NetBans Supportbot. Credit has been given via README and comments directly inside the java files taken from the original source.
-
+Portions of the bot have been taken from NetBans Supportbot.
 Original source can be viewed [here](https://github.com/netbans/supportbot). 
 
 The bot is built on the public Discord API known as [JDA](https://github.com/DV8FromTheWorld/JDA) with the 3rd party library of [bJdaUtilities](https://github.com/bhopahk/bJdaUtilities/)
