@@ -67,16 +67,17 @@ public class PrivateMessageListener extends ListenerAdapter {
             TextChannel supportChannel = (TextChannel) event.getJDA().getCategoryById(main.mgr.getConfig().getSupportCategoryId())
                     .createTextChannel(member.getEffectiveName() + "-" + ThreadLocalRandom.current().nextInt(99999)).complete();
 
-            supportChannel.getManager().setTopic(event.getAuthor().getIdLong() + " Creation date: " + supportChannel.getCreationTime().format(dateFormat) + " Creation Time: " + supportChannel.getCreationTime().format(timeFormat) + "GMT").queue();
-
             EmbedBuilder message = new EmbedBuilder()
                     .addField("Author: ", member.getAsMention(), true)
                     .addField("Ticket: ", userMessage, true)
+                    .setDescription(userMessage)
                     .setFooter("If you are finished with this ticket, please click \u2705. All staff and developers can close the ticket also", event.getJDA().getSelfUser().getEffectiveAvatarUrl())
                     .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()));
 
-            EditableMessage supportMessageEdit = main.getMessenger().sendEmbed(supportChannel, message.build(), 0);
-            Message supportMessage = supportMessageEdit.getMessage();
+//            Message supportMessage = main.getMessenger().sendEmbed(supportChannel, message.build()).getMessage();
+            Message supportMessage = main.getMessenger().sendEmbed(supportChannel, message.build()).getMessage();
+
+            supportChannel.getManager().setTopic("Creation date: " + supportChannel.getCreationTime().format(dateFormat) + " Creation Time: " + supportChannel.getCreationTime().format(timeFormat) + " GMT Authors ID: " + event.getAuthor().getIdLong() + " Message ID: " + supportMessage.getIdLong() + " Channel ID: " + supportChannel.getIdLong()).queue();
             for (Message.Attachment attachment : event.getMessage().getAttachments()) {
                 String[] fileName = attachment.getFileName().split("\\.");
                 if (main.mgr.getConfig().getBlacklistFiles().contains(fileName[1])) {
