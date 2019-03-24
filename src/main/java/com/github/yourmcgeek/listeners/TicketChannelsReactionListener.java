@@ -21,7 +21,6 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
 
     @Override
     public void onMessageReactionAdd(MessageReactionAddEvent event) {
-        String originalIssue = null;
         if (event.isFromType(ChannelType.TEXT)) {
             TextChannel channel = (TextChannel) event.getChannel();
             if (channel.getParent().getIdLong() == Long.valueOf(main.mgr.getConfig().getSupportCategoryId())) {
@@ -33,17 +32,13 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
                         String supportMsgId = cTopicSplit[12];
                         String channelId = cTopicSplit[15];
 
-                        main.getLogger().info(cTopicSplit + "\n\n" + userId + "\n\n" + supportMsgId);
-
                         if (event.getMember().getUser().getIdLong() == Long.valueOf(userId) || event.getMember().getRoles().stream().map(Role::getName).anyMatch("Staff"::equalsIgnoreCase) ||
                                 event.getMember().getRoles().stream().map(Role::getName).anyMatch("Developer"::equalsIgnoreCase)) {
 
-//                        String ticket = null;
                             RestAction<Message> message1 = event.getJDA().getGuildById(main.getGuildId()).getTextChannelById(channelId).getMessageById(supportMsgId);
                             Consumer<Message> callback = (msg) -> {
                                 Message m = msg;
                                 String ticket = m.getEmbeds().get(0).getFields().get(1).getValue();
-
 
                                 event.getJDA().getUserById(Long.valueOf(userId)).openPrivateChannel().complete().sendMessage(new EmbedBuilder()
                                         .setTitle("Issue Completed")

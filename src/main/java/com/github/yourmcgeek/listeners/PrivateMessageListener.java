@@ -74,7 +74,6 @@ public class PrivateMessageListener extends ListenerAdapter {
                     .setFooter("If you are finished with this ticket, please click \u2705. All staff and developers can close the ticket also", event.getJDA().getSelfUser().getEffectiveAvatarUrl())
                     .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()));
 
-//            Message supportMessage = main.getMessenger().sendEmbed(supportChannel, message.build()).getMessage();
             Message supportMessage = main.getMessenger().sendEmbed(supportChannel, message.build()).getMessage();
 
             supportChannel.getManager().setTopic("Creation date: " + supportChannel.getCreationTime().format(dateFormat) + " Creation Time: " + supportChannel.getCreationTime().format(timeFormat) + " GMT Authors ID: " + event.getAuthor().getIdLong() + " Message ID: " + supportMessage.getIdLong() + " Channel ID: " + supportChannel.getIdLong()).queue();
