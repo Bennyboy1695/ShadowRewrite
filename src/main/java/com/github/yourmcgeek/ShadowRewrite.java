@@ -18,29 +18,23 @@ import com.google.gson.stream.JsonReader;
 import me.bhop.bjdautilities.Messenger;
 import me.bhop.bjdautilities.command.CommandHandler;
 import me.bhop.bjdautilities.command.CommandHandlerBuilder;
-import me.bhop.bjdautilities.command.annotation.Command;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.hooks.InterfacedEventManager;
-import org.reflections.Reflections;
-import org.reflections.scanners.MethodAnnotationsScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -78,7 +72,6 @@ public class ShadowRewrite {
             CommandHandler handler = new CommandHandlerBuilder(jda)
                 .setPrefix(config.getPrefix())
                 .setDeleteCommands(true)
-                .setDeleteResponse(false)
                 .setGenerateHelp(true)
                 .setSendTyping(true)
             .build();
@@ -99,7 +92,7 @@ public class ShadowRewrite {
             handler.register(new Wiki(this));
             handler.register(new Relocate(this));
             handler.register(new Crate(this));
-            handler.register(new LMGTFYCommand(this));
+//            handler.register(new LMGTFYCommand(this));
 
             logger.info("Registering Listeners...");
             this.jda.addEventListener(new PrivateMessageListener(this));
@@ -113,7 +106,7 @@ public class ShadowRewrite {
         }
 
         try {
-            logger.info("Checking Logs directories");
+            logger.info("Checking Log directories...");
             Path logs = Paths.get(directory + "/logs");
             if (!Files.exists(logs)) {
                 Files.createDirectories(logs);
@@ -130,7 +123,7 @@ public class ShadowRewrite {
             logger.error("Error creating directories!", e);
         }
 
-        logger.info("Ready to accept input!");
+        logger.info("Everything Loaded Successfully | Ready to accept input!");
     }
     public List<String[]> getTips() throws IOException, ParseException {
         JsonReader reader = new JsonReader(Files.newBufferedReader(Paths.get(".").resolve("conf.json")));
