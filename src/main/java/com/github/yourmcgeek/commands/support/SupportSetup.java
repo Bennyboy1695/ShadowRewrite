@@ -14,7 +14,7 @@ import net.dv8tion.jda.core.entities.TextChannel;
 import java.awt.*;
 import java.util.List;
 
-@Command(label = {"supportsetup", "setupsupport"}, usage = "setupsupport", description = "Provides information that needs added to the configuration file for support to work properly", permission = Permission.ADMINISTRATOR)
+@Command(label = {"supportsetup", "setupsupport"}, usage = "setupsupport", description = "Provides information that needs added to the configuration file for support to work properly", permission = Permission.ADMINISTRATOR, hideInHelp = true)
 public class SupportSetup {
 
     private ShadowRewrite main;
@@ -27,7 +27,6 @@ public class SupportSetup {
         if (!member.hasPermission(Permission.ADMINISTRATOR)) {
             return CommandResult.NO_PERMISSION;
         } else {
-            message.delete().queue();
             EmbedBuilder builder = new EmbedBuilder();
             builder.setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()));
             builder.setDescription("To make a support ticket please type /support. Please remember to always include the name of the server you are needing support on. When you do this a dedicated channel will be created for your issue. Once this is done Staff will contact you to try and resolve your issue.\n" +

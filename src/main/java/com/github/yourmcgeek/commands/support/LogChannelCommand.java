@@ -13,7 +13,7 @@ import net.dv8tion.jda.core.entities.TextChannel;
 import java.awt.*;
 import java.util.List;
 
-@Command(label = {"log", "logchannel"}, usage = "log", description = "Prints out log channel id for configuration file", permission = Permission.ADMINISTRATOR)
+@Command(label = {"log", "logchannel"}, usage = "log", description = "Prints out log channel id for configuration file", permission = Permission.ADMINISTRATOR, hideInHelp = true)
 public class LogChannelCommand {
 
     private ShadowRewrite main;
@@ -33,7 +33,6 @@ public class LogChannelCommand {
                     .addField("ID", String.valueOf(Long.valueOf(channel.getIdLong())), true)
                     .setDescription("Add this in its corresponding place in your config file. Save the config," +
                             " then restart the bot!").build(), 30);
-            message.delete().queue();
             return CommandResult.SUCCESS;
         }
     }

@@ -31,7 +31,6 @@ public class ChunkLoading {
                 .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()));
 
         main.getMessenger().sendEmbed(channel, embed.build(), 10);
-        message.delete().queue();
         return CommandResult.SUCCESS;
     }
 }

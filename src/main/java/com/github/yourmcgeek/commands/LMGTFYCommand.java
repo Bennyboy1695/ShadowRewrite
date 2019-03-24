@@ -13,7 +13,7 @@ import net.dv8tion.jda.core.entities.TextChannel;
 import java.awt.*;
 import java.util.List;
 
-@Command(label = {"google", "lmgtfy"}, usage = "google {args}", description = "Displays a LMGTFY link", minArgs = 1, permission = Permission.ADMINISTRATOR)
+@Command(label = {"google", "lmgtfy"}, usage = "google {args}", description = "Displays a LMGTFY link", minArgs = 1, permission = Permission.ADMINISTRATOR, hideInHelp = true)
 public class LMGTFYCommand {
 
     private ShadowRewrite main;
@@ -24,8 +24,6 @@ public class LMGTFYCommand {
 
     @Execute
     public CommandResult onExecute(Member member, TextChannel channel, Message message, String label, List<String> args) {
-        message.delete().complete();
-
         String link = "";
         StringBuilder link2 = new StringBuilder();
         for (int x = 0; x != args.size(); x++) {
