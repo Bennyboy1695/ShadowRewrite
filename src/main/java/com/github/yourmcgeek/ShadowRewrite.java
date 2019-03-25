@@ -1,9 +1,9 @@
 package com.github.yourmcgeek;
 
-import com.github.yourmcgeek.commands.LMGTFYCommand;
 import com.github.yourmcgeek.commands.support.LogChannelCommand;
 import com.github.yourmcgeek.commands.support.SupportCommand;
 import com.github.yourmcgeek.commands.support.SupportSetup;
+import com.github.yourmcgeek.commands.utils.Util;
 import com.github.yourmcgeek.commands.wiki.*;
 import com.github.yourmcgeek.listeners.PrivateMessageListener;
 import com.github.yourmcgeek.listeners.SuggestionListener;
@@ -17,7 +17,6 @@ import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import me.bhop.bjdautilities.Messenger;
 import me.bhop.bjdautilities.command.CommandHandler;
-import me.bhop.bjdautilities.command.CommandHandler.Builder;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -50,7 +49,6 @@ public class ShadowRewrite {
     private Path directory;
     private Logger logger;
     private JDA jda;
-
 
     public void init(Path directory) throws Exception {
         this.directory = directory;
@@ -185,6 +183,7 @@ public class ShadowRewrite {
     public CommandHandler.Builder getHandlerBuilder() {
         return handlerBuilder;
     }
+
 
     private final class ThreadedEventManager extends InterfacedEventManager {
         private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()+1);
