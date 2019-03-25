@@ -1,19 +1,13 @@
 package com.github.yourmcgeek;
 
-import com.github.yourmcgeek.commands.LMGTFYCommand;
+import com.github.yourmcgeek.commands.remind.Remind;
 import com.github.yourmcgeek.commands.support.LogChannelCommand;
 import com.github.yourmcgeek.commands.support.SupportCommand;
 import com.github.yourmcgeek.commands.support.SupportSetup;
 import com.github.yourmcgeek.commands.wiki.*;
-import com.github.yourmcgeek.listeners.PrivateMessageListener;
-import com.github.yourmcgeek.listeners.SuggestionListener;
-import com.github.yourmcgeek.listeners.SupportCategoryListener;
-import com.github.yourmcgeek.listeners.TicketChannelsReactionListener;
+import com.github.yourmcgeek.listeners.*;
 import com.github.yourmcgeek.objects.config.Config;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 import me.bhop.bjdautilities.Messenger;
 import me.bhop.bjdautilities.command.CommandHandler;
@@ -28,6 +22,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -45,31 +41,17 @@ public class ShadowRewrite {
     public JsonArray remindersJson = new JsonArray();
 
     private Path logDirectory;
-<<<<<<< HEAD
     private Path attachmentDir;
-=======
-    private Path remindDirectory;
-    private Path confirmFile;
-    private Path remindersFile;
->>>>>>> Development Branch for Remind Command
     private Messenger messenger;
     private CommandHandlerBuilder handlerBuilder;
     private Path directory;
     private Logger logger;
     private JDA jda;
+    private Path confirmFile;
+    private Path remindersFile;
 
-<<<<<<< HEAD
 
     public void init(Path directory) throws Exception {
-=======
-    public static void main(String[] args) {
-        Path p1 = Paths.get(".");
-
-        new ShadowRewrite().setupBot(p1);
-    }
-
-    private void setupBot(Path directory) {
->>>>>>> Development Branch for Remind Command
         this.directory = directory;
         logger = LoggerFactory.getLogger("ShadowBot");
         try {
@@ -87,11 +69,11 @@ public class ShadowRewrite {
 
             logger.info("Setting Preferences...");
             CommandHandler handler = new CommandHandlerBuilder(jda)
-                .setPrefix(config.getPrefix())
-                .setDeleteCommands(true)
-                .setGenerateHelp(true)
-                .setSendTyping(true)
-            .build();
+                    .setPrefix(config.getPrefix())
+                    .setDeleteCommands(true)
+                    .setGenerateHelp(true)
+                    .setSendTyping(true)
+                    .build();
 
             logger.info("Starting Messenger...");
             this.messenger = new Messenger();
@@ -109,6 +91,7 @@ public class ShadowRewrite {
             handler.register(new Wiki(this));
             handler.register(new Relocate(this));
             handler.register(new Crate(this));
+            handler.register(new Remind(this));
 //            handler.register(new LMGTFYCommand(this));
 
             logger.info("Registering Listeners...");
@@ -116,6 +99,7 @@ public class ShadowRewrite {
             this.jda.addEventListener(new SupportCategoryListener(this));
             this.jda.addEventListener(new TicketChannelsReactionListener(this));
             this.jda.addEventListener(new SuggestionListener(this));
+            this.jda.addEventListener(new RemindConfirmListener(this));
 
 
         } catch (LoginException e) {
@@ -123,20 +107,11 @@ public class ShadowRewrite {
         }
 
         try {
-<<<<<<< HEAD
             logger.info("Checking Log directories...");
             Path logs = Paths.get(directory + "/logs");
             if (!Files.exists(logs)) {
                 Files.createDirectories(logs);
                 logDirectory = logs;
-=======
-            Path path = Paths.get(directory + "/reminders");
-            Path file = Paths.get(path + "/confirm.json");
-            Path reminder = Paths.get(path + "/ActiveReminders.json");
-            if (!path.toFile().exists()) {
-                path.toFile().mkdir();
-                remindDirectory = path;
->>>>>>> Development Branch for Remind Command
             }
             logDirectory = logs;
             Path attachments = logs.resolve("attachments");
@@ -144,27 +119,10 @@ public class ShadowRewrite {
                 Files.createDirectories(attachments);
                 attachmentDir = attachments;
             }
-<<<<<<< HEAD
             attachmentDir = attachments;
         } catch (IOException e) {
             logger.error("Error creating directories!", e);
         }
-=======
-            if (!Files.exists(reminder)) {
-                Files.createFile(reminder);
-                remindersFile = reminder;
-            }
-            remindDirectory = path;
-            confirmFile = file;
-            remindersFile = reminder;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        loadMessages();
-        loadTasks();
-    }
-
->>>>>>> Development Branch for Remind Command
 
         logger.info("Everything Loaded Successfully | Ready to accept input!");
     }
@@ -184,21 +142,25 @@ public class ShadowRewrite {
         return tipArray;
     }
 
-    public void shutdown() {
-        logger.info("Initiating Shutdown...");
-        getJDA().shutdown();
-        logger.info("Shutdown Complete.");
+    public void saveMessages() {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try (BufferedWriter writer = Files.newBufferedWriter(this.getConfirmFile())) {
+            writer.write(gson.toJson(this.getConfirmMessages()));
+            writer.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public JDA getJDA() {
-        return this.jda;
+    public void loadMessages() {
+        try (BufferedReader reader = Files.newBufferedReader(this.getConfirmFile())) {
+            JsonParser parser = new JsonParser();
+            confirmMessages = parser.parse(reader).getAsJsonArray();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-<<<<<<< HEAD
-    public Logger getLogger() {
-        return logger;
-    }
-=======
     public void saveTasks() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (BufferedWriter writer = Files.newBufferedWriter(this.getRemindersFile())) {
@@ -218,36 +180,39 @@ public class ShadowRewrite {
         }
     }
 
->>>>>>> Development Branch for Remind Command
+    public void shutdown() {
+        logger.info("Initiating Shutdown...");
+        getJDA().shutdown();
+        logger.info("Shutdown Complete.");
+    }
+
+    public JDA getJDA() {
+        return this.jda;
+    }
+
+    public Logger getLogger() {
+        return logger;
+    }
     public SettingsManager getSettingsManager() {
         return mgr;
     }
 
-    public JsonArray getConfirmMessages() { return confirmMessages; }
+    public JsonArray getConfirmMessages() {
+        return confirmMessages;
+    }
 
-    public JsonArray getRemindersJson() { return remindersJson; }
-
-<<<<<<< HEAD
     public String getGuildId() {
         return mgr.getConfig().getGuildID();
     }
-=======
-    public Path getConfirmFile() { return confirmFile; }
 
-    public String getGuildId() { return mgr.getConfig().getGuildID(); }
->>>>>>> Development Branch for Remind Command
-
-    public Path getLogDirectory() { return logDirectory; }
-
-<<<<<<< HEAD
-=======
-    public Path getRemindDirectory() { return remindDirectory; }
-
-    public Path getRemindersFile() {
-        return remindersFile;
+    public Path getLogDirectory() {
+        return logDirectory;
     }
 
->>>>>>> Development Branch for Remind Command
+    public JsonArray getRemindersJson() { return remindersJson; }
+
+    public Path getConfirmFile() { return confirmFile; }
+
     public Messenger getMessenger() {
         return messenger;
     }
@@ -258,6 +223,10 @@ public class ShadowRewrite {
 
     public Path getAttachmentDir() {
         return attachmentDir;
+    }
+
+    public Path getRemindersFile() {
+        return remindersFile;
     }
 
     public CommandHandlerBuilder getHandlerBuilder() {

@@ -5,72 +5,70 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
+import me.bhop.bjdautilities.command.CommandResult;
+import me.bhop.bjdautilities.command.annotation.Command;
+import me.bhop.bjdautilities.command.annotation.Execute;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
 
 import java.awt.*;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
-public class Remind extends Command {
+@Command(label = {"remind", "reminder", "remindme"}, usage = "remind {time}{s|m|h|d} {Reminder}", description = "Sets a reminder with a custom time and message!", minArgs = 2)
+public class Remind  {
 
     private ShadowRewrite main;
     public Remind(ShadowRewrite main) {
         this.main = main;
-        this.name = "remind";
-        this.help = "Sets a reminder with a custom time and message!";
     }
 
-    @Override
-    protected void execute(CommandEvent event) {
+    @Execute
+    public CommandResult onExecute(Member member, TextChannel channel, Message message, String label, List<String> args) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
         try {
-            String[] args = event.getArgs().split(" ");
-
-            event.getMessage().delete().complete();
             int timeAmt;
             String timeUnit;
 
-            timeAmt = Integer.parseInt(args[0].substring(0, (args[0].length() - 1)));
-            timeUnit = args[0].substring((args[0].length() - 1));
+            timeAmt = Integer.parseInt(args.get(0).substring(0, (args.get(0).length() - 1)));
+            timeUnit = args.get(0).substring(args.get(0).length() - 1);
 
             switch (timeUnit) {
-                case "s":
+                case "s": // Seconds
                     timeAmt = timeAmt * 1000;
                     break;
-                case "m":
+                case "m": // Minutes
                     timeAmt = timeAmt * 1000 * 60;
                     break;
-                case "h":
+                case "h": // Hours
                     timeAmt = timeAmt * 1000 * 60 * 60;
                     break;
-                case "d":
+                case "d": // Days
                     timeAmt = timeAmt * 1000 * 60 * 60 * 24;
                     break;
-                default:
+                default: // Minutes
                     timeAmt = timeAmt * 1000 * 60;
                     break;
             }
-            List<String> argsList = new LinkedList<>(Arrays.asList(args));
 
-            System.out.println(argsList);
-            argsList.remove(0);
-            String content = String.join(",", argsList);
+
+            main.getLogger().info(args.toArray().toString());
+            args.remove(0);
+            String content = String.join(",", args);
             content = content.replaceAll(",", " ");
+            main.getLogger().info(content);
 
             EmbedBuilder confirm = new EmbedBuilder()
                     .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()))
                     .setTitle("Please Confirm")
-                    .setAuthor(String.valueOf(event.getAuthor()), String.valueOf(event.getAuthor().getAsTag()), String.valueOf(event.getAuthor().getEffectiveAvatarUrl()))
+                    .setAuthor(String.valueOf(message.getAuthor()), String.valueOf(message.getAuthor().getAsTag()), String.valueOf(message.getAuthor().getEffectiveAvatarUrl()))
                     .addField("Remind in", timeAmt + timeUnit, true)
                     .addField("Reminder", content, true)
                     .setDescription("Please confirm by reacting with a \u2705 within 15 seconds");
-            long messageID = main.getMessenger().sendEmbed((TextChannel) event.getChannel(), confirm.build(), 15).getIdLong();
-            long userID = event.getAuthor().getIdLong();
+            long messageID = main.getMessenger().sendEmbed(channel, confirm.build(), 15).getId();
+            long userID = message.getAuthor().getIdLong();
 
             try {
                 JsonObject object = new JsonObject();
@@ -96,7 +94,8 @@ public class Remind extends Command {
                     .setTitle("Error!")
                     .addField("Time Units", "s = seconds\nm = minutes\nh = hours\nd = days", true)
                     .setDescription(String.format("Proper usage is %sremind {Duration}{TimeUnit} {Message}", main.mgr.getConfig().getPrefix()));
-            main.getMessenger().sendEmbed((TextChannel) event.getChannel(), embed.build(), 10);
+            main.getMessenger().sendEmbed(channel, embed.build(), 10);
         }
+        return CommandResult.SUCCESS;
     }
 }
