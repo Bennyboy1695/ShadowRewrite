@@ -1,5 +1,6 @@
 package com.github.yourmcgeek;
 
+import com.github.yourmcgeek.commands.remind.Remind;
 import com.github.yourmcgeek.commands.support.LogChannelCommand;
 import com.github.yourmcgeek.commands.support.SupportCommand;
 import com.github.yourmcgeek.commands.support.SupportSetup;
@@ -46,7 +47,9 @@ public class ShadowRewrite {
     private Path attachmentDir;
     private Messenger messenger;
     private CommandHandler.Builder handlerBuilder;
+    private CommandHandler commandHandler;
     private Path directory;
+    private ShadowRewrite bot = this;
     private Logger logger;
     private JDA jda;
 
@@ -72,6 +75,7 @@ public class ShadowRewrite {
                 .setDeleteCommands(true)
                 .setGenerateHelp(true)
                 .setSendTyping(true)
+                .addCustomParameter(bot)
             .build();
 
             logger.info("Starting Messenger...");
@@ -91,6 +95,9 @@ public class ShadowRewrite {
             handler.register(new Relocate(this));
             handler.register(new Crate(this));
 //            handler.register(new LMGTFYCommand(this));
+
+            handler.getCommand(Remind.class).ifPresent(cmd -> cmd.addCustomParam(commandHandler));
+
 
             logger.info("Registering Listeners...");
             this.jda.addEventListener(new PrivateMessageListener(this));

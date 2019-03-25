@@ -27,7 +27,7 @@ public class List {
     public CommandResult onList(Member member, TextChannel channel, Message message, String label, java.util.List<String> args) {
         EmbedBuilder embed = EmbedTemplates.PRETTY_SUCCESSFULL.getEmbed();
         embed.setTitle("Reminders for: " + member.getEffectiveName());
-        for (Reminder reminder : bot.getSqlManager().getRemindersForUser(member.getUser().getIdLong())) { // Needs Changed
+        for (Reminder reminder : main.getSqlManager().getRemindersForUser(member.getUser().getIdLong())) { // Needs Changed
             if (Instant.ofEpochMilli(reminder.getExpiry()).isAfter(Instant.now())) {
                 long duration = Instant.ofEpochMilli(reminder.getExpiry()).minusMillis(Instant.now().toEpochMilli()).toEpochMilli();
                 long secs = TimeUnit.MILLISECONDS.toSeconds(duration);
