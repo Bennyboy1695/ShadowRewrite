@@ -2,7 +2,7 @@ package com.github.yourmcgeek.commands.support;
 
 import com.github.yourmcgeek.ShadowRewrite;
 import me.bhop.bjdautilities.EditableMessage;
-import me.bhop.bjdautilities.command.CommandResult;
+import me.bhop.bjdautilities.command.result.CommandResult;
 import me.bhop.bjdautilities.command.annotation.Command;
 import me.bhop.bjdautilities.command.annotation.Execute;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -25,7 +25,7 @@ public class SupportSetup {
     @Execute
     public CommandResult onExecute(Member member, TextChannel channel, Message message, String label, List<String> args) {
         if (!member.hasPermission(Permission.ADMINISTRATOR)) {
-            return CommandResult.NO_PERMISSION;
+            return CommandResult.noPermission();
         } else {
             EmbedBuilder builder = new EmbedBuilder();
             builder.setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()));
@@ -50,7 +50,7 @@ public class SupportSetup {
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
-            return CommandResult.SUCCESS;
+            return CommandResult.success();
         }
     }
 }

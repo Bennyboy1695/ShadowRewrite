@@ -17,7 +17,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import me.bhop.bjdautilities.Messenger;
 import me.bhop.bjdautilities.command.CommandHandler;
-import me.bhop.bjdautilities.command.CommandHandlerBuilder;
+import me.bhop.bjdautilities.command.CommandHandler.Builder;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -46,7 +46,7 @@ public class ShadowRewrite {
     private Path logDirectory;
     private Path attachmentDir;
     private Messenger messenger;
-    private CommandHandlerBuilder handlerBuilder;
+    private CommandHandler.Builder handlerBuilder;
     private Path directory;
     private Logger logger;
     private JDA jda;
@@ -69,7 +69,7 @@ public class ShadowRewrite {
             jda.awaitReady();
 
             logger.info("Setting Preferences...");
-            CommandHandler handler = new CommandHandlerBuilder(jda)
+            CommandHandler handler = new CommandHandler.Builder(jda)
                 .setPrefix(config.getPrefix())
                 .setDeleteCommands(true)
                 .setGenerateHelp(true)
@@ -182,7 +182,7 @@ public class ShadowRewrite {
         return attachmentDir;
     }
 
-    public CommandHandlerBuilder getHandlerBuilder() {
+    public CommandHandler.Builder getHandlerBuilder() {
         return handlerBuilder;
     }
 

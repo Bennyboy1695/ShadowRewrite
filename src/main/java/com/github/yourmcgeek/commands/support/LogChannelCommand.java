@@ -1,7 +1,7 @@
 package com.github.yourmcgeek.commands.support;
 
 import com.github.yourmcgeek.ShadowRewrite;
-import me.bhop.bjdautilities.command.CommandResult;
+import me.bhop.bjdautilities.command.result.CommandResult;
 import me.bhop.bjdautilities.command.annotation.Command;
 import me.bhop.bjdautilities.command.annotation.Execute;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -25,7 +25,7 @@ public class LogChannelCommand {
     @Execute
     public CommandResult onExecute(Member member, TextChannel channel, Message message, String label, List<String> args) {
         if (!member.hasPermission(Permission.ADMINISTRATOR)) {
-            return CommandResult.NO_PERMISSION;
+            return CommandResult.noPermission();
         } else {
             main.getMessenger().sendEmbed(channel, new EmbedBuilder()
                     .setTitle("Log Channel ID")
@@ -33,7 +33,7 @@ public class LogChannelCommand {
                     .addField("ID", String.valueOf(Long.valueOf(channel.getIdLong())), true)
                     .setDescription("Add this in its corresponding place in your config file. Save the config," +
                             " then restart the bot!").build(), 30);
-            return CommandResult.SUCCESS;
+            return CommandResult.success();
         }
     }
 }

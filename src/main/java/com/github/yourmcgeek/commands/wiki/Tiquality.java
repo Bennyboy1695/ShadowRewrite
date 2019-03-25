@@ -1,7 +1,7 @@
 package com.github.yourmcgeek.commands.wiki;
 
 import com.github.yourmcgeek.ShadowRewrite;
-import me.bhop.bjdautilities.command.CommandResult;
+import me.bhop.bjdautilities.command.result.CommandResult;
 import me.bhop.bjdautilities.command.annotation.Command;
 import me.bhop.bjdautilities.command.annotation.Execute;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -12,7 +12,7 @@ import net.dv8tion.jda.core.entities.TextChannel;
 import java.awt.*;
 import java.util.List;
 
-@Command(label = {"tile", "cte", "claimtile", "tq"}, usage = "tiquality", description = "Displays wiki link to show how to claim Tile Entities with Tiquality")
+@Command(label = {"tile", "cte", "claimtile", "tq", "tiquality"}, usage = "tiquality", description = "Displays wiki link to show how to claim Tile Entities with Tiquality")
 
 public class Tiquality {
 
@@ -29,6 +29,6 @@ public class Tiquality {
                 .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()));
 
         main.getMessenger().sendEmbed(channel, embed.build(), 10);
-        return CommandResult.SUCCESS;
+        return CommandResult.success();
     }
 }

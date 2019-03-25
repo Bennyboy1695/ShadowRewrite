@@ -1,7 +1,7 @@
 package com.github.yourmcgeek.commands.support;
 
 import com.github.yourmcgeek.ShadowRewrite;
-import me.bhop.bjdautilities.command.CommandResult;
+import me.bhop.bjdautilities.command.result.CommandResult;
 import me.bhop.bjdautilities.command.annotation.Command;
 import me.bhop.bjdautilities.command.annotation.Execute;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -42,6 +42,6 @@ public class SupportCommand {
                 .setDescription("To create a ticket, please respond here and a channel will be created." +
                         "\nNote: Multiple messages will not be combined, so please type only one message.\n" +
                         "Also, if you upload a file, the file will be taken and sent in the support channel also!").build()).complete();
-        return CommandResult.SUCCESS;
+        return CommandResult.success();
     }
 }

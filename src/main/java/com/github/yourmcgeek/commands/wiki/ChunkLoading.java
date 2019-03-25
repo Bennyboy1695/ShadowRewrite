@@ -2,7 +2,7 @@ package com.github.yourmcgeek.commands.wiki;
 
 import com.github.yourmcgeek.ShadowRewrite;
 
-import me.bhop.bjdautilities.command.CommandResult;
+import me.bhop.bjdautilities.command.result.CommandResult;
 import me.bhop.bjdautilities.command.annotation.Command;
 import me.bhop.bjdautilities.command.annotation.Execute;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -31,6 +31,6 @@ public class ChunkLoading {
                 .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()));
 
         main.getMessenger().sendEmbed(channel, embed.build(), 10);
-        return CommandResult.SUCCESS;
+        return CommandResult.success();
     }
 }
