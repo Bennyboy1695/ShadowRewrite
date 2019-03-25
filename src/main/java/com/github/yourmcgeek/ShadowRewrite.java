@@ -197,17 +197,13 @@ public class ShadowRewrite {
         return mgr;
     }
 
-    public JsonArray getConfirmMessages() {
-        return confirmMessages;
-    }
+    public JsonArray getConfirmMessages() { return confirmMessages; }
 
     public String getGuildId() {
         return mgr.getConfig().getGuildID();
     }
 
-    public Path getLogDirectory() {
-        return logDirectory;
-    }
+    public Path getLogDirectory() { return logDirectory; }
 
     public JsonArray getRemindersJson() { return remindersJson; }
 
