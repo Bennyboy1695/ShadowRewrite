@@ -35,7 +35,7 @@ public class Add {
         long expiry = Util.stringToMillisConverter(length);
         long finalExpiry = Instant.now().plusMillis(expiry).toEpochMilli();
 
-        Reminder reminder = new Reminder(member.getUser().getIdLong(), Instant.now().toEpochMilli(), finalExpiry, msg);
+        Reminder reminder = new Reminder(member.getUser().getIdLong(), channel.getIdLong(), Instant.now().toEpochMilli(), finalExpiry, msg);
         try {
             main.getMessenger().sendEmbed(channel, EmbedTemplates.SUCCESS.getEmbed().setTitle("Success").setDescription("Successfully added a reminder that will appear in " + length).addField("Message: ", msg, true).build(), 10);
         } catch (Exception e) {
