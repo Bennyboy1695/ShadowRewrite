@@ -10,6 +10,8 @@ import com.github.yourmcgeek.shadowrewrite.listeners.SuggestionListener;
 import com.github.yourmcgeek.shadowrewrite.listeners.SupportCategoryListener;
 import com.github.yourmcgeek.shadowrewrite.listeners.TicketChannelsReactionListener;
 import com.github.yourmcgeek.shadowrewrite.objects.config.Config;
+import com.github.yourmcgeek.shadowrewrite.storage.MySQL;
+import com.github.yourmcgeek.shadowrewrite.storage.SQLManager;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -51,6 +53,8 @@ public class ShadowRewrite {
     private ShadowRewrite bot = this;
     private Logger logger;
     private JDA jda;
+    private SQLManager sqlManager;
+    private MySQL mySQL;
 
     public void init(Path directory) throws Exception {
         this.directory = directory;
@@ -104,7 +108,13 @@ public class ShadowRewrite {
             this.jda.addEventListener(new TicketChannelsReactionListener(this));
             this.jda.addEventListener(new SuggestionListener(this));
 
-
+            logger.info("Attempting Connection to Database");
+            try {
+                this.sqlManager = new SQLManager(this.mgr.getConfig().getHostname(), this.mgr.getConfig().getPort(), this.mgr.getConfig().getDatabaseName(), this.mgr.getConfig().getUsername(), this.mgr.getConfig().getPassword());
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.exit(1);
+            }
         } catch (LoginException e) {
             e.printStackTrace();
         }
@@ -190,6 +200,13 @@ public class ShadowRewrite {
         return handlerBuilder;
     }
 
+    public SQLManager getSqlManager() {
+        return sqlManager;
+    }
+
+    public MySQL getMySQL() {
+        return mySQL;
+    }
 
     private final class ThreadedEventManager extends InterfacedEventManager {
         private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()+1);

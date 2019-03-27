@@ -25,13 +25,19 @@ public class Config {
     private String wikiURL = "Change this to the proper \"Wiki\" direct url";
     private String crateURL = "Change this to the proper \"Crates\" wiki page url";
     private String relocateURL = "Change this to the proper \"Relocation\" wiki page url";
+    private String hostname = "changeme";
+    private int port = 0;
+    private String username = "changeme";
+    private String password = "changeme";
+    private String databaseName = "changeme";
 
     public Config() {}
 
     public Config(String prefix, String token, String botOwnerId, String supportId, String supportCategoryId
     , String guildID, String logChannelID, int colorRed, int colorBlue, int colorGreen, ArrayList<String> blacklistFiles,
                   String linkingURL, String crashURL, String tqURL, String claimURL, String clURL,
-                  String restartURL, String wikiURL, String crateURL, String relocateURL, ArrayList<String> swearWords) {
+                  String restartURL, String wikiURL, String crateURL, String relocateURL, ArrayList<String> swearWords,
+                  String hostname, int port, String username, String password, String databaseName) {
         this.prefix = prefix;
         this.token = token;
         this.botOwnerId = botOwnerId;
@@ -53,48 +59,45 @@ public class Config {
         this.crateURL = crateURL;
         this.relocateURL = relocateURL;
         this.swearWords = swearWords;
+        this.hostname = hostname;
+        this.port = port;
+        this.username = username;
+        this.password = password;
+        this.databaseName = databaseName;
     }
 
-    @Override
-    public String toString() {
-        return "Config{" +
-                "prefix='" + prefix + '\'' +
-                ", botOwnerId=" + botOwnerId + + '\'' +
-                ", token='" + token + '\'' +
-                ", supportId='" + supportId + '\'' +
-                ", guildId='" + guildID + '\'' +
-                ", logChannelId='" + logChannelID + '\'' +
-                ", colorRed='" + colorRed + '\'' +
-                ", colorGreen='" + colorGreen + '\'' +
-                ", colorBlue='" + colorBlue + '\'' +
-                ", crashURL='" + crashURL + '\'' +
-                ", linkingURL='" + linkingURL + '\'' +
-                ", tqURL='" + tqURL + '\'' +
-                ", claimURL='" + claimURL + '\'' +
-                ", chunkURL='" + clURL + '\'' +
-                ", restartURL='" + restartURL + '\'' +
-                ", wikiURL='" + wikiURL + '\'' +
-                ", crateURL='" + crateURL + '\'' +
-                ", relocateURL='" + relocateURL + '\'' +
-                ", blacklistFiles: ['" + Arrays.toString(blacklistFiles.toArray()) + "']" +
-                ", swearWords: ['" + Arrays.toString(swearWords.toArray()) + "']"
-                + "}";
-    }
+//    @Override
+//    public String toString() {
+//        return "Config{" +
+//                "prefix='" + prefix + '\'' +
+//                ", botOwnerId=" + botOwnerId + + '\'' +
+//                ", token='" + token + '\'' +
+//                ", supportId='" + supportId + '\'' +
+//                ", guildId='" + guildID + '\'' +
+//                ", logChannelId='" + logChannelID + '\'' +
+//                ", colorRed='" + colorRed + '\'' +
+//                ", colorGreen='" + colorGreen + '\'' +
+//                ", colorBlue='" + colorBlue + '\'' +
+//                ", crashURL='" + crashURL + '\'' +
+//                ", linkingURL='" + linkingURL + '\'' +
+//                ", tqURL='" + tqURL + '\'' +
+//                ", claimURL='" + claimURL + '\'' +
+//                ", chunkURL='" + clURL + '\'' +
+//                ", restartURL='" + restartURL + '\'' +
+//                ", wikiURL='" + wikiURL + '\'' +
+//                ", crateURL='" + crateURL + '\'' +
+//                ", relocateURL='" + relocateURL + '\'' +
+//                ", blacklistFiles: ['" + Arrays.toString(blacklistFiles.toArray()) + "']" +
+//                ", swearWords: ['" + Arrays.toString(swearWords.toArray()) + "']"
+//                + "}";
+//    }
 
     public String getPrefix() {
         return prefix;
     }
 
-    public String getBotOwnerId() {
-        return botOwnerId;
-    }
-
     public String getToken() {
         return token;
-    }
-
-    public String getSupportId() {
-        return supportId;
     }
 
     public String getSupportCategoryId() {
@@ -163,5 +166,25 @@ public class Config {
 
     public ArrayList<String> getSwearWords() {
         return swearWords;
+    }
+
+    public String getHostname() {
+        return hostname;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getDatabaseName() {
+        return databaseName;
     }
 }

@@ -6,7 +6,7 @@ plugins {
 
 apply plugin: 'java'
 
-mainClassName = 'com.github.yourmcgeek.Main'
+mainClassName = 'com.github.yourmcgeek.shadowrewrite.Main'
 
 group 'com.github.yourmcgeek'
 version '1.0'
@@ -36,6 +36,8 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.1'
 //    Logger
     compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.8.0-beta4'
+//    MySQL
+    compile 'com.microsoft.sqlserver:mssql-jdbc:7.2.1.jre11'
 //    Utils
     compile 'org.reflections:reflections:0.9.11'
     compileOnly 'org.projectlombok:lombok:1.16.20'

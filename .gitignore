@@ -16,3 +16,4 @@ gradle-app.setting
 conf.json
 logs/
 logs/**
+conf.json.old

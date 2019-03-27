@@ -1,0 +1,50 @@
+{
+  "prefix": "/",
+  "botOwnerId": "102762443767287808",
+  "token": "NTQ5MjY0NTQwNDkyMTAzNjgw.D3holA.aOBXikU65-HYcWsqvprrq-3VKBM",
+  "supportId": "541793294850719764",
+  "supportCategoryId": "541793264475308052",
+  "guildID": "539253025668071455",
+  "logChannelID": "541793347690299411",
+  "colorRed": 238,
+  "colorGreen": 130,
+  "colorBlue": 238,
+  "crashURL": "https://www.shadownode.ca/threads/102/",
+  "linkingURL": "https://www.shadownode.ca/threads/85/",
+  "tqURL": "https://shadownode.ca/threads/680/",
+  "claimURL": "https://shadownode.ca/threads/107/",
+  "chunkURL": "https://shadownode.ca/threads/571/",
+  "resetURL": "https://shadownode.ca/threads/153/",
+  "wikiURL": "https://shadownode.ca/wiki/",
+  "crateURL": "https://shadownode.ca/threads/89/",
+  "relocateURL": "https://shadownode.ca/threads/724/",
+  "blacklistFiles": ["bat", "sh"],
+  "swearWords": ["fuck", "dick", "pussy"],
+  "serverRoles": ["Server1", "Server2", "Server3"],
+  "hostname": "127.0.0.1",
+  "username": "root",
+  "port": 3306,
+  "password": "minecraft62",
+  "tips":[
+    {
+      "suggestion":"Visit our forums at <forum>",
+      "word":"forum"
+    },
+    {
+      "suggestion":"My prefix is <prefix>",
+      "word":"prefix"
+    },
+    {
+      "suggestion":"Stop by our wiki by visiting <wiki>",
+      "word":"wiki"
+    },
+    {
+      "suggestion":"<support>",
+      "word":"support"
+    },
+    {
+      "suggestion":"Please tell us what you need help with, your in-game-name, and the server you are playing on.",
+      "word":"help"
+    }
+  ]
+}
