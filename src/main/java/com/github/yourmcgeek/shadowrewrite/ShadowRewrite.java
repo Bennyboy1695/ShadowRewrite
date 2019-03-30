@@ -1,6 +1,8 @@
 package com.github.yourmcgeek.shadowrewrite;
 
+import com.github.yourmcgeek.shadowrewrite.commands.remind.Add;
 import com.github.yourmcgeek.shadowrewrite.commands.remind.Remind;
+import com.github.yourmcgeek.shadowrewrite.commands.remind.Remove;
 import com.github.yourmcgeek.shadowrewrite.commands.support.LogChannelCommand;
 import com.github.yourmcgeek.shadowrewrite.commands.support.SupportCommand;
 import com.github.yourmcgeek.shadowrewrite.commands.support.SupportSetup;
@@ -47,14 +49,12 @@ public class ShadowRewrite {
     private Path logDirectory;
     private Path attachmentDir;
     private Messenger messenger;
-    private CommandHandler.Builder handlerBuilder;
     private CommandHandler commandHandler;
     private Path directory;
     private ShadowRewrite bot = this;
     private Logger logger;
     private JDA jda;
     private SQLManager sqlManager;
-    private MySQL mySQL;
 
     public void init(Path directory) throws Exception {
         this.directory = directory;
@@ -98,6 +98,9 @@ public class ShadowRewrite {
             handler.register(new Crate(this));
 //            handler.register(new LMGTFYCommand(this));
             handler.register(new Remind(this));
+            handler.register(new Add(this));
+            handler.register(new Remove(this));
+            handler.register(new com.github.yourmcgeek.shadowrewrite.commands.remind.List(this));
 
             handler.getCommand(Remind.class).ifPresent(cmd -> cmd.addCustomParam(commandHandler));
 
@@ -196,16 +199,8 @@ public class ShadowRewrite {
         return attachmentDir;
     }
 
-    public CommandHandler.Builder getHandlerBuilder() {
-        return handlerBuilder;
-    }
-
     public SQLManager getSqlManager() {
         return sqlManager;
-    }
-
-    public MySQL getMySQL() {
-        return mySQL;
     }
 
     private final class ThreadedEventManager extends InterfacedEventManager {
