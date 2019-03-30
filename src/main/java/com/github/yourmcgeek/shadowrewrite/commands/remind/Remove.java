@@ -20,7 +20,7 @@ public class Remove {
     }
 
     @Execute
-    public CommandResult onRemove(Member member, TextChannel channel, Message message, String label, List<String> args) {
+    public CommandResult onRemove(Member member, TextChannel channel, Message message, String label, List<String> args, ShadowRewrite main) {
         return CommandResult.success();
     }
 }

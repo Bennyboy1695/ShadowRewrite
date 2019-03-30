@@ -24,7 +24,7 @@ public class List {
     }
 
     @Execute
-    public CommandResult onList(Member member, TextChannel channel, Message message, String label, java.util.List<String> args) {
+    public CommandResult onList(Member member, TextChannel channel, Message message, String label, java.util.List<String> args, ShadowRewrite main) {
         EmbedBuilder embed = EmbedTemplates.PRETTY_SUCCESSFULL.getEmbed();
         embed.setTitle("Reminders for: " + member.getEffectiveName());
         for (Reminder reminder : main.getSqlManager().getRemindersForUser(member.getUser().getIdLong())) { // Needs Changed
@@ -38,7 +38,7 @@ public class List {
                 .setStartingReactions("\u274C")
                 .setEmbed(embed.build())
                 .onClick("\u274C", reactionMenu -> reactionMenu.destroy())
-                .onDelete(delete -> {
+                .onDestroy(delete -> {
                     System.out.println("Deleted");
                 })
                 .buildAndDisplay(channel).destroyIn(30);

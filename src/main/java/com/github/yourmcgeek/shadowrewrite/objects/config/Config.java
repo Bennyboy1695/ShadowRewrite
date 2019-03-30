@@ -18,7 +18,6 @@ public class Config {
     private ArrayList<String> swearWords = new ArrayList<>();
     private String linkingURL = "Change this to the proper \"Linking Accounts\" wiki page url";
     private String crashURL = "Change this to the proper \"Crash Reports\" wiki page url";
-    private String tqURL = "Change this to the proper \"Claiming\" wiki page url";
     private String claimURL = "Change this to the proper \"Tiqaulity Tile Entity Claiming\" wiki page url";
     private String clURL = "Change this to the proper \"Chunk Loading\" wiki page url";
     private String restartURL = "Change this to the proper \"Restart and Wipe\" wiki page url";
@@ -35,7 +34,7 @@ public class Config {
 
     public Config(String prefix, String token, String botOwnerId, String supportId, String supportCategoryId
     , String guildID, String logChannelID, int colorRed, int colorBlue, int colorGreen, ArrayList<String> blacklistFiles,
-                  String linkingURL, String crashURL, String tqURL, String claimURL, String clURL,
+                  String linkingURL, String crashURL, String claimURL, String clURL,
                   String restartURL, String wikiURL, String crateURL, String relocateURL, ArrayList<String> swearWords,
                   String hostname, int port, String username, String password, String databaseName) {
         this.prefix = prefix;
@@ -52,7 +51,6 @@ public class Config {
         this.linkingURL = linkingURL;
         this.crashURL = crashURL;
         this.clURL = clURL;
-        this.tqURL = tqURL;
         this.claimURL = claimURL;
         this.restartURL = restartURL;
         this.wikiURL = wikiURL;
@@ -134,10 +132,6 @@ public class Config {
 
     public String getLinkingURL() {
         return linkingURL;
-    }
-
-    public String getTQURL() {
-        return tqURL;
     }
 
     public String getClaimURL() {

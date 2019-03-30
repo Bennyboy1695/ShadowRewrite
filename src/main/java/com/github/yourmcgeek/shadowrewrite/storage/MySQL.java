@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+
 public class MySQL extends Database {
 
     private Connection conn;
@@ -32,6 +33,7 @@ public class MySQL extends Database {
         }
         try {
             String url = "jdbc:mysql://" + hostname + ":" + port + "/" + database  + "?user=" + username + "&password=" + password;
+            Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(url);
         } catch (Exception e) {
             e.printStackTrace();

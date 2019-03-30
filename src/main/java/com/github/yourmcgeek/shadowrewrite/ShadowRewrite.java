@@ -92,12 +92,12 @@ public class ShadowRewrite {
             handler.register(new CrashReport(this));
             handler.register(new Restart(this));
             handler.register(new Claiming(this));
-            handler.register(new Tiquality(this));
             handler.register(new ChunkLoading(this));
             handler.register(new Wiki(this));
             handler.register(new Relocate(this));
             handler.register(new Crate(this));
 //            handler.register(new LMGTFYCommand(this));
+            handler.register(new Remind(this));
 
             handler.getCommand(Remind.class).ifPresent(cmd -> cmd.addCustomParam(commandHandler));
 
