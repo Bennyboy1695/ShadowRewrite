@@ -1,7 +1,6 @@
 package com.github.yourmcgeek.shadowrewrite.objects.config;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Config {
     private String prefix = "/";
@@ -29,6 +28,10 @@ public class Config {
     private String username = "changeme";
     private String password = "changeme";
     private String databaseName = "changeme";
+    private ArrayList<Long> channelsToWatch = new ArrayList<>();
+    private ArrayList<Long> rolesToWatch = new ArrayList<>();
+    private ArrayList<Long> userMentionToWatch = new ArrayList<>();
+    private int pingChannel = 0;
 
     public Config() {}
 
@@ -36,7 +39,8 @@ public class Config {
     , String guildID, String logChannelID, int colorRed, int colorBlue, int colorGreen, ArrayList<String> blacklistFiles,
                   String linkingURL, String crashURL, String claimURL, String clURL,
                   String restartURL, String wikiURL, String crateURL, String relocateURL, ArrayList<String> swearWords,
-                  String hostname, int port, String username, String password, String databaseName) {
+                  String hostname, int port, String username, String password, String databaseName, ArrayList<Long> channelsToWatch,
+                  ArrayList<Long> rolesToWatch, int pingChannel, ArrayList<Long> userMentionToWatch) {
         this.prefix = prefix;
         this.token = token;
         this.botOwnerId = botOwnerId;
@@ -62,33 +66,11 @@ public class Config {
         this.username = username;
         this.password = password;
         this.databaseName = databaseName;
+        this.channelsToWatch = channelsToWatch;
+        this.rolesToWatch = rolesToWatch;
+        this.pingChannel = pingChannel;
+        this.userMentionToWatch = userMentionToWatch;
     }
-
-//    @Override
-//    public String toString() {
-//        return "Config{" +
-//                "prefix='" + prefix + '\'' +
-//                ", botOwnerId=" + botOwnerId + + '\'' +
-//                ", token='" + token + '\'' +
-//                ", supportId='" + supportId + '\'' +
-//                ", guildId='" + guildID + '\'' +
-//                ", logChannelId='" + logChannelID + '\'' +
-//                ", colorRed='" + colorRed + '\'' +
-//                ", colorGreen='" + colorGreen + '\'' +
-//                ", colorBlue='" + colorBlue + '\'' +
-//                ", crashURL='" + crashURL + '\'' +
-//                ", linkingURL='" + linkingURL + '\'' +
-//                ", tqURL='" + tqURL + '\'' +
-//                ", claimURL='" + claimURL + '\'' +
-//                ", chunkURL='" + clURL + '\'' +
-//                ", restartURL='" + restartURL + '\'' +
-//                ", wikiURL='" + wikiURL + '\'' +
-//                ", crateURL='" + crateURL + '\'' +
-//                ", relocateURL='" + relocateURL + '\'' +
-//                ", blacklistFiles: ['" + Arrays.toString(blacklistFiles.toArray()) + "']" +
-//                ", swearWords: ['" + Arrays.toString(swearWords.toArray()) + "']"
-//                + "}";
-//    }
 
     public String getPrefix() {
         return prefix;
@@ -180,5 +162,19 @@ public class Config {
 
     public String getDatabaseName() {
         return databaseName;
+    }
+
+    public ArrayList<Long> getChannelsToWatch() { return channelsToWatch; }
+
+    public ArrayList<Long> getRolesToWatch() {
+        return rolesToWatch;
+    }
+
+    public int getPingChannel() {
+        return pingChannel;
+    }
+
+    public ArrayList<Long> getUserMentionToWatch() {
+        return userMentionToWatch;
     }
 }

@@ -7,12 +7,8 @@ import com.github.yourmcgeek.shadowrewrite.commands.support.LogChannelCommand;
 import com.github.yourmcgeek.shadowrewrite.commands.support.SupportCommand;
 import com.github.yourmcgeek.shadowrewrite.commands.support.SupportSetup;
 import com.github.yourmcgeek.shadowrewrite.commands.wiki.*;
-import com.github.yourmcgeek.shadowrewrite.listeners.PrivateMessageListener;
-import com.github.yourmcgeek.shadowrewrite.listeners.SuggestionListener;
-import com.github.yourmcgeek.shadowrewrite.listeners.SupportCategoryListener;
-import com.github.yourmcgeek.shadowrewrite.listeners.TicketChannelsReactionListener;
+import com.github.yourmcgeek.shadowrewrite.listeners.*;
 import com.github.yourmcgeek.shadowrewrite.objects.config.Config;
-import com.github.yourmcgeek.shadowrewrite.storage.MySQL;
 import com.github.yourmcgeek.shadowrewrite.storage.SQLManager;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -110,6 +106,7 @@ public class ShadowRewrite {
             this.jda.addEventListener(new SupportCategoryListener(this));
             this.jda.addEventListener(new TicketChannelsReactionListener(this));
             this.jda.addEventListener(new SuggestionListener(this));
+            this.jda.addEventListener(new TagListener(this));
 
             logger.info("Attempting Connection to Database");
             try {
