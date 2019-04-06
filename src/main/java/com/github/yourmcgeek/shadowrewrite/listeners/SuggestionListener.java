@@ -27,15 +27,13 @@ public class SuggestionListener extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-        if (event.getAuthor().isBot() || event.getMessage().getContentRaw().startsWith(main.mgr.getConfig().getPrefix()))
+        if (event.getAuthor().isBot() || event.getMessage().getContentRaw().startsWith(main.getPrefix()))
             return;
 
         List<String[]> tips = new ArrayList<>();
         try {
             tips = main.getTips();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (java.text.ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         for (String[] sugg : tips) {
@@ -45,13 +43,13 @@ public class SuggestionListener extends ListenerAdapter {
                     return;
 
                 event.getChannel().sendMessage(new EmbedBuilder()
-                        .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()))
+                        .setColor(new Color(main.getConfig().getConfigValue("Red").getAsInt(), main.getConfig().getConfigValue("Blue").getAsInt(), main.getConfig().getConfigValue("Green").getAsInt()))
                         .setDescription(sugg[1]
                                 .replaceAll("<tag>", event.getAuthor().getAsMention())
-                                .replaceAll("<prefix>", main.mgr.getConfig().getPrefix())
+                                .replaceAll("<prefix>", main.getPrefix())
                                 .replaceAll("<forum>", "https://shadownode.ca")
                                 .replaceAll("<wiki>", "https://shadownode.ca/wiki")
-                                .replaceAll("<support>", "If you need support, create a new ticket by running " +  main.mgr.getConfig().getPrefix() + "ticket")
+                                .replaceAll("<support>", "If you need support, create a new ticket by running " +  main.getPrefix() + "ticket")
                         ).build()).queue(x -> {
                     messageId.set(x.getIdLong());
                     hasSent.set(true);

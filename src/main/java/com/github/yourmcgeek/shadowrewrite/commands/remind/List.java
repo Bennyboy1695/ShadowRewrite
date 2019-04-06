@@ -17,12 +17,6 @@ import java.util.concurrent.TimeUnit;
 @Command(value = "list")
 public class List {
 
-    private ShadowRewrite main;
-
-    public List(ShadowRewrite main) {
-        this.main = main;
-    }
-
     @Execute
     public CommandResult onList(Member member, TextChannel channel, Message message, String label, java.util.List<String> args, ShadowRewrite main) {
         EmbedBuilder embed = EmbedTemplates.PRETTY_SUCCESSFULL.getEmbed();

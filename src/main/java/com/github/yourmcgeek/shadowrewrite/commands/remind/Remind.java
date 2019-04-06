@@ -12,12 +12,6 @@ import net.dv8tion.jda.core.entities.TextChannel;
 @Command(label = {"remind", "reminder"}, children = {Add.class, List.class, Remove.class})
 public class Remind {
 
-    private ShadowRewrite main;
-
-    public Remind(ShadowRewrite main) {
-        this.main = main;
-    }
-
     @Execute
     public CommandResult onRemind(Member member, TextChannel channel, Message message, String label, java.util.List<String> args, CommandHandler handler, ShadowRewrite main) {
         if (!args.get(0).toLowerCase().equals("list") || !args.get(0).toLowerCase().equals("add") || !args.get(0).toLowerCase().equals("remove")) {

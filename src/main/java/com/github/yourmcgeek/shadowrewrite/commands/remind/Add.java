@@ -19,13 +19,6 @@ import java.util.concurrent.TimeUnit;
 
 @Command(label = {"add", "create"}, minArgs = 2, usage = "remind add 1d1h1m1s")
 public class Add {
-
-    private ShadowRewrite main;
-
-    public Add(ShadowRewrite main) {
-        this.main = main;
-    }
-
     @Execute
     public CommandResult onAdd(Member member, TextChannel channel, Message message, String label, List<String> args, ShadowRewrite main) {
         String length = args.get(0);

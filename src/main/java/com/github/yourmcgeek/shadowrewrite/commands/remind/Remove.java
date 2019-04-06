@@ -13,12 +13,6 @@ import java.util.List;
 @Command("remove")
 public class Remove {
 
-    private ShadowRewrite main;
-
-    public Remove(ShadowRewrite main) {
-        this.main = main;
-    }
-
     @Execute
     public CommandResult onRemove(Member member, TextChannel channel, Message message, String label, List<String> args, ShadowRewrite main) {
         return CommandResult.success();

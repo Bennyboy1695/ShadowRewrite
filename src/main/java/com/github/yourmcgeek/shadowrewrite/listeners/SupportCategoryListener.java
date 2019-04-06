@@ -21,8 +21,8 @@ public class SupportCategoryListener extends ListenerAdapter {
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("[dd/MM/YY HH:mm]");
-        if (event.getChannel().getParent().getIdLong() == Long.valueOf(main.mgr.getConfig().getSupportCategoryId())) {
-            if (event.getChannel().getIdLong() != Long.valueOf(main.mgr.getConfig().getLogChannelID())) {
+        if (event.getChannel().getParent().getIdLong() == main.getConfig().getConfigValue("supportCategoryId").getAsLong()) {
+            if (event.getChannel().getIdLong() != main.getConfig().getConfigValue("logChannelId").getAsLong()) {
                 try {
                     if (!Files.exists(main.getLogDirectory().resolve(event.getChannel().getName() + ".log"))) {
                         Files.createFile(main.getLogDirectory().resolve(event.getChannel().getName() + ".log"));

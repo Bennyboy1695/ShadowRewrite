@@ -16,18 +16,12 @@ import java.util.List;
 
 public class Restart {
 
-    private ShadowRewrite main;
-    public Restart(ShadowRewrite main) {
-        this.main = main;
-    }
-
     @Execute
-    public CommandResult onExecute(Member member, TextChannel channel, Message message, String label, List<String> args) {
+    public CommandResult onExecute(Member member, TextChannel channel, Message message, String label, List<String> args, ShadowRewrite main) {
         EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("Wipes and Restarts")
-                .setDescription("Use this link to see how often and when the servers restart/wipe\n" + main.mgr.getConfig().getRestartURL())
-                .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()));
-
+                .setDescription("Use this link to see how often and when the servers restart/wipe\n" + main.getConfig().getConfigValue("restartURL").getAsString())
+                .setColor(new Color(main.getConfig().getConfigValue("Red").getAsInt(), main.getConfig().getConfigValue("Blue").getAsInt(), main.getConfig().getConfigValue("Green").getAsInt()));
         main.getMessenger().sendEmbed(channel, embed.build(), 10);
         return CommandResult.success();
     }

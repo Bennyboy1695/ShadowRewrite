@@ -15,19 +15,12 @@ import java.util.List;
 @Command(label = {"link", "accounts", "linkaccount"}, usage = "link", description = "Displays how to link your account with the forums!")
 public class LinkAccount {
 
-    private ShadowRewrite main;
-
-    public LinkAccount(ShadowRewrite main) {
-        this.main = main;
-    }
-
     @Execute
-    public CommandResult onExecute(Member member, TextChannel channel, Message message, String label, List<String> args) {
+    public CommandResult onExecute(Member member, TextChannel channel, Message message, String label, List<String> args, ShadowRewrite main) {
         EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("Linking Accounts")
-                .setDescription("Use this link to see how to link your accounts with the forums, access <#260579843710779392> and the voice channels\n" + main.mgr.getConfig().getLinkingURL())
-                .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()));
-
+                .setDescription("Use this link to see how to link your accounts with the forums, access <#260579843710779392> and the voice channels\n" + main.getConfig().getConfigValue("linkingURL").getAsString())
+                .setColor(new Color(main.getConfig().getConfigValue("Red").getAsInt(), main.getConfig().getConfigValue("Blue").getAsInt(), main.getConfig().getConfigValue("Green").getAsInt()));
         main.getMessenger().sendEmbed(channel, embed.build(), 10);
         return CommandResult.success();
     }

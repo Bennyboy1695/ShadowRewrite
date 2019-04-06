@@ -16,14 +16,8 @@ import java.util.List;
 @Command(label = {"google", "lmgtfy"}, usage = "google {args}", description = "Displays a LMGTFY link", minArgs = 1, permission = Permission.ADMINISTRATOR, hideInHelp = true)
 public class LMGTFYCommand {
 
-    private ShadowRewrite main;
-
-    public LMGTFYCommand(ShadowRewrite main) {
-        this.main = main;
-    }
-
     @Execute
-    public CommandResult onExecute(Member member, TextChannel channel, Message message, String label, List<String> args) {
+    public CommandResult onExecute(Member member, TextChannel channel, Message message, String label, List<String> args, ShadowRewrite main) {
         String link = "";
         StringBuilder link2 = new StringBuilder();
         for (int x = 0; x != args.size(); x++) {
@@ -38,7 +32,7 @@ public class LMGTFYCommand {
         String BASE_URL = "http://lmgtfy.com/?q=";
         EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("Search Result")
-                .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()))
+                .setColor(new Color(main.getConfig().getConfigValue("Red").getAsInt(), main.getConfig().getConfigValue("Blue").getAsInt(), main.getConfig().getConfigValue("Green").getAsInt()))
                 .setDescription(BASE_URL + link2.toString());
         main.getMessenger().sendEmbed(channel, embed.build(), 10);
         return CommandResult.success();
