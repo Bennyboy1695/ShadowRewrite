@@ -14,6 +14,10 @@ public class SupportCategoryListener extends ListenerAdapter {
 
     private ShadowRewrite main;
 
+    public SupportCategoryListener(ShadowRewrite main) {
+        this.main = main;
+    }
+
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("[dd/MM/YY HH:mm]");

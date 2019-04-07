@@ -15,6 +15,10 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
 
     private ShadowRewrite main;
 
+    public TicketChannelsReactionListener(ShadowRewrite main) {
+        this.main = main;
+    }
+
     @Override
     public void onMessageReactionAdd(MessageReactionAddEvent event) {
         if (event.isFromType(ChannelType.TEXT)) {

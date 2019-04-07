@@ -20,7 +20,8 @@ public class SuggestionListener extends ListenerAdapter {
     private ShadowRewrite main;
     private final ScheduledExecutorService executorService;
     final AtomicBoolean hasSent = new AtomicBoolean(false);
-    public SuggestionListener() {
+    public SuggestionListener(ShadowRewrite main) {
+        this.main = main;
         this.executorService = Executors.newScheduledThreadPool(2);
     }
 

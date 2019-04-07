@@ -20,7 +20,8 @@ public class CustomChatCommandListener extends ListenerAdapter {
     private final ScheduledExecutorService executorService;
     final AtomicBoolean hasSent = new AtomicBoolean(false);
 
-    public CustomChatCommandListener() {
+    public CustomChatCommandListener(ShadowRewrite main) {
+        this.main = main;
         this.executorService = Executors.newScheduledThreadPool(2);
     }
 
