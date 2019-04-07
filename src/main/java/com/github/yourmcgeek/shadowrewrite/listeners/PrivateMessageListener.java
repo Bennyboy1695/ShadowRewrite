@@ -22,9 +22,6 @@ public class PrivateMessageListener extends ListenerAdapter {
     private ShadowRewrite main;
     private int userCount;
 
-    public PrivateMessageListener(ShadowRewrite main) {
-        this.main = main;
-    }
 
     @Override
     public void onPrivateMessageReceived(PrivateMessageReceivedEvent event) {

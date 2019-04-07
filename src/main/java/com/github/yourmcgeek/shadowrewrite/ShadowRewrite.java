@@ -105,11 +105,12 @@ public class ShadowRewrite {
 
 
             logger.info("Registering Listeners...");
-            this.jda.addEventListener(new PrivateMessageListener(this));
-            this.jda.addEventListener(new SupportCategoryListener(this));
-            this.jda.addEventListener(new TicketChannelsReactionListener(this));
-            this.jda.addEventListener(new SuggestionListener(this));
-            this.jda.addEventListener(new TagListener(this));
+            this.jda.addEventListener(new CustomChatCommandListener());
+            this.jda.addEventListener(new PrivateMessageListener());
+            this.jda.addEventListener(new SupportCategoryListener());
+            this.jda.addEventListener(new TicketChannelsReactionListener());
+            this.jda.addEventListener(new SuggestionListener());
+            this.jda.addEventListener(new TagListener());
 
             logger.info("Attempting Connection to Database");
             try {
@@ -154,6 +155,19 @@ public class ShadowRewrite {
             tipArray.add(put);
         }
         return tipArray;
+    }
+
+    public List<String[]> getCustomChat() {
+        JsonArray customChat = config.getConfigValue("customChatCommands");
+        List<String[]> customChatArray = new ArrayList<>();
+        for (Object obj : customChat) {
+            JsonObject jsonObject = (JsonObject) obj;
+            String command = jsonObject.get("command").getAsString();
+            String result = jsonObject.get("result").getAsString();
+            String[] put = new String[]{command, result};
+            customChatArray.add(put);
+        }
+        return customChatArray;
     }
 
     public void shutdown() {

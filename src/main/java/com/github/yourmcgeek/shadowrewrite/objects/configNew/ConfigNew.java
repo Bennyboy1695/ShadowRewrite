@@ -75,9 +75,6 @@ public class ConfigNew {
         jo.addProperty("Red", 0);
         jo.addProperty("Blue", 0);
         jo.addProperty("Green", 0);
-        jo.add("blacklistFiles", new JsonArray());
-        jo.add("swearWords", new JsonArray());
-        jo.add("tips", new JsonArray());
         jo.addProperty("linkingURL", "Change this to the proper \"Linking Accounts\" wiki page url");
         jo.addProperty("crashURL", "Change this to the proper \"Crash Reports\" wiki page url");
         jo.addProperty("claimURL", "Change this to the proper \"Claiming\" wiki page url");
@@ -91,10 +88,17 @@ public class ConfigNew {
         jo.addProperty("username", "add_me");
         jo.addProperty("password", "add_me");
         jo.addProperty("databaseName", "add_me");
+        jo.addProperty("customRed", 0);
+        jo.addProperty("customGreen", 0);
+        jo.addProperty("customBlue", 0);
+        jo.add("customChatCommands", new JsonArray());
         jo.add("channelsToWatch", new JsonArray());
         jo.add("rolesToWatch", new JsonArray());
         jo.add("userMentionToWatch", new JsonArray());
         jo.addProperty("redirectChannelID", 0);
+        jo.add("blacklistFiles", new JsonArray());
+        jo.add("swearWords", new JsonArray());
+        jo.add("tips", new JsonArray());
         return jo;
      }
 

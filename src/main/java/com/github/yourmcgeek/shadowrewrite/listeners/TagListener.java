@@ -17,10 +17,6 @@ public class TagListener extends ListenerAdapter {
 
     private ShadowRewrite main;
 
-    public TagListener(ShadowRewrite main) {
-        this.main = main;
-    }
-
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         if (!event.getMessage().getMentionedRoles().isEmpty()) {

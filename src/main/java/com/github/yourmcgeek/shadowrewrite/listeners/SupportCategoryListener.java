@@ -14,14 +14,10 @@ public class SupportCategoryListener extends ListenerAdapter {
 
     private ShadowRewrite main;
 
-    public SupportCategoryListener(ShadowRewrite main) {
-        this.main = main;
-    }
-
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("[dd/MM/YY HH:mm]");
-        if (event.getChannel().getParent().getIdLong() == main.getConfig().getConfigValue("supportCategoryId").getAsLong()) {
+        if (event.getChannel().getParent().getIdLong() == Long.valueOf(main.getConfig().getConfigValue("supportCategoryId").getAsLong())) {
             if (event.getChannel().getIdLong() != main.getConfig().getConfigValue("logChannelId").getAsLong()) {
                 try {
                     if (!Files.exists(main.getLogDirectory().resolve(event.getChannel().getName() + ".log"))) {
