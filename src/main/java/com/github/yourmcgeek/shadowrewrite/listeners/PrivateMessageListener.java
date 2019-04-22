@@ -28,7 +28,7 @@ public class PrivateMessageListener extends ListenerAdapter {
 
     @Override
     public void onPrivateMessageReceived(PrivateMessageReceivedEvent event) {
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/YY");
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM/dd/YY");
         DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
         if (event.getAuthor().isBot()) return;
 
@@ -74,12 +74,12 @@ public class PrivateMessageListener extends ListenerAdapter {
             EmbedBuilder message = new EmbedBuilder()
                     .addField("Author: ", member.getAsMention(), true)
                     .addField("Ticket: ", userMessage, true)
-                    .setDescription(userMessage)
-                    .setFooter("If you are finished with this ticket, please click \u2705. All staff and developers can close the ticket also", event.getJDA().getSelfUser().getEffectiveAvatarUrl())
+//                    .setDescription(userMessage)
+                    .setFooter("If you are finished, please click \u2705. All staff and developers can close the ticket also.", event.getJDA().getSelfUser().getEffectiveAvatarUrl())
                     .setColor(new Color(main.getConfig().getConfigValue("Red").getAsInt(), main.getConfig().getConfigValue("Blue").getAsInt(), main.getConfig().getConfigValue("Green").getAsInt()));
             Message supportMessage = main.getMessenger().sendEmbed(supportChannel, message.build()).getMessage();
 
-            supportChannel.getManager().setTopic("Creation date: " + supportChannel.getCreationTime().format(dateFormat) + " Creation Time: " + supportChannel.getCreationTime().format(timeFormat) + " GMT Authors ID: " + event.getAuthor().getIdLong() + " Message ID: " + supportMessage.getIdLong() + " Channel ID: " + supportChannel.getIdLong()).queue();
+            supportChannel.getManager().setTopic("Creation date: " + supportChannel.getCreationTime().format(dateFormat) + "Authors ID: " + event.getAuthor().getIdLong() + " Message ID: " + supportMessage.getIdLong() + " Channel ID: " + supportChannel.getIdLong()).queue();
             for (Message.Attachment attachment : event.getMessage().getAttachments()) {
                 String[] fileName = attachment.getFileName().split("\\.");
                 for (JsonElement blacklistArray : main.getConfig().getConfigValue("blacklistFiles").getAsJsonArray()) {

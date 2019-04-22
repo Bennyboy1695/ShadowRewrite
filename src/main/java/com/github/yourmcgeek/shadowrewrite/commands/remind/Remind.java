@@ -20,7 +20,7 @@ public class Remind {
                 result[0] = cmd.execute(member, channel, message, label, args);
             });
             if (result[0].equals(CommandResult.invalidArguments())) {
-                //
+//
             }
             return result[0];
         }

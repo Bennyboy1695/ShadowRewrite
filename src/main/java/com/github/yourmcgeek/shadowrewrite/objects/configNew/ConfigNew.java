@@ -75,10 +75,11 @@ public class ConfigNew {
         jo.addProperty("Red", 0);
         jo.addProperty("Blue", 0);
         jo.addProperty("Green", 0);
+        jo.addProperty("pingCooldownSeconds", 0);
         jo.addProperty("linkingURL", "Change this to the proper \"Linking Accounts\" wiki page url");
         jo.addProperty("crashURL", "Change this to the proper \"Crash Reports\" wiki page url");
         jo.addProperty("claimURL", "Change this to the proper \"Claiming\" wiki page url");
-        jo.addProperty("clURL", "Change this to the proper \"Chunk Loading\" wiki page url");
+        jo.addProperty("chunkURL", "Change this to the proper \"Chunk Loading\" wiki page url");
         jo.addProperty("restartURL", "Change this to the proper \"Restart and Wipe\" wiki page url");
         jo.addProperty("wikiURL", "Change this to the proper \"Wiki\" direct page url");
         jo.addProperty("crateURL", "Change this to the proper \"Crates\" wiki page url");

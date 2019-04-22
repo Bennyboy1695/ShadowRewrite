@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-@Command(label = {"add", "create"}, minArgs = 2, usage = "remind add 1d1h1m1s")
+@Command(label = {"add", "create"}, minArgs = 2, usage = "remind add 1d1h1m1s", hideInHelp = true)
 public class Add {
     @Execute
     public CommandResult onAdd(Member member, TextChannel channel, Message message, String label, List<String> args, ShadowRewrite main) {

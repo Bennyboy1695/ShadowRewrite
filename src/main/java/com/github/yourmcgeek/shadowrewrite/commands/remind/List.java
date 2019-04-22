@@ -14,7 +14,7 @@ import net.dv8tion.jda.core.entities.TextChannel;
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
-@Command(value = "list")
+@Command(value = "list", hideInHelp = true)
 public class List {
 
     @Execute
@@ -26,6 +26,7 @@ public class List {
                 long duration = Instant.ofEpochMilli(reminder.getExpiry()).minusMillis(Instant.now().toEpochMilli()).toEpochMilli();
                 long secs = TimeUnit.MILLISECONDS.toSeconds(duration);
                 embed.addField("Message shown in " + secs + "s :", reminder.getMessage(), true);
+                embed.addField("Reminder id", String.valueOf(reminder.getId()), true);
             }
         }
         new ReactionMenu.Builder(main.getJDA())

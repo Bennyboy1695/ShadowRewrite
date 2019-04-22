@@ -10,11 +10,12 @@ import net.dv8tion.jda.core.entities.TextChannel;
 
 import java.util.List;
 
-@Command("remove")
+@Command(value = "remove",  hideInHelp = true)
 public class Remove {
 
     @Execute
     public CommandResult onRemove(Member member, TextChannel channel, Message message, String label, List<String> args, ShadowRewrite main) {
+
         return CommandResult.success();
     }
 }
