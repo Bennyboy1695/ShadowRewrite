@@ -79,7 +79,7 @@ public class PrivateMessageListener extends ListenerAdapter {
                     .setColor(new Color(main.getConfig().getConfigValue("Red").getAsInt(), main.getConfig().getConfigValue("Blue").getAsInt(), main.getConfig().getConfigValue("Green").getAsInt()));
             Message supportMessage = main.getMessenger().sendEmbed(supportChannel, message.build()).getMessage();
 
-            supportChannel.getManager().setTopic("Creation date: " + supportChannel.getCreationTime().format(dateFormat) + "Authors ID: " + event.getAuthor().getIdLong() + " Message ID: " + supportMessage.getIdLong() + " Channel ID: " + supportChannel.getIdLong()).queue();
+            supportChannel.getManager().setTopic("Creation date: " + supportChannel.getCreationTime().format(dateFormat) + " Authors ID: " + event.getAuthor().getIdLong() + " Message ID: " + supportMessage.getIdLong() + " Channel ID: " + supportChannel.getIdLong()).queue();
             for (Message.Attachment attachment : event.getMessage().getAttachments()) {
                 String[] fileName = attachment.getFileName().split("\\.");
                 for (JsonElement blacklistArray : main.getConfig().getConfigValue("blacklistFiles").getAsJsonArray()) {

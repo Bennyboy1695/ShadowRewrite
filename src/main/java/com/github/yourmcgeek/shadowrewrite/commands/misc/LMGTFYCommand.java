@@ -1,4 +1,4 @@
-package com.github.yourmcgeek.shadowrewrite.commands;
+package com.github.yourmcgeek.shadowrewrite.commands.misc;
 
 import com.github.yourmcgeek.shadowrewrite.ShadowRewrite;
 import me.bhop.bjdautilities.command.result.CommandResult;
