@@ -96,12 +96,12 @@ public class ShadowRewrite {
             handler.register(new Relocate());
             handler.register(new Crate());
 //            handler.register(new LMGTFYCommand());
-            handler.register(new Remind());
-            handler.register(new Add());
-            handler.register(new Remove());
-            handler.register(new com.github.yourmcgeek.shadowrewrite.commands.remind.List());
-
-            handler.getCommand(Remind.class).ifPresent(cmd -> cmd.addCustomParam(handler));
+//            handler.register(new Remind());
+//            handler.register(new Add());
+//            handler.register(new Remove());
+//            handler.register(new com.github.yourmcgeek.shadowrewrite.commands.remind.List());
+//
+//            handler.getCommand(Remind.class).ifPresent(cmd -> cmd.addCustomParam(handler));
 
 
             logger.info("Registering Listeners...");
