@@ -13,7 +13,7 @@ import net.dv8tion.jda.core.entities.TextChannel;
 public class Remind {
 
     @Execute
-    public CommandResult onRemind(Member member, TextChannel channel, Message message, String label, java.util.List<String> args, CommandHandler handler, ShadowRewrite main) {
+    public CommandResult onRemind(Member member, TextChannel channel, Message message, String label, java.util.List<String> args, ShadowRewrite main, CommandHandler handler) {
         if (!args.get(0).toLowerCase().equals("list") || !args.get(0).toLowerCase().equals("add") || !args.get(0).toLowerCase().equals("remove")) {
             final CommandResult[] result = {CommandResult.success()};
             handler.getCommand(Add.class).ifPresent(cmd -> {
