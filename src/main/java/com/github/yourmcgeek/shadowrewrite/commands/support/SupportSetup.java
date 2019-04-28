@@ -28,7 +28,7 @@ public class SupportSetup {
                     "\n" +
                     "Tickets are not to be used for small questions that can be easily answered for these please use the this channel. Anything that requires in-depth staff interaction warrants creating a ticket. DO NOT abuse our ticket system doing so will result in a mute, kick or ban from our Discord.");
             EditableMessage editableMessage = main.getMessenger().sendEmbed(channel, builder.build(), 0);
-            Message message2 = editableMessage.getMessage();
+            Message message2 = editableMessage;
             message2.pin().queue();
             channel.getManager().setTopic("Read the pinned message to learn how to get support!").queue();
             EmbedBuilder pmBuilder = new EmbedBuilder()

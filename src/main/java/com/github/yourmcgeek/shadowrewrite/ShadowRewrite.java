@@ -1,9 +1,5 @@
 package com.github.yourmcgeek.shadowrewrite;
 
-import com.github.yourmcgeek.shadowrewrite.commands.misc.UUIDCommand;
-import com.github.yourmcgeek.shadowrewrite.commands.remind.Add;
-import com.github.yourmcgeek.shadowrewrite.commands.remind.Remind;
-import com.github.yourmcgeek.shadowrewrite.commands.remind.Remove;
 import com.github.yourmcgeek.shadowrewrite.commands.support.LogChannelCommand;
 import com.github.yourmcgeek.shadowrewrite.commands.support.SupportCommand;
 import com.github.yourmcgeek.shadowrewrite.commands.support.SupportSetup;
@@ -82,8 +78,7 @@ public class ShadowRewrite {
 
             logger.info("Registering Commands...");
 
-            CommandHandler handler = new CommandHandler.Builder(jda).addCustomParameter(this).setPrefix(getPrefix())
-                    .setDeleteCommandTime(10).setGenerateHelp(true).setSendTyping(true).setEntriesPerHelpPage(6).build();
+            CommandHandler handler = new CommandHandler.Builder(jda).setGenerateHelp(true).addCustomParameter(this).setEntriesPerHelpPage(6).guildIndependent().setCommandLifespan(10).setResponseLifespan(10).setPrefix(getPrefix()).build();
 
             handler.register(new SupportSetup());
             handler.register(new SupportCommand());
@@ -96,7 +91,6 @@ public class ShadowRewrite {
             handler.register(new Wiki());
             handler.register(new Relocate());
             handler.register(new Crate());
-            handler.register(new UUIDCommand());
 //            handler.register(new LMGTFYCommand());
 //            handler.register(new Remind());
 //            handler.register(new Add());
