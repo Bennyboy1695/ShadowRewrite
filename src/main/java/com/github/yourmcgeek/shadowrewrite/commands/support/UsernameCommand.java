@@ -43,7 +43,7 @@ public class UsernameCommand {
                             .addField(originalMessage.getEmbeds().get(0).getFields().get(0).getName(), originalMessage.getEmbeds().get(0).getFields().get(0).getValue(), true)
                             .addField(originalMessage.getEmbeds().get(0).getFields().get(1).getName(), originalMessage.getEmbeds().get(0).getFields().get(1).getValue(), true)
                             .addField(originalMessage.getEmbeds().get(0).getFields().get(2).getName(), data.getString("name"), true)
-                            .addField(originalMessage.getEmbeds().get(0).getFields().get(3).getName(), formattedUUID, true)
+                            .addField(originalMessage.getEmbeds().get(0).getFields().get(3).getName(), ("[" + formattedUUID + "](https://mcuuid.net/?q=" + formattedUUID + ")"), true)
                             .addField(originalMessage.getEmbeds().get(0).getFields().get(4).getName(), originalMessage.getEmbeds().get(0).getFields().get(4).getValue(), true);
 
                     reaction.getMessage().setContent(embedBuilder.build());

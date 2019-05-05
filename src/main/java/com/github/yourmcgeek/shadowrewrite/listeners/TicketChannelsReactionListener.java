@@ -1,15 +1,22 @@
 package com.github.yourmcgeek.shadowrewrite.listeners;
 
 import com.github.yourmcgeek.shadowrewrite.ShadowRewrite;
+import me.bhop.bjdautilities.ReactionMenu;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.MessageBuilder;
-import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.entities.ChannelType;
+import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.Role;
+import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.requests.RestAction;
 
 import java.awt.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 public class TicketChannelsReactionListener extends ListenerAdapter {
@@ -36,7 +43,7 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
                         if (event.getMember().getUser().getIdLong() == Long.valueOf(userId) || event.getMember().getRoles().stream().map(Role::getName).anyMatch("Staff"::equalsIgnoreCase) ||
                                 event.getMember().getRoles().stream().map(Role::getName).anyMatch("Developer"::equalsIgnoreCase)) {
 
-                            main.getMessenger().sendMessage(channel, "Closing Ticket in 60 Seconds! Marked Complete by " + event.getMember().getAsMention());
+
                             RestAction<Message> message1 = event.getJDA().getGuildById(main.getGuildID()).getTextChannelById(channelId).getMessageById(supportMsgId);
                             Consumer<Message> callback = (msg) -> {
                                 Message m = msg;
@@ -57,7 +64,30 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
                                         .queue();
                                 event.getJDA().getGuildById(main.getGuildID()).getTextChannelById(channelId).delete().queue();
                             };
-                            message1.queueAfter(60, TimeUnit.SECONDS, callback);
+
+                            ScheduledExecutorService scheduledTask = Executors.newScheduledThreadPool(2);
+
+                            AtomicBoolean deleteChannel = new AtomicBoolean(true);
+                            ReactionMenu reactionMenu = new ReactionMenu.Builder(event.getJDA())
+                                    .setEmbed(new EmbedBuilder().setColor(Color.GREEN).setTitle("Deleting Channel").setDescription("Channel deletion started by " + event.getMember().getAsMention() + ", 60 seconds to abort!").setFooter("React with \uD83D\uDED1 to abort", null).build())
+                                    .onClick("\uD83D\uDED1", (x, user) -> {
+                                        if (user.getUser().getIdLong() == Long.valueOf(userId) || user.getRoles().stream().map(Role::getName).anyMatch("Staff"::equalsIgnoreCase) ||
+                                                user.getRoles().stream().map(Role::getName).anyMatch("Developer"::equalsIgnoreCase)) {
+                                            deleteChannel.set(false);
+                                            x.removeReaction("\uD83D\uDED1");
+                                            x.getMessage().setContent(new EmbedBuilder().setColor(Color.RED).setTitle("Cancelled!").setDescription("Ticket Deletion cancelled by " + user.getAsMention()).build());
+                                            x.destroyIn(10);
+                                        }
+                                    })
+                                    .onDisplay(display -> {
+                                        scheduledTask.schedule(() -> {
+                                            if (deleteChannel.get()) {
+                                                message1.queue(callback);
+                                            }
+                                        }, 60, TimeUnit.SECONDS);
+                                    }).buildAndDisplay(channel);
+                            reactionMenu.destroyIn(60);
+
                         }
                     }
                 }
