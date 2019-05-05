@@ -61,7 +61,7 @@ public class TagListener extends ListenerAdapter {
 
     private List<Long> getRoleMentions() {
         List<Long> longs = new ArrayList<>();
-        JsonObject mentions = main.getConfig().getConfigValue("mentions");
+        JsonObject mentions = main.getConfig().getConfigValue("rolesToWatch");
         JsonArray roles = mentions.get("roles").getAsJsonArray();
         for (Object object : roles) {
             JsonElement entry = (JsonElement) object;
@@ -72,7 +72,7 @@ public class TagListener extends ListenerAdapter {
 
     private List<Long> getUserMentions() {
         List<Long> longs = new ArrayList<>();
-        JsonObject mentions = main.getConfig().getConfigValue("mentions");
+        JsonObject mentions = main.getConfig().getConfigValue("userMentionToWatch");
         JsonArray users = mentions.get("users").getAsJsonArray();
         for (Object object : users) {
             JsonElement entry = (JsonElement) object;

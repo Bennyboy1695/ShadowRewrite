@@ -27,7 +27,6 @@ repositories {
 dependencies {
 //    JDA
     compile 'net.dv8tion:JDA:3.8.3_462'
-//    compile 'com.jagrosh:jda-utilities:2.1.5'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
     compile 'me.bhop:bJdaUtilities:1.4.9'
 //   Google

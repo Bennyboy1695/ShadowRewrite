@@ -33,10 +33,9 @@ public class SupportCommand {
         message.getAuthor().openPrivateChannel().complete().sendMessage(new EmbedBuilder()
                 .setTitle("Support Ticket Creation")
                 .setColor(new Color(main.getConfig().getConfigValue("Red").getAsInt(), main.getConfig().getConfigValue("Blue").getAsInt(), main.getConfig().getConfigValue("Green").getAsInt()))
-//                .setDescription("To create a ticket, please respond here and a channel will be created." +
-//                        "\nNote: Multiple messages will not be combined, so please type only one message.\n" +
-//                        "Also, if you upload a file, the file will be taken and sent in the support channel also!")
-                .setDescription("Please enter your username")
+                .setDescription("To create a ticket, please respond here and a channel will be created." +
+                        "\nNote: Multiple messages will not be combined, so please type only one message.\n" +
+                        "Also, if you upload a file, the file will be taken and sent in the support channel also!")
                 .build()).complete();
         return CommandResult.success();
     }

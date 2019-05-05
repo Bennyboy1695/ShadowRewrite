@@ -9,6 +9,7 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.requests.RestAction;
 
 import java.awt.*;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class TicketChannelsReactionListener extends ListenerAdapter {
@@ -35,6 +36,7 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
                         if (event.getMember().getUser().getIdLong() == Long.valueOf(userId) || event.getMember().getRoles().stream().map(Role::getName).anyMatch("Staff"::equalsIgnoreCase) ||
                                 event.getMember().getRoles().stream().map(Role::getName).anyMatch("Developer"::equalsIgnoreCase)) {
 
+                            main.getMessenger().sendMessage(channel, "Closing Ticket in 60 Seconds! Marked Complete by " + event.getMember().getAsMention());
                             RestAction<Message> message1 = event.getJDA().getGuildById(main.getGuildID()).getTextChannelById(channelId).getMessageById(supportMsgId);
                             Consumer<Message> callback = (msg) -> {
                                 Message m = msg;
@@ -55,7 +57,7 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
                                         .queue();
                                 event.getJDA().getGuildById(main.getGuildID()).getTextChannelById(channelId).delete().queue();
                             };
-                            message1.queue(callback);
+                            message1.queueAfter(60, TimeUnit.SECONDS, callback);
                         }
                     }
                 }
