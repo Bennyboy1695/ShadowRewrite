@@ -27,6 +27,7 @@ public class PrivateMessageListener extends ListenerAdapter {
     private ShadowRewrite main;
     private int userCount;
     private JSONObject data;
+    private HashMap<Long, Message> userIDMessage = new HashMap<Long, Message>();
 
     public PrivateMessageListener(ShadowRewrite main) {
         this.main = main;
@@ -34,10 +35,9 @@ public class PrivateMessageListener extends ListenerAdapter {
 
     @Override
     public void onPrivateMessageReceived(PrivateMessageReceivedEvent event) {
-        HashMap<Long, Message> userIDMessage = new HashMap<Long, Message>();
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM/dd/YY");
         if (event.getAuthor().isBot()) return;
-        String userMessage = event.getMessage().getContentRaw();
+        String username = event.getMessage().getContentRaw();
         Member member = event.getJDA().getGuildById(main.getGuildID()).getMember(event.getAuthor());
 
         for (Guild.Ban bans : event.getJDA().getGuildById(main.getGuildID()).getBanList().complete()) {
@@ -54,11 +54,11 @@ public class PrivateMessageListener extends ListenerAdapter {
                 }
             }
         }
-
+        String userMessage = event.getMessage().getContentRaw();
         String[] userMessageSplit = userMessage.split(" ");
 
         boolean clean = false;
-        boolean usernameFilled = false;
+        boolean usernameNotFilled = true;
 
         for (int x = 0; x != userMessageSplit.length; x++) {
             for (JsonElement swearWords : main.getConfig().getConfigValue("swearWords").getAsJsonArray()) {
@@ -72,24 +72,26 @@ public class PrivateMessageListener extends ListenerAdapter {
         }
 
         if (clean) {
-            if (!(usernameFilled)) {
-//            Ask for Username
+            if ((usernameNotFilled)) {
+//            Ask for Ticket
                 EmbedBuilder embedBuilder = new EmbedBuilder()
-                        .setTitle("Username Required")
+                        .setTitle("Support Ticket Creation")
                         .setColor(new Color(main.getConfig().getConfigValue("Red").getAsInt(), main.getConfig().getConfigValue("Blue").getAsInt(), main.getConfig().getConfigValue("Green").getAsInt()))
-                        .setDescription("In order to finish the ticket creation process, please enter your username, and your username only");
+                       .setDescription("To create a ticket, please respond here and a channel will be created." +
+                            "\nNote: Multiple messages will not be combined, so please type only one message.\n" +
+                            "Also, if you upload a file, the file will be taken and sent in the support channel also!");
                 main.getMessenger().sendEmbed(event.getChannel(), embedBuilder.build());
 
                 if (event.getAuthor().isBot()) return;
                 if (userIDMessage.containsKey(event.getMessage().getAuthor().getIdLong())) {
                     String enteredName = event.getMessage().getContentRaw();
-
+                    usernameNotFilled = false;
                     if (!(isValidUsername(enteredName))) {
                         main.getMessenger().sendEmbed(event.getChannel(), new EmbedBuilder()
                                 .setDescription("Username cannot be found, please make sure the username in question is spelled correctly. If you are positive it's spelled correctly, please contact YourMCGeek.")
                                 .setColor(new Color(main.getConfig().getConfigValue("Red").getAsInt(), main.getConfig().getConfigValue("Blue").getAsInt(), main.getConfig().getConfigValue("Green").getAsInt())).setTitle("Error!").build(), 10);
                     } else {
-                        usernameFilled = true;
+                        usernameNotFilled = false;
 
                         TextChannel supportChannel = (TextChannel) event.getJDA().getCategoryById(main.getConfig().getConfigValue("supportCategoryId").getAsLong())
                                 .createTextChannel(member.getEffectiveName() + "-" + ThreadLocalRandom.current().nextInt(99999)).complete();
@@ -97,9 +99,10 @@ public class PrivateMessageListener extends ListenerAdapter {
                         String regex = "(.{8})(.{4})(.{4})(.{4})(.{12})";
                         String uuid = data.getString("id");
                         String formattedUUID = uuid.replaceAll(regex, "$1-$2-$3-$4-$5");
+                        System.out.println(userIDMessage.get(event.getAuthor().getIdLong()).getContentRaw());
                         EmbedBuilder message = new EmbedBuilder()
                                 .addField("Author: ", member.getAsMention(), true)
-                                .addField("Ticket: ", userIDMessage.get(event.getAuthor().getIdLong()).getContentDisplay(), true)
+                                .addField("Ticket: ", userIDMessage.get(event.getAuthor().getIdLong()).getContentRaw(), true)
                                 .addField("Username: ", data.getString("name"), true)
                                 .addField("UUID: ", formattedUUID, true)
                                 .setFooter("If you are finished, please click \u2705. All staff and developers can close the ticket also.", event.getJDA().getSelfUser().getEffectiveAvatarUrl())
