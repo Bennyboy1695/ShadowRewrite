@@ -1,8 +1,6 @@
 package com.github.yourmcgeek.shadowrewrite;
 
-import com.github.yourmcgeek.shadowrewrite.commands.support.LogChannelCommand;
-import com.github.yourmcgeek.shadowrewrite.commands.support.SupportCommand;
-import com.github.yourmcgeek.shadowrewrite.commands.support.SupportSetup;
+import com.github.yourmcgeek.shadowrewrite.commands.support.*;
 import com.github.yourmcgeek.shadowrewrite.commands.wiki.*;
 import com.github.yourmcgeek.shadowrewrite.listeners.*;
 import com.github.yourmcgeek.shadowrewrite.objects.configNew.ConfigNew;
@@ -91,6 +89,8 @@ public class ShadowRewrite {
             handler.register(new Wiki());
             handler.register(new Relocate());
             handler.register(new Crate());
+            handler.register(new UsernameCommand());
+            handler.register(new ServerCommand());
 //            handler.register(new LMGTFYCommand());
 //            handler.register(new Remind());
 //            handler.register(new Add());

@@ -5,6 +5,7 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.time.OffsetDateTime;
@@ -34,7 +35,7 @@ public class SupportCategoryListener extends ListenerAdapter {
                     } else {
                         content = ("[" + OffsetDateTime.now().format(format) + "] " + event.getMember().getEffectiveName() + ": " + event.getMessage().getContentRaw());
                     }
-                    Files.write(main.getLogDirectory().resolve(event.getChannel().getName() + ".log"), (content + "\n").getBytes(), StandardOpenOption.APPEND);
+                    Files.write(main.getLogDirectory().resolve(event.getChannel().getName() + ".log"), (content + "\n").getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
