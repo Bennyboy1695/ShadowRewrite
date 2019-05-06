@@ -1,20 +1,12 @@
 package com.github.yourmcgeek.shadowrewrite;
 
-import com.github.yourmcgeek.shadowrewrite.commands.remind.Remind;
-import com.github.yourmcgeek.shadowrewrite.commands.support.LogChannelCommand;
-import com.github.yourmcgeek.shadowrewrite.commands.support.SupportCommand;
-import com.github.yourmcgeek.shadowrewrite.commands.support.SupportSetup;
+import com.github.yourmcgeek.shadowrewrite.commands.support.*;
 import com.github.yourmcgeek.shadowrewrite.commands.wiki.*;
-import com.github.yourmcgeek.shadowrewrite.listeners.PrivateMessageListener;
-import com.github.yourmcgeek.shadowrewrite.listeners.SuggestionListener;
-import com.github.yourmcgeek.shadowrewrite.listeners.SupportCategoryListener;
-import com.github.yourmcgeek.shadowrewrite.listeners.TicketChannelsReactionListener;
-import com.github.yourmcgeek.shadowrewrite.objects.config.Config;
+import com.github.yourmcgeek.shadowrewrite.listeners.*;
+import com.github.yourmcgeek.shadowrewrite.objects.configNew.ConfigNew;
+import com.github.yourmcgeek.shadowrewrite.storage.SQLManager;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
 import me.bhop.bjdautilities.Messenger;
 import me.bhop.bjdautilities.command.CommandHandler;
 import net.dv8tion.jda.core.AccountType;
@@ -31,7 +23,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -39,72 +30,91 @@ import java.util.concurrent.Executors;
 
 public class ShadowRewrite {
 
-    public SettingsManager mgr = new SettingsManager(Paths.get(".").resolve("conf.json"));
     public JsonArray confirmMessages = new JsonArray();
 
     private Path logDirectory;
     private Path attachmentDir;
     private Messenger messenger;
-    private CommandHandler.Builder handlerBuilder;
     private CommandHandler commandHandler;
     private Path directory;
+    private Path configDirectory;
     private ShadowRewrite bot = this;
+    private ConfigNew config;
     private Logger logger;
     private JDA jda;
+    private SQLManager sqlManager;
 
-    public void init(Path directory) throws Exception {
+    public void init(Path directory, Path configDirectory) throws Exception {
         this.directory = directory;
+        this.configDirectory = configDirectory;
         logger = LoggerFactory.getLogger("ShadowBot");
+        logger.info("Initializing Config!");
+
         try {
-            Config config = mgr.getConfig();
-            if (config.getToken().equalsIgnoreCase("changeme")) {
+            initConfig(configDirectory);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to initialize config!", e);
+        }
+
+        try {
+
+            if (config.getConfigValue("token").getAsString().equals("add_me")) {
                 System.out.println("Please add the bot token into the config.");
                 System.exit(1);
             }
+
+            logger.info("Setting Preferences...");
             this.jda = new JDABuilder(AccountType.BOT)
-                    .setToken(config.getToken())
+                    .setToken(config.getConfigValue("token").getAsString())
                     .setEventManager(new ThreadedEventManager())
                     .setGame(Game.playing("play.shadownode.ca"))
                     .build();
             jda.awaitReady();
 
-            logger.info("Setting Preferences...");
-            CommandHandler handler = new CommandHandler.Builder(jda)
-                .setPrefix(config.getPrefix())
-                .setDeleteCommands(true)
-                .setGenerateHelp(true)
-                .setSendTyping(true)
-                .addCustomParameter(bot)
-            .build();
-
             logger.info("Starting Messenger...");
             this.messenger = new Messenger();
 
             logger.info("Registering Commands...");
-            handler.register(new SupportSetup(this));
-            handler.register(new SupportCommand(this));
-            handler.register(new LogChannelCommand(this));
-            handler.register(new LinkAccount(this));
-            handler.register(new CrashReport(this));
-            handler.register(new Restart(this));
-            handler.register(new Claiming(this));
-            handler.register(new Tiquality(this));
-            handler.register(new ChunkLoading(this));
-            handler.register(new Wiki(this));
-            handler.register(new Relocate(this));
-            handler.register(new Crate(this));
-//            handler.register(new LMGTFYCommand(this));
 
-            handler.getCommand(Remind.class).ifPresent(cmd -> cmd.addCustomParam(commandHandler));
+            CommandHandler handler = new CommandHandler.Builder(jda).setGenerateHelp(true).addCustomParameter(this).setEntriesPerHelpPage(6).guildIndependent().setCommandLifespan(10).setResponseLifespan(10).setPrefix(getPrefix()).build();
+
+            handler.register(new SupportSetup());
+            handler.register(new SupportCommand());
+            handler.register(new LogChannelCommand());
+            handler.register(new LinkAccount());
+            handler.register(new CrashReport());
+            handler.register(new Restart());
+            handler.register(new Claiming());
+            handler.register(new ChunkLoading());
+            handler.register(new Wiki());
+            handler.register(new Relocate());
+            handler.register(new Crate());
+            handler.register(new UsernameCommand());
+            handler.register(new ServerCommand());
+//            handler.register(new LMGTFYCommand());
+//            handler.register(new Remind());
+//            handler.register(new Add());
+//            handler.register(new Remove());
+//            handler.register(new com.github.yourmcgeek.shadowrewrite.commands.remind.List());
+//
+//            handler.getCommand(Remind.class).ifPresent(cmd -> cmd.addCustomParam(handler));
 
 
             logger.info("Registering Listeners...");
-            this.jda.addEventListener(new PrivateMessageListener(this));
+            this.jda.addEventListener(new CustomChatCommandListener(this));
+            this.jda.addEventListener(new PrivateMessageListenerNew(this));
             this.jda.addEventListener(new SupportCategoryListener(this));
             this.jda.addEventListener(new TicketChannelsReactionListener(this));
             this.jda.addEventListener(new SuggestionListener(this));
+            this.jda.addEventListener(new TagListener(this));
 
-
+            logger.info("Attempting Connection to Database");
+            try {
+                this.sqlManager = new SQLManager(config.getConfigValue("hostname").getAsString(), config.getConfigValue("port").getAsInt(), config.getConfigValue("databaseName").getAsString(), config.getConfigValue("username").getAsString(), config.getConfigValue("password").getAsString());
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.exit(1);
+            }
         } catch (LoginException e) {
             e.printStackTrace();
         }
@@ -129,14 +139,12 @@ public class ShadowRewrite {
 
         logger.info("Everything Loaded Successfully | Ready to accept input!");
     }
-    public List<String[]> getTips() throws IOException, ParseException {
-        JsonReader reader = new JsonReader(Files.newBufferedReader(Paths.get(".").resolve("conf.json")));
-        JsonParser parser = new JsonParser();
-        JsonObject result = parser.parse(reader).getAsJsonObject();
-        JsonArray tips = result.get("tips").getAsJsonArray();
+
+    public List<String[]> getTips(){
+        JsonArray tips = config.getConfigValue("tips");
         List<String[]> tipArray = new ArrayList<>();
-        for (JsonElement obj : tips) {
-            JsonObject jsonObject = obj.getAsJsonObject();
+        for (Object obj : tips) {
+            JsonObject jsonObject = (JsonObject) obj;
             String word = jsonObject.get("word").getAsString();
             String suggestion = jsonObject.get("suggestion").getAsString();
             String[] put = new String[]{word, suggestion};
@@ -145,29 +153,48 @@ public class ShadowRewrite {
         return tipArray;
     }
 
+    public List<String[]> getCustomChat() {
+        JsonArray customChat = config.getConfigValue("customChatCommands");
+        List<String[]> customChatArray = new ArrayList<>();
+        for (Object obj : customChat) {
+            JsonObject jsonObject = (JsonObject) obj;
+            String command = jsonObject.get("command").getAsString();
+            String result = jsonObject.get("result").getAsString();
+            String[] put = new String[]{command, result};
+            customChatArray.add(put);
+        }
+        return customChatArray;
+    }
+
     public void shutdown() {
         logger.info("Initiating Shutdown...");
         getJDA().shutdown();
         logger.info("Shutdown Complete.");
     }
 
+    public void initConfig(Path configDirectory) {
+        try {
+            config = new ConfigNew(this, configDirectory);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public JDA getJDA() {
         return this.jda;
     }
 
+    public ConfigNew getConfig() {
+        return config;
+    }
+
+
+    public String getPrefix() {
+        return config.getConfigValue("commandPrefix").getAsString();
+    }
+
     public Logger getLogger() {
         return logger;
-    }
-    public SettingsManager getSettingsManager() {
-        return mgr;
-    }
-
-    public JsonArray getConfirmMessages() {
-        return confirmMessages;
-    }
-
-    public String getGuildId() {
-        return mgr.getConfig().getGuildID();
     }
 
     public Path getLogDirectory() {
@@ -179,17 +206,16 @@ public class ShadowRewrite {
     }
 
     public long getGuildID() {
-        return Long.valueOf(mgr.getConfig().getGuildID());
+        return config.getConfigValue("guildID").getAsLong();
     }
 
     public Path getAttachmentDir() {
         return attachmentDir;
     }
 
-    public CommandHandler.Builder getHandlerBuilder() {
-        return handlerBuilder;
+    public SQLManager getSqlManager() {
+        return sqlManager;
     }
-
 
     private final class ThreadedEventManager extends InterfacedEventManager {
         private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()+1);

@@ -1,9 +1,12 @@
 package com.github.yourmcgeek.shadowrewrite.storage;
 
+import com.github.yourmcgeek.shadowrewrite.ShadowRewrite;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 
 public class MySQL extends Database {
 
@@ -13,6 +16,7 @@ public class MySQL extends Database {
     private String database;
     private String username;
     private String password;
+    private ShadowRewrite main;
 
     public MySQL(String hostname, int port, String database, String username, String password) {
         this.hostname = hostname;
@@ -29,6 +33,7 @@ public class MySQL extends Database {
         }
         try {
             String url = "jdbc:mysql://" + hostname + ":" + port + "/" + database  + "?user=" + username + "&password=" + password;
+            Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(url);
         } catch (Exception e) {
             e.printStackTrace();

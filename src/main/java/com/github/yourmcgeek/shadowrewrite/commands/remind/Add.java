@@ -17,46 +17,46 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-@Command(label = {"add", "cerate"}, minArgs = 2, usage = "remind add 1d1h1m1s")
+@Command(label = {"add", "create"}, minArgs = 2, usage = "remind add 1d1h1m1s", hideInHelp = true)
 public class Add {
-
-    private ShadowRewrite main;
-
-    public Add(ShadowRewrite main) {
-        this.main = main;
-    }
-
     @Execute
-    public CommandResult onAdd(Member member, TextChannel channel, Message message, String label, List<String> args) {
+    public CommandResult onAdd(Member member, TextChannel channel, Message message, String label, List<String> args, ShadowRewrite main) {
         String length = args.get(0);
-        List<String> mine = args;
-        mine.remove(0);
-        String msg = String.join(",", mine).replaceAll(",", " ");
-        long expiry = Util.stringToMillisConverter(length);
-        long finalExpiry = Instant.now().plusMillis(expiry).toEpochMilli();
+        if (length.toLowerCase().matches("([0-9]+w)?([0-9]+d)?([0-9]+h)?([0-9]+m)?([0-9]+s)?")) {
+            List<String> mine = args;
+            mine.remove(0);
+            String msg = String.join(",", mine).replaceAll(",", " ");
+            long expiry = Util.stringToMillisConverter(length);
+            long finalExpiry = Instant.now().plusMillis(expiry).toEpochMilli();
 
-        Reminder reminder = new Reminder(member.getUser().getIdLong(), channel.getIdLong(), Instant.now().toEpochMilli(), finalExpiry, msg);
-        try {
-            main.getMessenger().sendEmbed(channel, EmbedTemplates.SUCCESS.getEmbed().setTitle("Success").setDescription("Successfully added a reminder that will appear in " + length).addField("Message: ", msg, true).build(), 10);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        long duration = TimeUnit.MILLISECONDS.toSeconds(expiry);
-        Executors.newSingleThreadScheduledExecutor().schedule(() -> {
-            final Message tagMessage = channel.sendMessage(member.getAsMention() + " here is the reminder you asked for!").complete();
-            new ReactionMenu.Builder(main.getJDA())
-                    .setEmbed(EmbedTemplates.PRETTY_SUCCESSFULL.getEmbed().setTitle("Reminder").addField("Message: " , msg, true).setFooter("To delete this message react with a \u274C!", main.getJDA().getSelfUser().getAvatarUrl()).build())
-                    .setRemoveReactions(true)
-                    .onClick("\u274C", (reactionMenu, reactor) -> {
-                        if (reactor.equals(member)) {
-                            reactionMenu.destroy();
-                        } else if (reactor.hasPermission(Permission.MESSAGE_MANAGE)) {
-                            reactionMenu.destroy();
-                        }
-                    })
-                    .onDelete(delete -> tagMessage.delete().complete())
-                    .buildAndDisplay(channel);
-        }, duration , TimeUnit.SECONDS);
+            Reminder reminder = new Reminder(member.getUser().getIdLong(), channel.getIdLong(), Instant.now().toEpochMilli(), finalExpiry, msg);
+            try {
+                main.getSqlManager().addNewRemind(reminder);
+                main.getMessenger().sendEmbed(channel, EmbedTemplates.SUCCESS.getEmbed().setTitle("Success").setDescription("Successfully added a reminder that will appear in " + length).addField("Message: ", msg, true).build(), 10);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            long duration = TimeUnit.MILLISECONDS.toSeconds(expiry);
+            Executors.newSingleThreadScheduledExecutor().schedule(() -> {
+                final Message tagMessage = channel.sendMessage(member.getAsMention() + " here is the reminder you asked for!").complete();
+                new ReactionMenu.Builder(main.getJDA())
+                        .setEmbed(EmbedTemplates.PRETTY_SUCCESSFULL.getEmbed().setTitle("Reminder").addField("Message: ", msg, true).setFooter("To delete this message react with a \u274C!", main.getJDA().getSelfUser().getAvatarUrl()).build())
+                        .setRemoveReactions(true)
+                        .onClick("\u274C", (reactionMenu, reactor) -> {
+                            if (reactor.equals(member)) {
+                                reactionMenu.destroy();
+                            } else if (reactor.hasPermission(Permission.MESSAGE_MANAGE)) {
+                                reactionMenu.destroy();
+                            }
+                        })
+                        .onDestroy(delete -> tagMessage.delete().complete())
+                        .buildAndDisplay(channel);
+                main.getSqlManager().removeRemind(reminder);
+            }, duration, TimeUnit.SECONDS);
         return CommandResult.success();
+        }
+        else {
+            return CommandResult.invalidArguments();
+        }
     }
 }

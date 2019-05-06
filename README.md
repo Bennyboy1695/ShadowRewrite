@@ -1,4 +1,6 @@
-# ShadowRewrite [![Build](https://img.shields.io/teamcity/https/ci.bhop.me/s/yourmcgeek_ShadowRewrite.png?label=ShadowRewrite&?style=for-the-badge&colorA=191919&colorB=31b231&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAMAAAAolt3jAAABrVBMVEUAAABQQUlTTlDSrf8+PDuY/f/KpP+keP+jef/No/9v/4pg+H+T/63Lnv+UZf+EYv59aP9/bP99ofI4+2A69VxM/3Ogb/8lz89C/4K6iv+RZP8AGxQAAAACAACSZ/8ABgwa0P9c6f+mdP+Jbv8Svv+S7P/bt/+Fe/8EsvhCxPlc5f8M0/QDsvhGxfmb7f8RwPUQvv9o3f8+w/gGtPMAEBYY0/893/9DxfkFsfQADhQAAAAAAAAHAwJl3f8Ouv4Hwv8Qyv8r0P8/Pz48Ojgw0v8KuP4EsvYOvP4lzP87z/9OyPlAxPk3zP+EZ/93c/9rff9ihf8Z6LUs85J+b/8bIEsBCB4ADxoAGxcAFh4AHB19dP8bHi6/vrPV0s5mX16vp6jWztA9NDQGBRsKCQOuraxWVVV1dHQAAAAACxEIw/8AFxgTEAy4uLc6Ojq+vr5EQ0MwKicAChALwP8AGhwFAABIR0dPT0+Ih4cRCwgACxAIyP0AFR0ADhQLxP8Iwv8NIiqXioablJJ+eHYJvP8AIzAABQYACAoACg0ACA4It/oIuv0Jvv8Hwf8Dsfb///+wb3fXAAAATXRSTlMAAAAAAAACGRoCCx0CC6Tz9bFD0Pd6hv3TAs3unwS49HAIVP6pAwbW+ikR0/0xAqK/Bh31+ZMSKPz53LgECNH8szQHBjvh/MBCEDktBTzDNREAAACQSURBVAjXNcexSoJhGAbQ5/S/fvoX0dQgTXYBrkFLDRGJVxs1FNEQREG3IS3RUgQSgThoZzuShuUuP0kq+9D7b3+C11MvrFJjDed0RxbZ+ajhxmXXTSLHzkB4UCkjW6VSer4P8Ftqau4z+UoO90qVMuY9udPeamAAk2tDz6mm4caIp0QuXN3z+Jckkcxwm4013d8Y2JqfGdEAAAAASUVORK5CYII=)](https://ci.bhop.me/viewType.html?buildTypeId=yourmcgeek_ShadowRewrite)
+# ShadowRewrite[![Build](https://img.shields.io/teamcity/https/ci.bhop.me/s/yourmcgeek_ShadowRewrite.png?label=ShadowRewrite&?style=for-the-badge&colorA=191919&colorB=31b231&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAMAAAAolt3jAAABrVBMVEUAAABQQUlTTlDSrf8+PDuY/f/KpP+keP+jef/No/9v/4pg+H+T/63Lnv+UZf+EYv59aP9/bP99ofI4+2A69VxM/3Ogb/8lz89C/4K6iv+RZP8AGxQAAAACAACSZ/8ABgwa0P9c6f+mdP+Jbv8Svv+S7P/bt/+Fe/8EsvhCxPlc5f8M0/QDsvhGxfmb7f8RwPUQvv9o3f8+w/gGtPMAEBYY0/893/9DxfkFsfQADhQAAAAAAAAHAwJl3f8Ouv4Hwv8Qyv8r0P8/Pz48Ojgw0v8KuP4EsvYOvP4lzP87z/9OyPlAxPk3zP+EZ/93c/9rff9ihf8Z6LUs85J+b/8bIEsBCB4ADxoAGxcAFh4AHB19dP8bHi6/vrPV0s5mX16vp6jWztA9NDQGBRsKCQOuraxWVVV1dHQAAAAACxEIw/8AFxgTEAy4uLc6Ojq+vr5EQ0MwKicAChALwP8AGhwFAABIR0dPT0+Ih4cRCwgACxAIyP0AFR0ADhQLxP8Iwv8NIiqXioablJJ+eHYJvP8AIzAABQYACAoACg0ACA4It/oIuv0Jvv8Hwf8Dsfb///+wb3fXAAAATXRSTlMAAAAAAAACGRoCCx0CC6Tz9bFD0Pd6hv3TAs3unwS49HAIVP6pAwbW+ikR0/0xAqK/Bh31+ZMSKPz53LgECNH8szQHBjvh/MBCEDktBTzDNREAAACQSURBVAjXNcexSoJhGAbQ5/S/fvoX0dQgTXYBrkFLDRGJVxs1FNEQREG3IS3RUgQSgThoZzuShuUuP0kq+9D7b3+C11MvrFJjDed0RxbZ+ajhxmXXTSLHzkB4UCkjW6VSer4P8Ftqau4z+UoO90qVMuY9udPeamAAk2tDz6mm4caIp0QuXN3z+Jckkcxwm4013d8Y2JqfGdEAAAAASUVORK5CYII=)](https://ci.bhop.me/viewType.html?buildTypeId=yourmcgeek_ShadowRewrite) [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://github.com/YourMCGeek/ShadowRewrite/blob/master/LICENSE)
+
+
 
 ShadowRewrite is a rewrite of the Discord bot used in the community Discord server for [ShadowNode](https://shadownode.ca). The rewrite modernizes the bot with the use of embeds, file uploaders, and private messaging. 
 
@@ -57,15 +59,15 @@ Follow the format in order to add more words that the bot will respond to with t
 
 |  Placeholder 	|                                  Value                                  	|
 |:------------:	|  :-----------------------------------------------------------------------:	|
-|    <forum>   	|                          https://shadownode.ca                          	|
-|   <prefix>   	|                         Prefix from config.json                         	|
-|    <wiki>    	|                     https://www.shadownode.ca/wiki/                     	|
-|   <support>  	|       If you need support, create a new ticket by running <prefix>ticket    |
-|   <tag>     	|                              Tags the user                                  |
+|   ` <forum>  ` 	|                          https://shadownode.ca                          	|
+| `  <prefix>  ` 	|                         Prefix from config.json                         	|
+|  `  <wiki> `   	|                     https://www.shadownode.ca/wiki/                     	|
+|  ` <support> ` 	|       If you need support, create a new ticket by running <prefix>ticket    |
+| `  <tag>  `   	|                              Tags the user                                  |
 
 ## Credit
-Portions of the bot have been taken from NetBans Supportbot.
-Original source can be viewed [here](https://github.com/netbans/supportbot). 
+Portions of the bot have been taken from the NetworkSync Supportbot.
+Original source can be viewed [here](https://github.com/networksync/supportbot). 
 
 The bot is built on the public Discord API known as [JDA](https://github.com/DV8FromTheWorld/JDA) with the 3rd party library of [bJdaUtilities](https://github.com/bhopahk/bJdaUtilities/)
 

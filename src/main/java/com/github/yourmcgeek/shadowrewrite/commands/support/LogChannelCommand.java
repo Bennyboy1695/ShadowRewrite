@@ -16,21 +16,15 @@ import java.util.List;
 @Command(label = {"log", "logchannel"}, usage = "log", description = "Prints out log channel id for configuration file", permission = Permission.ADMINISTRATOR, hideInHelp = true)
 public class LogChannelCommand {
 
-    private ShadowRewrite main;
-
-    public LogChannelCommand(ShadowRewrite main) {
-        this.main = main;
-    }
-
     @Execute
-    public CommandResult onExecute(Member member, TextChannel channel, Message message, String label, List<String> args) {
+    public CommandResult onExecute(Member member, TextChannel channel, Message message, String label, List<String> args, ShadowRewrite main) {
         if (!member.hasPermission(Permission.ADMINISTRATOR)) {
             return CommandResult.noPermission();
         } else {
             main.getMessenger().sendEmbed(channel, new EmbedBuilder()
                     .setTitle("Log Channel ID")
-                    .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()))
-                    .addField("ID", String.valueOf(Long.valueOf(channel.getIdLong())), true)
+                    .setColor(new Color(main.getConfig().getConfigValue("Red").getAsInt(), main.getConfig().getConfigValue("Blue").getAsInt(), main.getConfig().getConfigValue("Green").getAsInt()))
+                    .addField("ID", String.valueOf(channel.getIdLong()), true)
                     .setDescription("Add this in its corresponding place in your config file. Save the config," +
                             " then restart the bot!").build(), 30);
             return CommandResult.success();

@@ -17,17 +17,11 @@ import java.util.List;
 @Command(label = {"support", "ticket"}, usage = "support", description = "Opens a support ticket")
 public class SupportCommand {
 
-    private ShadowRewrite main;
-
-    public SupportCommand(ShadowRewrite main) {
-        this.main = main;
-    }
-
     @Execute
-    public CommandResult onExecute(Member member, TextChannel channel, Message message, String label, List<String> args) {
+    public CommandResult onExecute(Member member, TextChannel channel, Message message, String label, List<String> args, ShadowRewrite main) {
         RestAction<PrivateChannel> pmChannel = member.getUser().openPrivateChannel();
         EmbedBuilder embedBuilder = new EmbedBuilder()
-                .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()))
+                .setColor(new Color(main.getConfig().getConfigValue("Red").getAsInt(), main.getConfig().getConfigValue("Blue").getAsInt(), main.getConfig().getConfigValue("Green").getAsInt()))
                 .setTitle("Support Ticket")
                 .setDescription("Click the link to open your private message in order to create the ticket!\n" +
                         "Make sure you have private messages turned on for this server to receive a message from the bot!")
@@ -38,10 +32,11 @@ public class SupportCommand {
 
         message.getAuthor().openPrivateChannel().complete().sendMessage(new EmbedBuilder()
                 .setTitle("Support Ticket Creation")
-                .setColor(new Color(main.mgr.getConfig().getColorRed(), main.mgr.getConfig().getColorGreen(), main.mgr.getConfig().getColorBlue()))
+                .setColor(new Color(main.getConfig().getConfigValue("Red").getAsInt(), main.getConfig().getConfigValue("Blue").getAsInt(), main.getConfig().getConfigValue("Green").getAsInt()))
                 .setDescription("To create a ticket, please respond here and a channel will be created." +
                         "\nNote: Multiple messages will not be combined, so please type only one message.\n" +
-                        "Also, if you upload a file, the file will be taken and sent in the support channel also!").build()).complete();
+                        "Also, if you upload a file, the file will be taken and sent in the support channel also!")
+                .build()).complete();
         return CommandResult.success();
     }
 }

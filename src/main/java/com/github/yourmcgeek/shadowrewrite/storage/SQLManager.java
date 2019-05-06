@@ -39,6 +39,7 @@ public class SQLManager {
         database.closeConnection();
     }
 
+
     public boolean addNewRemind(Reminder reminder) {
         try (Connection c = database.openConnection()) {
             String statement = "INSERT INTO reminds (user,channel,creation,expiry,message) VALUES(?,?,?,?,?);";
@@ -63,7 +64,7 @@ public class SQLManager {
         try (Connection c = database.openConnection()) {
             String statement = "DELETE FROM reminds WHERE user='" + reminder.getUserID() + "' AND channel='" + reminder.getChannelID() + "' AND creation='" + reminder.getCreation() + "' AND expiry='" + reminder.getExpiry() + "' AND message='" + reminder.getMessage() + "';";
             try (PreparedStatement ps = c.prepareStatement(statement)) {
-                ps.executeQuery();
+                ps.executeUpdate();
                 return true;
             }
         } catch (SQLException e) {

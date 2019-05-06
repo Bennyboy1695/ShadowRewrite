@@ -5,6 +5,7 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.time.OffsetDateTime;
@@ -21,8 +22,8 @@ public class SupportCategoryListener extends ListenerAdapter {
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("[dd/MM/YY HH:mm]");
-        if (event.getChannel().getParent().getIdLong() == Long.valueOf(main.mgr.getConfig().getSupportCategoryId())) {
-            if (event.getChannel().getIdLong() != Long.valueOf(main.mgr.getConfig().getLogChannelID())) {
+        if (event.getChannel().getParent().getIdLong() == Long.valueOf(main.getConfig().getConfigValue("supportCategoryId").getAsLong())) {
+            if (event.getChannel().getIdLong() != main.getConfig().getConfigValue("logChannelId").getAsLong()) {
                 try {
                     if (!Files.exists(main.getLogDirectory().resolve(event.getChannel().getName() + ".log"))) {
                         Files.createFile(main.getLogDirectory().resolve(event.getChannel().getName() + ".log"));
@@ -34,7 +35,7 @@ public class SupportCategoryListener extends ListenerAdapter {
                     } else {
                         content = ("[" + OffsetDateTime.now().format(format) + "] " + event.getMember().getEffectiveName() + ": " + event.getMessage().getContentRaw());
                     }
-                    Files.write(main.getLogDirectory().resolve(event.getChannel().getName() + ".log"), (content + "\n").getBytes(), StandardOpenOption.APPEND);
+                    Files.write(main.getLogDirectory().resolve(event.getChannel().getName() + ".log"), (content + "\n").getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
