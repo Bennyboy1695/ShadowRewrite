@@ -61,7 +61,7 @@ public class PrivateMessageListenerNew extends ListenerAdapter {
                 .setFooter("If you are finished, please click \u2705. All staff and developers can close the ticket also.", event.getJDA().getSelfUser().getEffectiveAvatarUrl())
                 .setColor(new Color(main.getConfig().getConfigValue("Red").getAsInt(), main.getConfig().getConfigValue("Blue").getAsInt(), main.getConfig().getConfigValue("Green").getAsInt()));
 
-        ReactionMenu supportMessage = new ReactionMenu.Builder(event.getJDA()).setEmbed(message.build()).addStartingReaction("\u2705").buildAndDisplay(supportChannel);
+        ReactionMenu supportMessage = new ReactionMenu.Builder(event.getJDA()).setEmbed(message.build()).addStartingReaction("\u2705").addStartingReaction("\uD83D\uDD12").buildAndDisplay(supportChannel);
         supportChannel.getManager().setTopic("Creation date: " + supportChannel.getCreationTime().format(dateFormat) + " Authors ID: " + event.getAuthor().getIdLong() + " Message ID: " + supportMessage.getMessage().getIdLong() + " Channel ID: " + supportChannel.getIdLong()).queue();
         for (Message.Attachment attachment : event.getMessage().getAttachments()) {
             String[] fileName = attachment.getFileName().split("\\.");
