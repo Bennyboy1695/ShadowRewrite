@@ -1,14 +1,17 @@
 package com.github.yourmcgeek.shadowrewrite.listeners;
 
+import com.github.yourmcgeek.shadowrewrite.EmbedTemplates;
 import com.github.yourmcgeek.shadowrewrite.ShadowRewrite;
 import me.bhop.bjdautilities.ReactionMenu;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.MessageBuilder;
+import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
+import net.dv8tion.jda.core.events.message.react.MessageReactionRemoveEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.requests.RestAction;
 
@@ -34,6 +37,8 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
             if (channel.getParent().getIdLong() == main.getConfig().getConfigValue("supportCategoryId").getAsLong()) {
                 for (Message message : channel.getPinnedMessages().complete()) {
                     if (message.getAuthor().isBot() && event.getReactionEmote().getName().equals("\u2705")) {
+                        if (event.getReaction().isSelf())
+                            return;
                         String cTopicFull = channel.getTopic();
                         String[] cTopicSplit = cTopicFull.split(" "); // https://regex101.com/r/r1zvJ6/1
                         String userId = cTopicSplit[5];
@@ -89,6 +94,30 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
                             reactionMenu.destroyIn(60);
 
                         }
+                    } else if (message.getAuthor().isBot() && event.getReactionEmote().getName().equals("\uD83D\uDD12")) {
+                        channel.getManager().putPermissionOverride(channel.getPinnedMessages().complete().get(0).getMentionedMembers().get(0), 101440L, 0L).complete();
+                        Role publicRole = channel.getGuild().getPublicRole();
+                        channel.createPermissionOverride(publicRole).setDeny(Permission.VIEW_CHANNEL).complete();
+                        main.getMessenger().sendEmbed(channel, EmbedTemplates.CHANNEL_LOCKED.getBuilt(), 10);
+                        main.getLogger().info("Locked channel: " + channel.getName());
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onMessageReactionRemove(MessageReactionRemoveEvent event) {
+        if (event.isFromType(ChannelType.TEXT)) {
+            TextChannel channel = (TextChannel) event.getChannel();
+            if (channel.getParent().getIdLong() == main.getConfig().getConfigValue("supportCategoryId").getAsLong()) {
+                if (event.getReaction().isSelf())
+                    return;
+                for (Message message : channel.getPinnedMessages().complete()) {
+                    if (message.getAuthor().isBot() && event.getReactionEmote().getName().equals("\uD83D\uDD12")) {
+                        channel.getManager().sync().complete();
+                        main.getMessenger().sendEmbed(channel, EmbedTemplates.CHANNEL_UNLOCKED.getBuilt(), 10);
+                        main.getLogger().info("Unlocked channel: " + channel.getName());
                     }
                 }
             }

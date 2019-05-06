@@ -11,7 +11,11 @@ public enum EmbedTemplates {
     BASE(new EmbedBuilder().setTimestamp(Instant.now())),
     ERROR(BASE.getEmbed().setColor(Color.RED)),
     SUCCESS(BASE.getEmbed().setColor(Color.GREEN)),
-    PRETTY_SUCCESSFULL(BASE.getEmbed().setColor(Color.CYAN));
+    PRETTY_SUCCESSFULL(BASE.getEmbed().setColor(Color.CYAN)),
+
+    CHANNEL_LOCKED(SUCCESS.getEmbed().setDescription("\uD83D\uDD12 Channel has been locked to just Staff and the Ticket Creator!")),
+    CHANNEL_UNLOCKED(SUCCESS.getEmbed().setDescription("\uD83D\uDD13 Channel has been unlocked, it is now back to default ticket perms!"));
+
 
     private final EmbedBuilder embed;
     EmbedTemplates(EmbedBuilder embed) {
