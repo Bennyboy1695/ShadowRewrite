@@ -35,19 +35,18 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
         if (event.isFromType(ChannelType.TEXT)) {
             TextChannel channel = (TextChannel) event.getChannel();
             if (channel.getParent().getIdLong() == main.getConfig().getConfigValue("supportCategoryId").getAsLong()) {
-                for (Message message : channel.getPinnedMessages().complete()) {
+                if (channel.getTopic() != null) {
+                    String cTopicFull = channel.getTopic();
+                    String[] cTopicSplit = cTopicFull.split(" "); // https://regex101.com/r/r1zvJ6/1
+                    String userId = cTopicSplit[5];
+                    String supportMsgId = cTopicSplit[8];
+                    String channelId = cTopicSplit[11];
+                    Message message = event.getChannel().getMessageById(supportMsgId).complete();
                     if (message.getAuthor().isBot() && event.getReactionEmote().getName().equals("\u2705")) {
                         if (event.getReaction().isSelf())
                             return;
-                        String cTopicFull = channel.getTopic();
-                        String[] cTopicSplit = cTopicFull.split(" "); // https://regex101.com/r/r1zvJ6/1
-                        String userId = cTopicSplit[5];
-                        String supportMsgId = cTopicSplit[8];
-                        String channelId = cTopicSplit[11];
-
                         if (event.getMember().getUser().getIdLong() == Long.valueOf(userId) || event.getMember().getRoles().stream().map(Role::getName).anyMatch("Staff"::equalsIgnoreCase) ||
                                 event.getMember().getRoles().stream().map(Role::getName).anyMatch("Developer"::equalsIgnoreCase)) {
-
 
                             RestAction<Message> message1 = event.getJDA().getGuildById(main.getGuildID()).getTextChannelById(channelId).getMessageById(supportMsgId);
                             Consumer<Message> callback = (msg) -> {
@@ -95,9 +94,18 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
 
                         }
                     } else if (message.getAuthor().isBot() && event.getReactionEmote().getName().equals("\uD83D\uDD12")) {
-                        channel.getManager().putPermissionOverride(channel.getPinnedMessages().complete().get(0).getMentionedMembers().get(0), 101440L, 0L).complete();
+                        if (event.getUser().isBot())
+                            return;
+                        channel.getManager().putPermissionOverride(channel.getGuild().getMemberById(userId), 117824L, 0L).complete();
                         Role publicRole = channel.getGuild().getPublicRole();
-                        channel.createPermissionOverride(publicRole).setDeny(Permission.VIEW_CHANNEL).complete();
+                        channel.putPermissionOverride(publicRole).setDeny(Permission.VIEW_CHANNEL).complete();
+                        channel.getGuild().getRoles().forEach(role -> {
+                            if (role.getName().equalsIgnoreCase("Staff") || role.getName().equalsIgnoreCase("Developer")) {
+                                if (role.isPublicRole())
+                                    return;
+                                channel.putPermissionOverride(role).setAllow(Permission.VIEW_CHANNEL, Permission.MESSAGE_READ, Permission.MESSAGE_WRITE, Permission.MESSAGE_HISTORY).queue();
+                            }
+                        });
                         main.getMessenger().sendEmbed(channel, EmbedTemplates.CHANNEL_LOCKED.getBuilt(), 10);
                         main.getLogger().info("Locked channel: " + channel.getName());
                     }
@@ -113,12 +121,14 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
             if (channel.getParent().getIdLong() == main.getConfig().getConfigValue("supportCategoryId").getAsLong()) {
                 if (event.getReaction().isSelf())
                     return;
-                for (Message message : channel.getPinnedMessages().complete()) {
-                    if (message.getAuthor().isBot() && event.getReactionEmote().getName().equals("\uD83D\uDD12")) {
-                        channel.getManager().sync().complete();
-                        main.getMessenger().sendEmbed(channel, EmbedTemplates.CHANNEL_UNLOCKED.getBuilt(), 10);
-                        main.getLogger().info("Unlocked channel: " + channel.getName());
-                    }
+                String cTopicFull = channel.getTopic();
+                String[] cTopicSplit = cTopicFull.split(" "); // https://regex101.com/r/r1zvJ6/1
+                String supportMsgId = cTopicSplit[8];
+                Message message = event.getChannel().getMessageById(supportMsgId).complete();
+                if (message.getAuthor().isBot() && event.getReactionEmote().getName().equals("\uD83D\uDD12")) {
+                    channel.getManager().sync().complete();
+                    main.getMessenger().sendEmbed(channel, EmbedTemplates.CHANNEL_UNLOCKED.getBuilt(), 10);
+                    main.getLogger().info("Unlocked channel: " + channel.getName());
                 }
             }
         }

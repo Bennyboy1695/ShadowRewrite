@@ -32,7 +32,7 @@ public class MySQL extends Database {
             return this.conn;
         }
         try {
-            String url = "jdbc:mysql://" + hostname + ":" + port + "/" + database  + "?user=" + username + "&password=" + password;
+            String url = "jdbc:mysql://" + hostname + ":" + port + "/" + database + "?user=" + username + "&password=" + password + "&serverTimezone=UTC";
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(url);
         } catch (Exception e) {

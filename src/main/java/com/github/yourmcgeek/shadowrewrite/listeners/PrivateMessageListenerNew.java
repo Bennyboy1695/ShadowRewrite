@@ -97,10 +97,9 @@ public class PrivateMessageListenerNew extends ListenerAdapter {
         supportChannel.getHistory().retrievePast(1).queue(l -> l.forEach(m -> m.delete().queue()));
         event.getAuthor().openPrivateChannel().complete().sendMessage(new EmbedBuilder()
                 .setTitle("Support Channel")
-                .setDescription("https://discordapp.com/channels/" + main.getGuildID() + "/" + supportChannel.getIdLong())
+                .setDescription("If you would prefer this ticket to be private, or concerns a dupe, glitch, bug, or contribution payment please react in your ticket channel with \uD83D\uDD12 to only allow staff to view the ticket. ")
+                .addField("Ticket", "https://discordapp.com/channels/" + main.getGuildID() + "/" + supportChannel.getIdLong(), false)
                 .setColor(new Color(main.getConfig().getConfigValue("Red").getAsInt(), main.getConfig().getConfigValue("Blue").getAsInt(), main.getConfig().getConfigValue("Green").getAsInt()))
                 .build()).queue();
-
-
     }
 }

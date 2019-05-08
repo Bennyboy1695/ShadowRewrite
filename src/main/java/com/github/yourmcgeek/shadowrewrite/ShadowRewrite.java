@@ -1,5 +1,8 @@
 package com.github.yourmcgeek.shadowrewrite;
 
+import com.github.yourmcgeek.shadowrewrite.commands.remind.Add;
+import com.github.yourmcgeek.shadowrewrite.commands.remind.Remind;
+import com.github.yourmcgeek.shadowrewrite.commands.remind.Remove;
 import com.github.yourmcgeek.shadowrewrite.commands.support.*;
 import com.github.yourmcgeek.shadowrewrite.commands.wiki.*;
 import com.github.yourmcgeek.shadowrewrite.listeners.*;
@@ -92,12 +95,12 @@ public class ShadowRewrite {
             handler.register(new UsernameCommand());
             handler.register(new ServerCommand());
 //            handler.register(new LMGTFYCommand());
-//            handler.register(new Remind());
-//            handler.register(new Add());
-//            handler.register(new Remove());
-//            handler.register(new com.github.yourmcgeek.shadowrewrite.commands.remind.List());
-//
-//            handler.getCommand(Remind.class).ifPresent(cmd -> cmd.addCustomParam(handler));
+            handler.register(new Remind());
+            handler.register(new Add());
+            handler.register(new Remove());
+            handler.register(new com.github.yourmcgeek.shadowrewrite.commands.remind.List());
+
+            handler.getCommand(Remind.class).ifPresent(cmd -> cmd.addCustomParam(handler));
 
 
             logger.info("Registering Listeners...");
