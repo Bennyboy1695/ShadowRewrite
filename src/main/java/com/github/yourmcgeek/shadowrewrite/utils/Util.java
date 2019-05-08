@@ -47,6 +47,9 @@ public class Util {
             con.setRequestMethod("GET");
             con.setRequestProperty("User-Agent", "Mozilla/5.0");
             responseCode = con.getResponseCode();
+            if (responseCode == 204 || responseCode == 400) {
+                return null;
+            }
             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
             String inputLine;
             StringBuffer response = new StringBuffer();
@@ -58,8 +61,6 @@ public class Util {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (responseCode == 204 || responseCode == 400)
-            return null;
         return null;
     }
 
