@@ -109,7 +109,7 @@ public class ShadowRewrite {
             this.jda.addEventListener(new SupportCategoryListener(this));
             this.jda.addEventListener(new TicketChannelsReactionListener(this));
             this.jda.addEventListener(new SuggestionListener(this));
-            this.jda.addEventListener(new TagListener(this));
+//            this.jda.addEventListener(new TagListener(this));
 
             logger.info("Attempting Connection to Database");
             try {
@@ -190,7 +190,6 @@ public class ShadowRewrite {
     public ConfigNew getConfig() {
         return config;
     }
-
 
     public String getPrefix() {
         return config.getConfigValue("commandPrefix").getAsString();

@@ -39,7 +39,6 @@ public class SQLManager {
         database.closeConnection();
     }
 
-
     public boolean addNewRemind(Reminder reminder) {
         try (Connection c = database.openConnection()) {
             String statement = "INSERT INTO reminds (user,channel,creation,expiry,message) VALUES(?,?,?,?,?);";

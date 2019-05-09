@@ -32,9 +32,6 @@ public class List {
                 .setStartingReactions("\u274C")
                 .setEmbed(embed.build())
                 .onClick("\u274C", reactionMenu -> reactionMenu.destroy())
-                .onDestroy(delete -> {
-                    System.out.println("Deleted");
-                })
                 .buildAndDisplay(channel).destroyIn(30);
         return CommandResult.success();
     }
