@@ -14,7 +14,7 @@ import net.dv8tion.jda.core.entities.TextChannel;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 @Command(label = {"add", "create"}, minArgs = 2, usage = "remind add 1d1h1m1s", hideInHelp = true)
@@ -37,7 +37,8 @@ public class Add {
                 e.printStackTrace();
             }
             long duration = TimeUnit.MILLISECONDS.toSeconds(expiry);
-            Executors.newSingleThreadScheduledExecutor().schedule(() -> {
+
+            ScheduledExecutorService remindCreation = (ScheduledExecutorService) main.getExecutors().schedule(() -> {
                 final Message tagMessage = channel.sendMessage(member.getAsMention() + " here is the reminder you asked for!").complete();
                 new ReactionMenu.Builder(main.getJDA())
                         .setEmbed(EmbedTemplates.PRETTY_SUCCESSFULL.getEmbed().setTitle("Reminder").addField("Message: ", msg, true).setFooter("To delete this message react with a \u274C!", main.getJDA().getSelfUser().getAvatarUrl()).build())
@@ -53,6 +54,7 @@ public class Add {
                         .buildAndDisplay(channel);
                 main.getSqlManager().removeRemind(reminder);
             }, duration, TimeUnit.SECONDS);
+            main.getScheduledTasks().add(remindCreation);
         return CommandResult.success();
         }
         else {

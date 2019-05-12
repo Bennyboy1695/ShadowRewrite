@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 public class ShadowRewrite {
 
@@ -47,6 +48,8 @@ public class ShadowRewrite {
     private JDA jda;
     private SQLManager sqlManager;
     private JsonObject conf;
+    private ScheduledExecutorService executors;
+    private List<ScheduledExecutorService> scheduledTasks = new ArrayList<>();
 
     public void init(Path directory, Path configDirectory) throws Exception {
         this.directory = directory;
@@ -132,7 +135,7 @@ public class ShadowRewrite {
                 logDirectory = logs;
             }
             logDirectory = logs;
-            Path attachments = logs.resolve("attachments");
+            Path attachments = logs.resolve("/attachments");
             if (!Files.exists(attachments)) {
                 Files.createDirectories(attachments);
                 attachmentDir = attachments;
@@ -219,6 +222,14 @@ public class ShadowRewrite {
 
     public SQLManager getSqlManager() {
         return sqlManager;
+    }
+
+    public ScheduledExecutorService getExecutors() {
+        return executors;
+    }
+
+    public List<ScheduledExecutorService> getScheduledTasks() {
+        return scheduledTasks;
     }
 
     private final class ThreadedEventManager extends InterfacedEventManager {
