@@ -42,7 +42,7 @@ public class TicketCreationListener extends ListenerAdapter {
             if (channel.getName().startsWith(member.getEffectiveName())) {
                 userCount++;
                 if (userCount == 1) {
-                    member.getUser().openPrivateChannel().complete().sendMessage("No channel has been created because you already have a ticket open! Please respond within the ticket to resolve that issue first!").queue();
+                    main.getMessenger().sendMessage(event.getChannel(), "No channel has been created because you already have a ticket open! Please respond within the ticket to resolve that issue first!", 10);
                     return;
                 }
             }

@@ -46,6 +46,7 @@ public class ShadowRewrite {
     private Logger logger;
     private JDA jda;
     private SQLManager sqlManager;
+    private JsonObject conf;
 
     public void init(Path directory, Path configDirectory) throws Exception {
         this.directory = directory;
