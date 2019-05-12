@@ -126,6 +126,8 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
                 String supportMsgId = cTopicSplit[8];
                 Message message = event.getChannel().getMessageById(supportMsgId).complete();
                 if (message.getAuthor().isBot() && event.getReactionEmote().getName().equals("\uD83D\uDD12")) {
+                    if (event.getUser().isBot())
+                        return;
                     channel.getManager().sync().complete();
                     main.getMessenger().sendEmbed(channel, EmbedTemplates.CHANNEL_UNLOCKED.getBuilt(), 10);
                     main.getLogger().info("Unlocked channel: " + channel.getName());

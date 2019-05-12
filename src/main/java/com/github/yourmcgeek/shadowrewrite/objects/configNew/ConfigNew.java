@@ -72,6 +72,7 @@ public class ConfigNew {
         jo.addProperty("supportCategoryId", "add_me");
         jo.addProperty("guildID", "add_me");
         jo.addProperty("logChannelId", "add_me");
+         jo.addProperty("TicketCreationChannelID", "add_me");
         jo.addProperty("Red", 0);
         jo.addProperty("Blue", 0);
         jo.addProperty("Green", 0);

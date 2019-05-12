@@ -37,7 +37,7 @@ public class Remove {
         List<Page> content = new ArrayList<>();
         PaginationEmbed.Builder builder = new PaginationEmbed.Builder(member.getJDA());
         while (count <= maxPages) {
-            content.add(generatePage(page, maxPages, reminders.stream(), member));
+            content.add(generatePage(page, maxPages, count, reminders.stream(), member));
             if (page < maxPages)
                 page++;
             count++;
@@ -47,7 +47,7 @@ public class Remove {
         return CommandResult.success();
     }
 
-    public Page generatePage(int page, int maxPages, Stream<Reminder> reminderStream, Member sender) {
+    public Page generatePage(int page, int maxPages, int count, Stream<Reminder> reminderStream, Member sender) {
         PageBuilder pageBuilder = new PageBuilder()
                 .includeTimestamp(true)
                 .setColor(Color.CYAN)
@@ -64,7 +64,7 @@ public class Remove {
 
             lines.add(("\u2022\u0020 Expires in " + secs + "s"));
 
-            pageBuilder.addContent(false, message, lines.toArray(new String[0]));
+            pageBuilder.addContent(false, count + ". " + message, lines.toArray(new String[0]));
         });
         return pageBuilder.build();
     }

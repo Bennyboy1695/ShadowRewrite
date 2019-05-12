@@ -106,6 +106,7 @@ public class ShadowRewrite {
             logger.info("Registering Listeners...");
             this.jda.addEventListener(new CustomChatCommandListener(this));
             this.jda.addEventListener(new PrivateMessageListenerNew(this));
+            this.jda.addEventListener(new TicketCreationListener(this));
             this.jda.addEventListener(new SupportCategoryListener(this));
             this.jda.addEventListener(new TicketChannelsReactionListener(this));
             this.jda.addEventListener(new SuggestionListener(this));
