@@ -1,6 +1,5 @@
 package com.github.yourmcgeek.shadowrewrite;
 
-import com.github.yourmcgeek.shadowrewrite.commands.remind.Reminder;
 import com.github.yourmcgeek.shadowrewrite.commands.support.LogChannelCommand;
 import com.github.yourmcgeek.shadowrewrite.commands.support.ServerCommand;
 import com.github.yourmcgeek.shadowrewrite.commands.support.SupportSetup;
@@ -8,7 +7,6 @@ import com.github.yourmcgeek.shadowrewrite.commands.support.UsernameCommand;
 import com.github.yourmcgeek.shadowrewrite.commands.wiki.*;
 import com.github.yourmcgeek.shadowrewrite.listeners.*;
 import com.github.yourmcgeek.shadowrewrite.objects.configNew.ConfigNew;
-import com.github.yourmcgeek.shadowrewrite.storage.SQLManager;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import me.bhop.bjdautilities.Messenger;
@@ -28,31 +26,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 public class ShadowRewrite {
-
-    public JsonArray confirmMessages = new JsonArray();
 
     private Path logDirectory;
     private Path attachmentDir;
     private Messenger messenger;
-    private CommandHandler commandHandler;
     private Path directory;
     private Path configDirectory;
     private ShadowRewrite bot = this;
     private ConfigNew config;
     private Logger logger;
     private JDA jda;
-    private SQLManager sqlManager;
-    private JsonObject conf;
-    private ScheduledExecutorService executors;
-    private Map<Reminder, ScheduledExecutorService> remindMap = new HashMap<>();
 
     public void init(Path directory, Path configDirectory) throws Exception {
         this.directory = directory;
@@ -100,33 +88,13 @@ public class ShadowRewrite {
             handler.register(new Crate());
             handler.register(new UsernameCommand());
             handler.register(new ServerCommand());
-//            handler.register(new LMGTFYCommand());
-
-            /* Reminder Stuff
-            handler.register(new Remind());
-            handler.register(new Add());
-            handler.register(new Remove());
-            handler.register(new com.github.yourmcgeek.shadowrewrite.commands.remind.List());
-
-            handler.getCommand(Remind.class).ifPresent(cmd -> cmd.addCustomParam(handler));
-            */
 
             logger.info("Registering Listeners...");
             this.jda.addEventListener(new CustomChatCommandListener(this));
-//            this.jda.addEventListener(new PrivateMessageListenerNew(this));
             this.jda.addEventListener(new TicketCreationListener(this));
             this.jda.addEventListener(new SupportCategoryListener(this));
             this.jda.addEventListener(new TicketChannelsReactionListener(this));
             this.jda.addEventListener(new SuggestionListener(this));
-//            this.jda.addEventListener(new TagListener(this));
-
-            logger.info("Attempting Connection to Database");
-            try {
-                this.sqlManager = new SQLManager(config.getConfigValue("hostname").getAsString(), config.getConfigValue("port").getAsInt(), config.getConfigValue("databaseName").getAsString(), config.getConfigValue("username").getAsString(), config.getConfigValue("password").getAsString());
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.exit(1);
-            }
         } catch (LoginException e) {
             e.printStackTrace();
         }
@@ -139,7 +107,7 @@ public class ShadowRewrite {
                 logDirectory = logs;
             }
             logDirectory = logs;
-            Path attachments = logs.resolve("/attachments");
+            Path attachments = logs.resolve("attachments");
             if (!Files.exists(attachments)) {
                 Files.createDirectories(attachments);
                 attachmentDir = attachments;
@@ -222,18 +190,6 @@ public class ShadowRewrite {
 
     public Path getAttachmentDir() {
         return attachmentDir;
-    }
-
-    public SQLManager getSqlManager() {
-        return sqlManager;
-    }
-
-    public ScheduledExecutorService getExecutors() {
-        return executors;
-    }
-
-    public Map<Reminder, ScheduledExecutorService> getRemindMap() {
-        return remindMap;
     }
 
     private final class ThreadedEventManager extends InterfacedEventManager {
