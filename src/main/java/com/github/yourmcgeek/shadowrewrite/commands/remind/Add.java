@@ -54,7 +54,7 @@ public class Add {
                         .buildAndDisplay(channel);
                 main.getSqlManager().removeRemind(reminder);
             }, duration, TimeUnit.SECONDS);
-            main.getScheduledTasks().add(remindCreation);
+            main.getRemindMap().put(reminder, remindCreation);
         return CommandResult.success();
         }
         else {

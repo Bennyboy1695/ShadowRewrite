@@ -38,10 +38,10 @@ public class TicketCreationListener extends ListenerAdapter {
                 return;
         }
 
-        for (TextChannel channel : event.getJDA().getCategoryById(main.getConfig().getConfigValue("supportCategoryId").getAsLong()).getTextChannels()) {
-            if (channel.getName().startsWith(member.getEffectiveName())) {
+        for (TextChannel channel : main.getJDA().getCategoryById(Long.valueOf(main.getConfig().getConfigValue("supportCategoryId").getAsString())).getTextChannels()) {
+            if (channel.getName().contains(event.getAuthor().getName())) {
                 userCount++;
-                if (userCount == 1) {
+                if (userCount >= 2) {
                     main.getMessenger().sendMessage(event.getChannel(), "No channel has been created because you already have a ticket open! Please respond within the ticket to resolve that issue first!", 10);
                     return;
                 }

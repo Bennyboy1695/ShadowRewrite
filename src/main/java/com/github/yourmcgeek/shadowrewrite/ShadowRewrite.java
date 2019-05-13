@@ -2,8 +2,12 @@ package com.github.yourmcgeek.shadowrewrite;
 
 import com.github.yourmcgeek.shadowrewrite.commands.remind.Add;
 import com.github.yourmcgeek.shadowrewrite.commands.remind.Remind;
+import com.github.yourmcgeek.shadowrewrite.commands.remind.Reminder;
 import com.github.yourmcgeek.shadowrewrite.commands.remind.Remove;
-import com.github.yourmcgeek.shadowrewrite.commands.support.*;
+import com.github.yourmcgeek.shadowrewrite.commands.support.LogChannelCommand;
+import com.github.yourmcgeek.shadowrewrite.commands.support.ServerCommand;
+import com.github.yourmcgeek.shadowrewrite.commands.support.SupportSetup;
+import com.github.yourmcgeek.shadowrewrite.commands.support.UsernameCommand;
 import com.github.yourmcgeek.shadowrewrite.commands.wiki.*;
 import com.github.yourmcgeek.shadowrewrite.listeners.*;
 import com.github.yourmcgeek.shadowrewrite.objects.configNew.ConfigNew;
@@ -27,7 +31,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -49,7 +55,7 @@ public class ShadowRewrite {
     private SQLManager sqlManager;
     private JsonObject conf;
     private ScheduledExecutorService executors;
-    private List<ScheduledExecutorService> scheduledTasks = new ArrayList<>();
+    private Map<Reminder, ScheduledExecutorService> remindMap = new HashMap<>();
 
     public void init(Path directory, Path configDirectory) throws Exception {
         this.directory = directory;
@@ -86,7 +92,6 @@ public class ShadowRewrite {
             CommandHandler handler = new CommandHandler.Builder(jda).setGenerateHelp(true).addCustomParameter(this).setEntriesPerHelpPage(6).guildIndependent().setCommandLifespan(10).setResponseLifespan(10).setPrefix(getPrefix()).build();
 
             handler.register(new SupportSetup());
-            handler.register(new SupportCommand());
             handler.register(new LogChannelCommand());
             handler.register(new LinkAccount());
             handler.register(new CrashReport());
@@ -109,7 +114,7 @@ public class ShadowRewrite {
 
             logger.info("Registering Listeners...");
             this.jda.addEventListener(new CustomChatCommandListener(this));
-            this.jda.addEventListener(new PrivateMessageListenerNew(this));
+//            this.jda.addEventListener(new PrivateMessageListenerNew(this));
             this.jda.addEventListener(new TicketCreationListener(this));
             this.jda.addEventListener(new SupportCategoryListener(this));
             this.jda.addEventListener(new TicketChannelsReactionListener(this));
@@ -228,8 +233,8 @@ public class ShadowRewrite {
         return executors;
     }
 
-    public List<ScheduledExecutorService> getScheduledTasks() {
-        return scheduledTasks;
+    public Map<Reminder, ScheduledExecutorService> getRemindMap() {
+        return remindMap;
     }
 
     private final class ThreadedEventManager extends InterfacedEventManager {

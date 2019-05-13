@@ -40,10 +40,11 @@ public class PrivateMessageListenerNew extends ListenerAdapter {
         for (TextChannel channel : event.getJDA().getCategoryById(main.getConfig().getConfigValue("supportCategoryId").getAsLong()).getTextChannels()) {
             if (channel.getName().startsWith(member.getEffectiveName())) {
                 userCount++;
-                if (userCount == 1) {
+                if (userCount >= 1) {
                     member.getUser().openPrivateChannel().complete().sendMessage("No channel has been created because you already have a ticket open! Please respond within the ticket to resolve that issue first!").queue();
                     return;
                 }
+                main.getLogger().info(String.valueOf(userCount));
             }
         }
 
