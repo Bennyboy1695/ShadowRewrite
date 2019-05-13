@@ -97,6 +97,7 @@ public class ShadowRewrite {
             this.jda.addEventListener(new SupportCategoryListener(this));
             this.jda.addEventListener(new TicketChannelsReactionListener(this));
             this.jda.addEventListener(new SuggestionListener(this));
+
         } catch (LoginException e) {
             e.printStackTrace();
         }
