@@ -1,9 +1,6 @@
 package com.github.yourmcgeek.shadowrewrite;
 
-import com.github.yourmcgeek.shadowrewrite.commands.remind.Add;
-import com.github.yourmcgeek.shadowrewrite.commands.remind.Remind;
 import com.github.yourmcgeek.shadowrewrite.commands.remind.Reminder;
-import com.github.yourmcgeek.shadowrewrite.commands.remind.Remove;
 import com.github.yourmcgeek.shadowrewrite.commands.support.LogChannelCommand;
 import com.github.yourmcgeek.shadowrewrite.commands.support.ServerCommand;
 import com.github.yourmcgeek.shadowrewrite.commands.support.SupportSetup;
@@ -104,13 +101,15 @@ public class ShadowRewrite {
             handler.register(new UsernameCommand());
             handler.register(new ServerCommand());
 //            handler.register(new LMGTFYCommand());
+
+            /* Reminder Stuff
             handler.register(new Remind());
             handler.register(new Add());
             handler.register(new Remove());
             handler.register(new com.github.yourmcgeek.shadowrewrite.commands.remind.List());
 
             handler.getCommand(Remind.class).ifPresent(cmd -> cmd.addCustomParam(handler));
-
+            */
 
             logger.info("Registering Listeners...");
             this.jda.addEventListener(new CustomChatCommandListener(this));
@@ -153,7 +152,7 @@ public class ShadowRewrite {
         logger.info("Everything Loaded Successfully | Ready to accept input!");
     }
 
-    public List<String[]> getTips(){
+    public List<String[]> getTips() {
         JsonArray tips = config.getConfigValue("tips");
         List<String[]> tipArray = new ArrayList<>();
         for (Object obj : tips) {
@@ -238,7 +237,7 @@ public class ShadowRewrite {
     }
 
     private final class ThreadedEventManager extends InterfacedEventManager {
-        private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()+1);
+        private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() + 1);
 
         @Override
         public void handle(Event e) {

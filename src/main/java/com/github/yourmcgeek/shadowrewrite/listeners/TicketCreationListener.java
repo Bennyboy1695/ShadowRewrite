@@ -1,5 +1,6 @@
 package com.github.yourmcgeek.shadowrewrite.listeners;
 
+import com.github.yourmcgeek.shadowrewrite.EmbedTemplates;
 import com.github.yourmcgeek.shadowrewrite.ShadowRewrite;
 import com.google.gson.JsonElement;
 import me.bhop.bjdautilities.ReactionMenu;
@@ -39,10 +40,10 @@ public class TicketCreationListener extends ListenerAdapter {
         }
 
         for (TextChannel channel : main.getJDA().getCategoryById(Long.valueOf(main.getConfig().getConfigValue("supportCategoryId").getAsString())).getTextChannels()) {
-            if (channel.getName().contains(event.getAuthor().getName())) {
+            if (channel.getName().startsWith(event.getAuthor().getName().toLowerCase())) {
                 userCount++;
                 if (userCount >= 2) {
-                    main.getMessenger().sendMessage(event.getChannel(), "No channel has been created because you already have a ticket open! Please respond within the ticket to resolve that issue first!", 10);
+                    main.getMessenger().sendEmbed(event.getChannel(), EmbedTemplates.ERROR.getEmbed().appendDescription("No channel has been created because you have multiple channels open already. Please complete these issue first!").build(), 10);
                     return;
                 }
             }
