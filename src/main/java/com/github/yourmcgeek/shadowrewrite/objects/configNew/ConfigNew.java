@@ -84,7 +84,6 @@ public class ConfigNew {
         jo.addProperty("wikiURL", "Change this to the proper \"Wiki\" direct page url");
         jo.addProperty("crateURL", "Change this to the proper \"Crates\" wiki page url");
         jo.addProperty("relocateURL", "Change this to the proper \"Relocation\" wiki page url");
-        jo.add("blacklistFiles", new JsonArray());
         jo.add("swearWords", new JsonArray());
         jo.add("tips", new JsonArray());
         return jo;

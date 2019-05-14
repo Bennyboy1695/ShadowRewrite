@@ -2,7 +2,6 @@ package com.github.yourmcgeek.shadowrewrite.listeners;
 
 import com.github.yourmcgeek.shadowrewrite.EmbedTemplates;
 import com.github.yourmcgeek.shadowrewrite.ShadowRewrite;
-import com.google.gson.JsonElement;
 import me.bhop.bjdautilities.ReactionMenu;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Guild;
@@ -14,7 +13,6 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import java.awt.*;
 import java.io.File;
-import java.nio.file.Files;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -43,6 +41,7 @@ public class TicketCreationListener extends ListenerAdapter {
             if (channel.getName().startsWith(event.getAuthor().getName().toLowerCase())) {
                 userCount++;
                 if (userCount >= 2) {
+                    event.getMessage().delete().queue();
                     main.getMessenger().sendEmbed(event.getChannel(), EmbedTemplates.ERROR.getEmbed().appendDescription("No channel has been created because you have multiple channels open already. Please complete these issue first!").build(), 10);
                     return;
                 }
@@ -50,10 +49,12 @@ public class TicketCreationListener extends ListenerAdapter {
         }
 
         String userMessage = event.getMessage().getContentRaw();
+        event.getMessage().delete().queue();
 
         TextChannel supportChannel = (TextChannel) event.getJDA().getCategoryById(main.getConfig().getConfigValue("supportCategoryId").getAsLong())
                 .createTextChannel(member.getEffectiveName() + "-" + ThreadLocalRandom.current().nextInt(99999)).complete();
 
+        supportChannel.putPermissionOverride(member).setAllow(383040).complete();
         EmbedBuilder message = new EmbedBuilder()
                 .addField("Author: ", member.getAsMention(), true)
                 .addField("Ticket: ", userMessage, true)
@@ -63,43 +64,23 @@ public class TicketCreationListener extends ListenerAdapter {
                 .setFooter("If you are finished, please click \u2705. All staff and developers can close the ticket also.", event.getJDA().getSelfUser().getEffectiveAvatarUrl())
                 .setColor(new Color(main.getConfig().getConfigValue("Red").getAsInt(), main.getConfig().getConfigValue("Blue").getAsInt(), main.getConfig().getConfigValue("Green").getAsInt()));
 
-        ReactionMenu supportMessage = new ReactionMenu.Builder(event.getJDA()).setEmbed(message.build()).addStartingReaction("\u2705").addStartingReaction("\uD83D\uDD12").buildAndDisplay(supportChannel);
+        ReactionMenu supportMessage = new ReactionMenu.Builder(event.getJDA()).setEmbed(message.build()).setRemoveReactions(false).buildAndDisplay(supportChannel);
         supportChannel.getManager().setTopic("Creation date: " + supportChannel.getCreationTime().format(dateFormat) + " Authors ID: " + event.getAuthor().getIdLong() + " Message ID: " + supportMessage.getMessage().getIdLong() + " Channel ID: " + supportChannel.getIdLong()).queue();
+
         for (Message.Attachment attachment : event.getMessage().getAttachments()) {
-            String[] fileName = attachment.getFileName().split("\\.");
-            for (JsonElement blacklistArray : main.getConfig().getConfigValue("blacklistFiles").getAsJsonArray()) {
-
-                if (blacklistArray.getAsString().equalsIgnoreCase(fileName[1])) {
-                    try {
-                        if (!new File(main.getLogDirectory().toFile(), "attachments").exists()) {
-                            new File(main.getLogDirectory().toFile(), "attachments").mkdir();
-                        }
-                        attachment.download(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName() + ".log"));
-                        supportChannel.sendFile(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName() + ".log")).complete();
-                        main.getMessenger().sendMessage(event.getChannel(), event.getMessage().getAuthor() + " has sent a file called " + attachment.getFileName() + ".log");
-                    } catch (Exception e) {
-                        main.getLogger().error("Error with PrivateMessageListener ", e);
-                    }
-                } else {
-                    if (Files.exists(main.getAttachmentDir().resolve(attachment.getFileName()))) {
-                        main.getLogger().info("Renaming attachment as one already exists!");
-                        String rename = fileName[0] + ThreadLocalRandom.current().nextInt(99999) + "." + fileName[1];
-
-                        attachment.download(new File(String.valueOf(main.getAttachmentDir().resolve(rename))));
-                        supportChannel.sendFile(new File(String.valueOf(main.getAttachmentDir().resolve(rename)))).complete();
-                        main.getLogger().info(attachment.getFileName() + " was renamed to " + rename);
-                    } else {
-                        attachment.download(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName()));
-                        supportChannel.sendFile(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName())).complete();
-                    }
+            try {
+                if (!new File(main.getLogDirectory().toFile(), "attachments").exists()) {
+                    new File(main.getLogDirectory().toFile(), "attachments").mkdir();
                 }
+                attachment.download(new File(main.getLogDirectory().toFile() + "/attachments/", attachment.getFileName()));
+                supportChannel.sendFile(new File(main.getAttachmentDir().toFile(), attachment.getFileName())).complete();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
-        event.getMessage().delete().queue();
-
-        supportMessage.getMessage().pin().complete();
-        supportChannel.getHistory().retrievePast(1).queue(l -> l.forEach(m -> m.delete().queue()));
+        supportMessage.addReaction("\u2705");
+        supportMessage.addReaction("\uD83D\uDD12");
         EmbedBuilder embedBuilder = new EmbedBuilder()
                 .setTitle("Support Channel")
                 .setDescription("If you would prefer this ticket to be private, or concerns a dupe, glitch, bug, or contribution payment please react in your ticket channel with \uD83D\uDD12 to only allow staff to view the ticket. ")

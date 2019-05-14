@@ -100,9 +100,9 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
                     } else if (message.getAuthor().isBot() && event.getReactionEmote().getName().equals("\uD83D\uDD12")) {
                         if (event.getUser().isBot())
                             return;
-                        channel.getManager().putPermissionOverride(channel.getGuild().getMemberById(userId), 117824L, 0L).complete();
+                        channel.getManager().putPermissionOverride(event.getJDA().getGuildById(main.getGuildID()).getMemberById(Long.valueOf(userId)), 383040, 0L).complete();
                         Role publicRole = channel.getGuild().getPublicRole();
-                        channel.putPermissionOverride(publicRole).setDeny(Permission.VIEW_CHANNEL).complete();
+                        channel.putPermissionOverride(publicRole).setDeny(Permission.VIEW_CHANNEL).queue();
                         channel.getGuild().getRoles().forEach(role -> {
                             if (role.getName().equalsIgnoreCase("Staff") || role.getName().equalsIgnoreCase("Developer")) {
                                 if (role.isPublicRole())
@@ -110,7 +110,7 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
                                 channel.putPermissionOverride(role).setAllow(Permission.VIEW_CHANNEL, Permission.MESSAGE_READ, Permission.MESSAGE_WRITE, Permission.MESSAGE_HISTORY).queue();
                             }
                         });
-                        main.getMessenger().sendEmbed(channel, EmbedTemplates.CHANNEL_LOCKED.getBuilt(), 10);
+                        main.getMessenger().sendEmbed(channel, EmbedTemplates.CHANNEL_LOCKED.getBuilt());
                         main.getLogger().info("Locked channel: " + channel.getName());
                     }
                 }
