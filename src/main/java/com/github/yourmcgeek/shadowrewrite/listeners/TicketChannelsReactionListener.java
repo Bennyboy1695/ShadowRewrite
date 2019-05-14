@@ -100,7 +100,7 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
                     } else if (message.getAuthor().isBot() && event.getReactionEmote().getName().equals("\uD83D\uDD12")) {
                         if (event.getUser().isBot())
                             return;
-                        channel.getManager().putPermissionOverride(event.getJDA().getGuildById(main.getGuildID()).getMemberById(Long.valueOf(userId)), 383040, 0L).complete();
+                        channel.getManager().putPermissionOverride(event.getJDA().getGuildById(main.getGuildID()).getMemberById(Long.valueOf(userId)), 101440, 0L).complete();
                         Role publicRole = channel.getGuild().getPublicRole();
                         channel.putPermissionOverride(publicRole).setDeny(Permission.VIEW_CHANNEL).queue();
                         channel.getGuild().getRoles().forEach(role -> {

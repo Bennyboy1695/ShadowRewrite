@@ -54,7 +54,7 @@ public class TicketCreationListener extends ListenerAdapter {
         TextChannel supportChannel = (TextChannel) event.getJDA().getCategoryById(main.getConfig().getConfigValue("supportCategoryId").getAsLong())
                 .createTextChannel(member.getEffectiveName() + "-" + ThreadLocalRandom.current().nextInt(99999)).complete();
 
-        supportChannel.putPermissionOverride(member).setAllow(383040).complete();
+        supportChannel.putPermissionOverride(member).setAllow(101440).complete();
         EmbedBuilder message = new EmbedBuilder()
                 .addField("Author: ", member.getAsMention(), true)
                 .addField("Ticket: ", userMessage, true)
