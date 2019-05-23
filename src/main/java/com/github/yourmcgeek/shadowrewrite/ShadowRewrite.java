@@ -1,5 +1,6 @@
 package com.github.yourmcgeek.shadowrewrite;
 
+import com.github.yourmcgeek.shadowrewrite.commands.EmbedCommand;
 import com.github.yourmcgeek.shadowrewrite.commands.support.LogChannelCommand;
 import com.github.yourmcgeek.shadowrewrite.commands.support.ServerCommand;
 import com.github.yourmcgeek.shadowrewrite.commands.support.SupportSetup;
@@ -91,6 +92,7 @@ public class ShadowRewrite {
             handler.register(new Crate());
             handler.register(new UsernameCommand());
             handler.register(new ServerCommand());
+            handler.register(new EmbedCommand());
 
             logger.info("Registering Listeners...");
             this.jda.addEventListener(new TicketCreationListener(this));
