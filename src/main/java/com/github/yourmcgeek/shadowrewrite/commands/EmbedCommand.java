@@ -21,8 +21,6 @@ public class EmbedCommand {
 
     @Execute
     public CommandResult onExecute(Member member, TextChannel channel, Message message, String label, List<String> args, ShadowRewrite main) {
-        if (!member.hasPermission(Permission.ADMINISTRATOR))
-            return CommandResult.noPermission();
         EmbedBuilder embed = new EmbedBuilder()
                 .setTimestamp(Instant.now());
         if (args.get(0).startsWith("#")) {
