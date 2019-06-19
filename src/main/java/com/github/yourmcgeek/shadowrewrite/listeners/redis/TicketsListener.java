@@ -70,12 +70,12 @@ public class TicketsListener {
             if (obj != null) {
                 if (obj.get("type").getAsString().equalsIgnoreCase("creation")) {
                     String playerName = obj.get("playerName").getAsString();
-                    for (TextChannel textChannel : plugin.getJDA().getGuildById(plugin.getGuildID()).getCategoryById(plugin.getConfig().getConfigValue("supportCategoryId").getAsLong()).getTextChannels()) {
+                    for (TextChannel textChannel : plugin.getJDA().getGuildById(plugin.getGuildID()).getCategoryById(plugin.getMainConfig().getConfigValue("supportCategoryId").getAsLong()).getTextChannels()) {
                         if (textChannel.getName().toLowerCase().startsWith(playerName.toLowerCase()))
                             return;
                     }
 
-                    TextChannel supportChannel = (TextChannel) plugin.getJDA().getCategoryById(plugin.getConfig().getConfigValue("supportCategoryId").getAsLong())
+                    TextChannel supportChannel = (TextChannel) plugin.getJDA().getCategoryById(plugin.getMainConfig().getConfigValue("supportCategoryId").getAsLong())
                             .createTextChannel(playerName + "-" + ThreadLocalRandom.current().nextInt(99999)).complete();
 
                     EmbedBuilder message = new EmbedBuilder()
@@ -85,7 +85,7 @@ public class TicketsListener {
                             .addField("UUID: ", ("[" + obj.get("uuid").getAsString() + "](https://mcuuid.net/?q=" + obj.get("uuid").getAsString() + ")"), true)
                             .addField("Server:", obj.get("serverName").getAsString(), true)
                             .setFooter("If you are finished, please click \u2705. All staff and developers can close the ticket also.", plugin.getJDA().getSelfUser().getEffectiveAvatarUrl())
-                            .setColor(new Color(plugin.getConfig().getConfigValue("Red").getAsInt(), plugin.getConfig().getConfigValue("Blue").getAsInt(), plugin.getConfig().getConfigValue("Green").getAsInt()));
+                            .setColor(new Color(plugin.getMainConfig().getConfigValue("Red").getAsInt(), plugin.getMainConfig().getConfigValue("Blue").getAsInt(), plugin.getMainConfig().getConfigValue("Green").getAsInt()));
 
                     ReactionMenu supportMessage = new ReactionMenu.Builder(plugin.getJDA()).setEmbed(message.build()).setStartingReactions("\uD83D\uDD12", "\u2705").setRemoveReactions(false).buildAndDisplay(supportChannel);
                     supportChannel.getManager().setTopic("Creation date: " + supportChannel.getCreationTime().format(dateFormat) + " Authors ID: " + obj.get("uuid").getAsString() + " Message ID: " + supportMessage.getMessage().getIdLong() + " Channel ID: " + supportChannel.getIdLong()).queue();

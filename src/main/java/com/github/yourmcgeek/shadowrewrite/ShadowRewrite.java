@@ -11,7 +11,6 @@ import com.github.yourmcgeek.shadowrewrite.listeners.discord.SupportCategoryList
 import com.github.yourmcgeek.shadowrewrite.listeners.discord.TicketChannelsReactionListener;
 import com.github.yourmcgeek.shadowrewrite.listeners.discord.TicketCreationListener;
 import com.github.yourmcgeek.shadowrewrite.listeners.redis.RedisClient;
-import com.github.yourmcgeek.shadowrewrite.listeners.redis.TicketsListener;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import me.bhop.bjdautilities.Messenger;
@@ -43,7 +42,8 @@ public class ShadowRewrite {
     private Path directory;
     private Path configDirectory;
     private ShadowRewrite bot = this;
-    private Config config;
+    private Config mainConfig;
+    private JsonObject mainConf;
     private Logger logger;
     private JDA jda;
     private RedisClient redisClient;
@@ -57,24 +57,24 @@ public class ShadowRewrite {
         try {
             initConfig(configDirectory);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to initialize config!", e);
+            throw new RuntimeException("Failed to initialize mainConfig!", e);
         }
 
-        redisClient = new RedisClient(this);
-        if (redisClient.load()) {
-            new TicketsListener(this).register();
-        }
+        //redisClient = new RedisClient(this);
+        //if (redisClient.load()) {
+        //    new TicketsListener(this).register();
+        //}
 
         try {
 
-            if (config.getConfigValue("token").getAsString().equals("add_me")) {
-                System.out.println("Please add the bot token into the config.");
+            if (mainConfig.getConfigValue("token").getAsString().equals("add_me")) {
+                System.out.println("Please add the bot token into the Config.");
                 System.exit(1);
             }
 
             logger.info("Setting Preferences...");
             this.jda = new JDABuilder(AccountType.BOT)
-                    .setToken(config.getConfigValue("token").getAsString())
+                    .setToken(mainConfig.getConfigValue("token").getAsString())
                     .setEventManager(new ThreadedEventManager())
                     .setGame(Game.playing("play.shadownode.ca"))
                     .build();
@@ -133,7 +133,7 @@ public class ShadowRewrite {
     }
 
     public List<String[]> getTips() {
-        JsonArray tips = config.getConfigValue("tips");
+        JsonArray tips = mainConfig.getConfigValue("tips");
         List<String[]> tipArray = new ArrayList<>();
         for (Object obj : tips) {
             JsonObject jsonObject = (JsonObject) obj;
@@ -146,7 +146,7 @@ public class ShadowRewrite {
     }
 
     public List<String[]> getCustomChat() {
-        JsonArray customChat = config.getConfigValue("customChatCommands");
+        JsonArray customChat = mainConfig.getConfigValue("customChatCommands");
         List<String[]> customChatArray = new ArrayList<>();
         for (Object obj : customChat) {
             JsonObject jsonObject = (JsonObject) obj;
@@ -164,9 +164,10 @@ public class ShadowRewrite {
         logger.info("Shutdown Complete.");
     }
 
-    public void initConfig(Path configDirectory) {
+    private void initConfig(Path configDirectory){
         try {
-            config = new Config(this, configDirectory);
+            mainConfig = new Config(this, configDirectory);
+            mainConf = mainConfig.newConfig("config", Config.writeDefaults());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -176,12 +177,12 @@ public class ShadowRewrite {
         return this.jda;
     }
 
-    public Config getConfig() {
-        return config;
+    public Config getMainConfig() {
+        return mainConfig;
     }
 
     public String getPrefix() {
-        return config.getConfigValue("commandPrefix").getAsString();
+        return mainConfig.getConfigValue("commandPrefix").getAsString();
     }
 
     public Logger getLogger() {
@@ -201,7 +202,7 @@ public class ShadowRewrite {
     }
 
     public long getGuildID() {
-        return config.getConfigValue("guildID").getAsLong();
+        return mainConfig.getConfigValue("guildID").getAsLong();
     }
 
     public Path getAttachmentDir() {

@@ -34,7 +34,7 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
     public void onMessageReactionAdd(MessageReactionAddEvent event) {
         if (event.isFromType(ChannelType.TEXT)) {
             TextChannel channel = (TextChannel) event.getChannel();
-            if (channel.getParent().getIdLong() == main.getConfig().getConfigValue("supportCategoryId").getAsLong()) {
+            if (channel.getParent().getIdLong() == main.getMainConfig().getConfigValue("supportCategoryId").getAsLong()) {
                 if (channel.getTopic() != null) {
                     String cTopicFull = channel.getTopic();
                     String[] cTopicSplit = cTopicFull.split(" "); // https://regex101.com/r/r1zvJ6/1
@@ -57,7 +57,7 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
                                     event.getJDA().getUserById(Long.valueOf(userId)).openPrivateChannel().queue((privateChannel) -> privateChannel.sendMessage(new EmbedBuilder()
                                             .setTitle("Issue Completed")
                                             .setDescription("Because of this we have sent you a log file containing the history, so that you may look at it in case you encounter the issue again!")
-                                            .setColor(new Color(main.getConfig().getConfigValue("Red").getAsInt(), main.getConfig().getConfigValue("Blue").getAsInt(), main.getConfig().getConfigValue("Green").getAsInt()))
+                                            .setColor(new Color(main.getMainConfig().getConfigValue("Red").getAsInt(), main.getMainConfig().getConfigValue("Blue").getAsInt(), main.getMainConfig().getConfigValue("Green").getAsInt()))
                                             .addField("Next Step: ", "If the issue still persists, please create a new ticket!", false)
                                             .addField("Original Issue: ", ticket, false)
                                             .build()).queue());
@@ -66,7 +66,7 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
                                 } catch (Exception e) {
                                     main.getLogger().info("Support Log cannot be sent from ticket " + channel.getName() + " because the user has left the server. Sending only to supportlog channel");
                                 }
-                                event.getJDA().getGuildById(main.getGuildID()).getTextChannelById(main.getConfig().getConfigValue("logChannelId").getAsLong())
+                                event.getJDA().getGuildById(main.getGuildID()).getTextChannelById(main.getMainConfig().getConfigValue("logChannelId").getAsLong())
                                         .sendFile(main.getLogDirectory().resolve(channel.getName() + ".log").toFile(), new MessageBuilder().append("`").append(channel.getName()).append("` has been closed! The ticket was ```" + ticket + "``` Here's a log to reference")
                                                 .build())
                                         .queue();
@@ -122,7 +122,7 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
     public void onMessageReactionRemove(MessageReactionRemoveEvent event) {
         if (event.isFromType(ChannelType.TEXT)) {
             TextChannel channel = (TextChannel) event.getChannel();
-            if (channel.getParent().getIdLong() == main.getConfig().getConfigValue("supportCategoryId").getAsLong()) {
+            if (channel.getParent().getIdLong() == main.getMainConfig().getConfigValue("supportCategoryId").getAsLong()) {
                 if (event.getReaction().isSelf())
                     return;
                 String cTopicFull = channel.getTopic();

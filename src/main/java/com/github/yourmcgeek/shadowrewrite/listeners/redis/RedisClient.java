@@ -1,7 +1,6 @@
 package com.github.yourmcgeek.shadowrewrite.listeners.redis;
 
 import com.github.yourmcgeek.shadowrewrite.ShadowRewrite;
-import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolAbstract;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisSentinelPool;
@@ -33,14 +32,14 @@ public final class RedisClient {
     public boolean load() {
         plugin.getLogger().info("[Sponge] Connecting to redis.");
 
-        this.host = plugin.getConfig().getConfigValue("redis", "hostname").getAsString();
-        this.password = plugin.getConfig().getConfigValue("redis", "password").getAsString();
-        this.poolName = plugin.getConfig().getConfigValue("redis", "poolName").getAsString();
+        this.host = plugin.getMainConfig().getConfigValue("redis", "hostname").getAsString();
+        this.password = plugin.getMainConfig().getConfigValue("redis", "password").getAsString();
+        this.poolName = plugin.getMainConfig().getConfigValue("redis", "poolName").getAsString();
 
-        this.sentinels = plugin.getConfig().getConfigValue("redis", "sentinels");
+        this.sentinels = plugin.getMainConfig().getConfigValue("redis", "sentinels");
 
-        this.port = plugin.getConfig().getConfigValue("redis", "port").getAsInt();
-        this.database = plugin.getConfig().getConfigValue("redis", "database").getAsInt();
+        this.port = plugin.getMainConfig().getConfigValue("redis", "port").getAsInt();
+        this.database = plugin.getMainConfig().getConfigValue("redis", "database").getAsInt();
 
         if (this.password == null || this.password.equals("")) {
             plugin.getLogger().error("Password not specified unable to connect to redis!");

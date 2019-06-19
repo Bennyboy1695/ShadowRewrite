@@ -19,8 +19,8 @@ public class CrashReport {
     public CommandResult onExecute(Member member, TextChannel channel, Message message, String label, List<String> args, ShadowRewrite main) {
         EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("Crash Reports")
-                .setDescription("Use this link to see how to find and share crash reports\n" + main.getConfig().getConfigValue("crashURL").getAsString())
-                .setColor(new Color(main.getConfig().getConfigValue("Red").getAsInt(), main.getConfig().getConfigValue("Blue").getAsInt(), main.getConfig().getConfigValue("Green").getAsInt()));
+                .setDescription("Use this link to see how to find and share crash reports\n" + main.getMainConfig().getConfigValue("crashURL").getAsString())
+                .setColor(new Color(main.getMainConfig().getConfigValue("Red").getAsInt(), main.getMainConfig().getConfigValue("Blue").getAsInt(), main.getMainConfig().getConfigValue("Green").getAsInt()));
 
         main.getMessenger().sendEmbed(channel, embed.build(), 10);
         return CommandResult.success();

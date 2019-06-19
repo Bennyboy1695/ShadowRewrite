@@ -23,7 +23,7 @@ public class LogChannelCommand {
         } else {
             main.getMessenger().sendEmbed(channel, new EmbedBuilder()
                     .setTitle("Log Channel ID")
-                    .setColor(new Color(main.getConfig().getConfigValue("Red").getAsInt(), main.getConfig().getConfigValue("Blue").getAsInt(), main.getConfig().getConfigValue("Green").getAsInt()))
+                    .setColor(new Color(main.getMainConfig().getConfigValue("Red").getAsInt(), main.getMainConfig().getConfigValue("Blue").getAsInt(), main.getMainConfig().getConfigValue("Green").getAsInt()))
                     .addField("ID", String.valueOf(channel.getIdLong()), true)
                     .setDescription("Add this in its corresponding place in your config file. Save the config," +
                             " then restart the bot!").build(), 30);

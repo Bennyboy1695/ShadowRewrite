@@ -28,7 +28,7 @@ public class TicketCreationListener extends ListenerAdapter {
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM/dd/YY");
-        if (event.getAuthor().isBot() || event.getChannel().getIdLong() != main.getConfig().getConfigValue("TicketCreationChannelID").getAsLong() || event.getMessage().getContentRaw().contains("supportsetup") || event.getMessage().getContentRaw().contains("setupsupport"))
+        if (event.getAuthor().isBot() || event.getChannel().getIdLong() != main.getMainConfig().getConfigValue("TicketCreationChannelID").getAsLong() || event.getMessage().getContentRaw().contains("supportsetup") || event.getMessage().getContentRaw().contains("setupsupport"))
             return;
         Member member = event.getJDA().getGuildById(main.getGuildID()).getMember(event.getAuthor());
 
@@ -37,7 +37,7 @@ public class TicketCreationListener extends ListenerAdapter {
                 return;
         }
 
-        for (TextChannel channel : main.getJDA().getCategoryById(Long.valueOf(main.getConfig().getConfigValue("supportCategoryId").getAsString())).getTextChannels()) {
+        for (TextChannel channel : main.getJDA().getCategoryById(Long.valueOf(main.getMainConfig().getConfigValue("supportCategoryId").getAsString())).getTextChannels()) {
             if (channel.getName().startsWith(event.getAuthor().getName().toLowerCase())) {
                 userCount++;
                 if (userCount >= 2) {
@@ -51,7 +51,7 @@ public class TicketCreationListener extends ListenerAdapter {
         String userMessage = event.getMessage().getContentRaw();
         event.getMessage().delete().queue();
 
-        TextChannel supportChannel = (TextChannel) event.getJDA().getCategoryById(main.getConfig().getConfigValue("supportCategoryId").getAsLong())
+        TextChannel supportChannel = (TextChannel) event.getJDA().getCategoryById(main.getMainConfig().getConfigValue("supportCategoryId").getAsLong())
                 .createTextChannel(member.getEffectiveName() + "-" + ThreadLocalRandom.current().nextInt(99999)).complete();
 
         supportChannel.putPermissionOverride(member).setAllow(101440).complete();
@@ -62,7 +62,7 @@ public class TicketCreationListener extends ListenerAdapter {
                 .addField("UUID: ", "Run `" + main.getPrefix() + "username <Username>` to set this field", true)
                 .addField("Server:", "Run `" + main.getPrefix() + "server <Server>` to set this field", true)
                 .setFooter("If you are finished, please click \u2705. All staff and developers can close the ticket also.", event.getJDA().getSelfUser().getEffectiveAvatarUrl())
-                .setColor(new Color(main.getConfig().getConfigValue("Red").getAsInt(), main.getConfig().getConfigValue("Blue").getAsInt(), main.getConfig().getConfigValue("Green").getAsInt()));
+                .setColor(new Color(main.getMainConfig().getConfigValue("Red").getAsInt(), main.getMainConfig().getConfigValue("Blue").getAsInt(), main.getMainConfig().getConfigValue("Green").getAsInt()));
 
         ReactionMenu supportMessage = new ReactionMenu.Builder(event.getJDA()).setEmbed(message.build()).setRemoveReactions(false).buildAndDisplay(supportChannel);
         supportChannel.getManager().setTopic("Creation date: " + supportChannel.getCreationTime().format(dateFormat) + " Authors ID: " + event.getAuthor().getIdLong() + " Message ID: " + supportMessage.getMessage().getIdLong() + " Channel ID: " + supportChannel.getIdLong()).queue();
@@ -85,7 +85,7 @@ public class TicketCreationListener extends ListenerAdapter {
                 .setTitle("Support Channel")
                 .setDescription("If you would prefer this ticket to be private, or concerns a dupe, glitch, bug, or contribution payment please react in your ticket channel with \uD83D\uDD12 to only allow staff to view the ticket. ")
                 .addField("Ticket", "https://discordapp.com/channels/" + main.getGuildID() + "/" + supportChannel.getIdLong(), false)
-                .setColor(new Color(main.getConfig().getConfigValue("Red").getAsInt(), main.getConfig().getConfigValue("Blue").getAsInt(), main.getConfig().getConfigValue("Green").getAsInt()));
+                .setColor(new Color(main.getMainConfig().getConfigValue("Red").getAsInt(), main.getMainConfig().getConfigValue("Blue").getAsInt(), main.getMainConfig().getConfigValue("Green").getAsInt()));
         main.getMessenger().sendEmbed(event.getChannel(), embedBuilder.build(), 10);
     }
 }

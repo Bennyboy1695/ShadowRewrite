@@ -20,8 +20,8 @@ public class Crate {
     public CommandResult onExecute(Member member, TextChannel channel, Message message, String label, List<String> args, ShadowRewrite main) {
         EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("Crates")
-                .setDescription("Use this link to see access the Crates wiki page\n" + main.getConfig().getConfigValue("crateURL").getAsString())
-                .setColor(new Color(main.getConfig().getConfigValue("Red").getAsInt(), main.getConfig().getConfigValue("Blue").getAsInt(), main.getConfig().getConfigValue("Green").getAsInt()));
+                .setDescription("Use this link to see access the Crates wiki page\n" + main.getMainConfig().getConfigValue("crateURL").getAsString())
+                .setColor(new Color(main.getMainConfig().getConfigValue("Red").getAsInt(), main.getMainConfig().getConfigValue("Blue").getAsInt(), main.getMainConfig().getConfigValue("Green").getAsInt()));
         main.getMessenger().sendEmbed(channel, embed.build(), 10);
         return CommandResult.success();
     }

@@ -20,8 +20,8 @@ public class Wiki {
     public CommandResult onExecute(Member member, TextChannel channel, Message message, String label, List<String> args, ShadowRewrite main) {
         EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("Wiki")
-                .setDescription("Use this link to see access the wiki hub which has lots more information on numerous different subjects\n" + main.getConfig().getConfigValue("wikiURL").getAsString())
-                .setColor(new Color(main.getConfig().getConfigValue("Red").getAsInt(), main.getConfig().getConfigValue("Blue").getAsInt(), main.getConfig().getConfigValue("Green").getAsInt()));
+                .setDescription("Use this link to see access the wiki hub which has lots more information on numerous different subjects\n" + main.getMainConfig().getConfigValue("wikiURL").getAsString())
+                .setColor(new Color(main.getMainConfig().getConfigValue("Red").getAsInt(), main.getMainConfig().getConfigValue("Blue").getAsInt(), main.getMainConfig().getConfigValue("Green").getAsInt()));
         main.getMessenger().sendEmbed(channel, embed.build(), 10);
         return CommandResult.success();
     }

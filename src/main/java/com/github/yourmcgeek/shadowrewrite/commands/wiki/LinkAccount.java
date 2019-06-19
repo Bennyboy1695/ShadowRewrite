@@ -19,8 +19,8 @@ public class LinkAccount {
     public CommandResult onExecute(Member member, TextChannel channel, Message message, String label, List<String> args, ShadowRewrite main) {
         EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("Linking Accounts")
-                .setDescription("Use this link to see how to link your accounts with the forums, access <#260579843710779392> and the voice channels\n" + main.getConfig().getConfigValue("linkingURL").getAsString())
-                .setColor(new Color(main.getConfig().getConfigValue("Red").getAsInt(), main.getConfig().getConfigValue("Blue").getAsInt(), main.getConfig().getConfigValue("Green").getAsInt()));
+                .setDescription("Use this link to see how to link your accounts with the forums, access <#260579843710779392> and the voice channels\n" + main.getMainConfig().getConfigValue("linkingURL").getAsString())
+                .setColor(new Color(main.getMainConfig().getConfigValue("Red").getAsInt(), main.getMainConfig().getConfigValue("Blue").getAsInt(), main.getMainConfig().getConfigValue("Green").getAsInt()));
         main.getMessenger().sendEmbed(channel, embed.build(), 10);
         return CommandResult.success();
     }

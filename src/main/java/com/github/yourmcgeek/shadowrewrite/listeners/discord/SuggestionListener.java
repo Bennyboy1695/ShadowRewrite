@@ -7,7 +7,6 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -44,7 +43,7 @@ public class SuggestionListener extends ListenerAdapter {
                     return;
 
                 event.getChannel().sendMessage(new EmbedBuilder()
-                        .setColor(new Color(main.getConfig().getConfigValue("Red").getAsInt(), main.getConfig().getConfigValue("Blue").getAsInt(), main.getConfig().getConfigValue("Green").getAsInt()))
+                        .setColor(new Color(main.getMainConfig().getConfigValue("Red").getAsInt(), main.getMainConfig().getConfigValue("Blue").getAsInt(), main.getMainConfig().getConfigValue("Green").getAsInt()))
                         .setDescription(sugg[1]
                                 .replaceAll("<tag>", event.getAuthor().getAsMention())
                                 .replaceAll("<prefix>", main.getPrefix())

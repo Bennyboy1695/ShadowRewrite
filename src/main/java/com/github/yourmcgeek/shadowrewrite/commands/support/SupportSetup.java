@@ -23,7 +23,7 @@ public class SupportSetup {
             return CommandResult.noPermission();
         } else {
             EmbedBuilder builder = new EmbedBuilder();
-            builder.setColor(new Color(main.getConfig().getConfigValue("Red").getAsInt(), main.getConfig().getConfigValue("Blue").getAsInt(), main.getConfig().getConfigValue("Green").getAsInt()));
+            builder.setColor(new Color(main.getMainConfig().getConfigValue("Red").getAsInt(), main.getMainConfig().getConfigValue("Blue").getAsInt(), main.getMainConfig().getConfigValue("Green").getAsInt()));
             builder.setDescription("To make a support ticket please type /support. Please remember to always include the name of the server you are needing support on. When you do this a dedicated channel will be created for your issue. Once this is done Staff will contact you to try and resolve your issue.\n" +
                     "\n" +
                     "Tickets are not to be used for small questions that can be easily answered for these please use the this channel. Anything that requires in-depth staff interaction warrants creating a ticket. DO NOT abuse our ticket system doing so will result in a mute, kick or ban from our Discord.");
@@ -32,7 +32,7 @@ public class SupportSetup {
             message2.pin().queue();
             channel.getManager().setTopic("Read the pinned message to learn how to get support!").queue();
             EmbedBuilder pmBuilder = new EmbedBuilder()
-                    .setColor(new Color(main.getConfig().getConfigValue("Red").getAsInt(), main.getConfig().getConfigValue("Blue").getAsInt(), main.getConfig().getConfigValue("Green").getAsInt()))
+                    .setColor(new Color(main.getMainConfig().getConfigValue("Red").getAsInt(), main.getMainConfig().getConfigValue("Blue").getAsInt(), main.getMainConfig().getConfigValue("Green").getAsInt()))
                     .addField("SupportId", channel.getId(), true)
                     .addField("SupportCategoryId", message.getCategory().getId(), true)
                     .addField("GuildID", String.valueOf(channel.getGuild().getIdLong()), true)
