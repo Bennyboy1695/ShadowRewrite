@@ -104,7 +104,7 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
                         if (event.getUser().getIdLong() == Long.valueOf(userId) || event.getMember().getRoles().stream().map(Role::getName).anyMatch(s -> s.equalsIgnoreCase("Owner") || s.equalsIgnoreCase("Staff") || s.equalsIgnoreCase("Developer"))) {
                             if (channel.getGuild().getPublicRole().hasPermission(channel, Permission.VIEW_CHANNEL)) {
                                 channel.getManager().putPermissionOverride(channel.getGuild().getMemberById(userId), 101440L, 0L).complete();
-                                channel.getManager().putPermissionOverride(channel.getGuild().getPublicRole(), null, Collections.singleton(Permission.VIEW_CHANNEL)).queue();
+                                channel.putPermissionOverride(channel.getGuild().getPublicRole()).setDeny(Permission.VIEW_CHANNEL).complete();
                                 channel.getGuild().getRoles().forEach(role -> {
                                     if (role.getName().equalsIgnoreCase("Owner") || role.getName().equalsIgnoreCase("Staff") || role.getName().equalsIgnoreCase("Developer")) {
                                         channel.putPermissionOverride(role).setAllow(Permission.VIEW_CHANNEL, Permission.MESSAGE_READ, Permission.MESSAGE_WRITE, Permission.MESSAGE_HISTORY).queue();
