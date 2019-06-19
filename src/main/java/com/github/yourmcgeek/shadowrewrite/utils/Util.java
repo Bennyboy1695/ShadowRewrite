@@ -1,7 +1,9 @@
 package com.github.yourmcgeek.shadowrewrite.utils;
 
 import com.github.yourmcgeek.shadowrewrite.ShadowRewrite;
-import org.json.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
@@ -14,6 +16,7 @@ import java.util.regex.Pattern;
 public class Util {
 
     private ShadowRewrite main;
+    private Gson gson;
 
     public Util(ShadowRewrite main) {
         this.main = main;
@@ -37,7 +40,7 @@ public class Util {
         return 0L;
     }
 
-    public static JSONObject isValidUsername(String username) {
+    public static JsonObject isValidUsername(String username) {
         int responseCode = 0;
         try {
             String url = "https://api.mojang.com/users/profiles/minecraft/" + username;
@@ -57,7 +60,7 @@ public class Util {
                 response.append(inputLine);
             }
             in.close();
-            return new JSONObject(response.toString());
+            return new JsonParser().parse(response.toString()).getAsJsonObject();
         } catch (Exception e) {
             e.printStackTrace();
         }
