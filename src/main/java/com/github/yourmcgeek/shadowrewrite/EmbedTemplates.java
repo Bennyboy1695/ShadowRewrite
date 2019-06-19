@@ -14,7 +14,8 @@ public enum EmbedTemplates {
     PRETTY_SUCCESSFULL(BASE.getEmbed().setColor(Color.CYAN)),
 
     CHANNEL_LOCKED(SUCCESS.getEmbed().setDescription("\uD83D\uDD12 Channel has been locked to just Staff and the Ticket Creator!")),
-    CHANNEL_UNLOCKED(SUCCESS.getEmbed().setDescription("\uD83D\uDD13 Channel has been unlocked, it is now back to default ticket perms!"));
+    CHANNEL_UNLOCKED(SUCCESS.getEmbed().setDescription("\uD83D\uDD13 Channel has been unlocked, it is now back to default ticket perms!")),
+    NO_REMINDS(SUCCESS.getEmbed().setDescription("You do not have any reminders active, add one before you attempt to remove one!"));
 
 
     private final EmbedBuilder embed;

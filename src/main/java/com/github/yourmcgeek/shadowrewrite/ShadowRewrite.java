@@ -1,10 +1,16 @@
 package com.github.yourmcgeek.shadowrewrite;
 
-import com.github.yourmcgeek.shadowrewrite.commands.support.*;
+import com.github.yourmcgeek.shadowrewrite.commands.EmbedCommand;
+import com.github.yourmcgeek.shadowrewrite.commands.support.LogChannelCommand;
+import com.github.yourmcgeek.shadowrewrite.commands.support.ServerCommand;
+import com.github.yourmcgeek.shadowrewrite.commands.support.SupportSetup;
+import com.github.yourmcgeek.shadowrewrite.commands.support.UsernameCommand;
 import com.github.yourmcgeek.shadowrewrite.commands.wiki.*;
-import com.github.yourmcgeek.shadowrewrite.listeners.*;
+import com.github.yourmcgeek.shadowrewrite.listeners.SuggestionListener;
+import com.github.yourmcgeek.shadowrewrite.listeners.SupportCategoryListener;
+import com.github.yourmcgeek.shadowrewrite.listeners.TicketChannelsReactionListener;
+import com.github.yourmcgeek.shadowrewrite.listeners.TicketCreationListener;
 import com.github.yourmcgeek.shadowrewrite.objects.configNew.ConfigNew;
-import com.github.yourmcgeek.shadowrewrite.storage.SQLManager;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import me.bhop.bjdautilities.Messenger;
@@ -30,19 +36,15 @@ import java.util.concurrent.Executors;
 
 public class ShadowRewrite {
 
-    public JsonArray confirmMessages = new JsonArray();
-
     private Path logDirectory;
     private Path attachmentDir;
     private Messenger messenger;
-    private CommandHandler commandHandler;
     private Path directory;
     private Path configDirectory;
     private ShadowRewrite bot = this;
     private ConfigNew config;
     private Logger logger;
     private JDA jda;
-    private SQLManager sqlManager;
 
     public void init(Path directory, Path configDirectory) throws Exception {
         this.directory = directory;
@@ -79,7 +81,6 @@ public class ShadowRewrite {
             CommandHandler handler = new CommandHandler.Builder(jda).setGenerateHelp(true).addCustomParameter(this).setEntriesPerHelpPage(6).guildIndependent().setCommandLifespan(10).setResponseLifespan(10).setPrefix(getPrefix()).build();
 
             handler.register(new SupportSetup());
-            handler.register(new SupportCommand());
             handler.register(new LogChannelCommand());
             handler.register(new LinkAccount());
             handler.register(new CrashReport());
@@ -91,30 +92,14 @@ public class ShadowRewrite {
             handler.register(new Crate());
             handler.register(new UsernameCommand());
             handler.register(new ServerCommand());
-//            handler.register(new LMGTFYCommand());
-//            handler.register(new Remind());
-//            handler.register(new Add());
-//            handler.register(new Remove());
-//            handler.register(new com.github.yourmcgeek.shadowrewrite.commands.remind.List());
-//
-//            handler.getCommand(Remind.class).ifPresent(cmd -> cmd.addCustomParam(handler));
-
+            handler.register(new EmbedCommand());
 
             logger.info("Registering Listeners...");
-            this.jda.addEventListener(new CustomChatCommandListener(this));
-            this.jda.addEventListener(new PrivateMessageListenerNew(this));
+            this.jda.addEventListener(new TicketCreationListener(this));
             this.jda.addEventListener(new SupportCategoryListener(this));
             this.jda.addEventListener(new TicketChannelsReactionListener(this));
             this.jda.addEventListener(new SuggestionListener(this));
-            this.jda.addEventListener(new TagListener(this));
 
-            logger.info("Attempting Connection to Database");
-            try {
-                this.sqlManager = new SQLManager(config.getConfigValue("hostname").getAsString(), config.getConfigValue("port").getAsInt(), config.getConfigValue("databaseName").getAsString(), config.getConfigValue("username").getAsString(), config.getConfigValue("password").getAsString());
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.exit(1);
-            }
         } catch (LoginException e) {
             e.printStackTrace();
         }
@@ -140,7 +125,7 @@ public class ShadowRewrite {
         logger.info("Everything Loaded Successfully | Ready to accept input!");
     }
 
-    public List<String[]> getTips(){
+    public List<String[]> getTips() {
         JsonArray tips = config.getConfigValue("tips");
         List<String[]> tipArray = new ArrayList<>();
         for (Object obj : tips) {
@@ -188,7 +173,6 @@ public class ShadowRewrite {
         return config;
     }
 
-
     public String getPrefix() {
         return config.getConfigValue("commandPrefix").getAsString();
     }
@@ -213,12 +197,8 @@ public class ShadowRewrite {
         return attachmentDir;
     }
 
-    public SQLManager getSqlManager() {
-        return sqlManager;
-    }
-
     private final class ThreadedEventManager extends InterfacedEventManager {
-        private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()+1);
+        private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() + 1);
 
         @Override
         public void handle(Event e) {
