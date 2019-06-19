@@ -100,41 +100,27 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
                     } else if (message.getAuthor().isBot() && event.getReactionEmote().getName().equals("\uD83D\uDD12")) {
                         if (event.getUser().isBot())
                             return;
-                        channel.getManager().putPermissionOverride(event.getJDA().getGuildById(main.getGuildID()).getMemberById(Long.valueOf(userId)), 101440, 0L).complete();
-                        Role publicRole = channel.getGuild().getPublicRole();
-                        channel.putPermissionOverride(publicRole).setDeny(Permission.VIEW_CHANNEL).queue();
-                        channel.getGuild().getRoles().forEach(role -> {
-                            if (role.getName().equalsIgnoreCase("Staff") || role.getName().equalsIgnoreCase("Developer")) {
-                                if (role.isPublicRole())
-                                    return;
-                                channel.putPermissionOverride(role).setAllow(Permission.VIEW_CHANNEL, Permission.MESSAGE_READ, Permission.MESSAGE_WRITE, Permission.MESSAGE_HISTORY).queue();
-                            }
-                        });
-                        main.getMessenger().sendEmbed(channel, EmbedTemplates.CHANNEL_LOCKED.getBuilt());
-                        main.getLogger().info("Locked channel: " + channel.getName());
+                        if (event.getUser().getIdLong() == Long.valueOf(userId) || event.getMember().getRoles().stream().map(Role::getName).anyMatch(s -> s.equalsIgnoreCase("Owner") || s.equalsIgnoreCase("Staff") || s.equalsIgnoreCase("Developer"))) {
+                            channel.getManager().putPermissionOverride(channel.getGuild().getMemberById(userId), 101440L, 0L).complete();
+                            channel.getGuild().getRoles().stream().forEach(role -> {
+                                if (role.getName().equalsIgnoreCase("Owner") || role.getName().equalsIgnoreCase("Staff") || role.getName().equalsIgnoreCase("Developer")) {
+                                    channel.putPermissionOverride(role).setAllow(Permission.VIEW_CHANNEL, Permission.MESSAGE_READ, Permission.MESSAGE_WRITE, Permission.MESSAGE_HISTORY).queue();
+                                }
+                            });
+                            main.getMessenger().sendEmbed(channel, EmbedTemplates.CHANNEL_LOCKED.getBuilt());
+                            main.getLogger().info("Locked channel: " + channel.getName());
+                        } else {
+                            main.getMessenger().sendEmbed(channel, EmbedTemplates.ERROR.getEmbed().setDescription(event.getMember().getAsMention() + " You do not have the ability to lock this channel!").build(), 10);
+                        }
+                    } else if (message.getAuthor().isBot() && event.getReactionEmote().getName().equals("\uD83D\uDD13")) {
+                        if (event.getUser().getIdLong() == Long.valueOf(userId) || event.getMember().getRoles().stream().map(Role::getName).anyMatch(s -> s.equalsIgnoreCase("Owner") || s.equalsIgnoreCase("Staff") || s.equalsIgnoreCase("Developer"))) {
+                            channel.getManager().sync().queue();
+                            main.getMessenger().sendEmbed(channel, EmbedTemplates.CHANNEL_UNLOCKED.getBuilt());
+                            main.getLogger().info("Fully unlocked channel: " + channel.getName());
+                        } else {
+                            main.getMessenger().sendEmbed(channel, EmbedTemplates.ERROR.getEmbed().setDescription(event.getMember().getAsMention() + " You do not have the ability to unlock this channel!").build(), 10);
+                        }
                     }
-                }
-            }
-        }
-    }
-
-    @Override
-    public void onMessageReactionRemove(MessageReactionRemoveEvent event) {
-        if (event.isFromType(ChannelType.TEXT)) {
-            TextChannel channel = (TextChannel) event.getChannel();
-            if (channel.getParent().getIdLong() == main.getMainConfig().getConfigValue("supportCategoryId").getAsLong()) {
-                if (event.getReaction().isSelf())
-                    return;
-                String cTopicFull = channel.getTopic();
-                String[] cTopicSplit = cTopicFull.split(" "); // https://regex101.com/r/r1zvJ6/1
-                String supportMsgId = cTopicSplit[8];
-                Message message = event.getChannel().getMessageById(supportMsgId).complete();
-                if (message.getAuthor().isBot() && event.getReactionEmote().getName().equals("\uD83D\uDD12")) {
-                    if (event.getUser().isBot())
-                        return;
-                    channel.getManager().sync().complete();
-                    main.getMessenger().sendEmbed(channel, EmbedTemplates.CHANNEL_UNLOCKED.getBuilt(), 10);
-                    main.getLogger().info("Unlocked channel: " + channel.getName());
                 }
             }
         }
