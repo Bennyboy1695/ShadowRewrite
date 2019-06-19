@@ -112,13 +112,15 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
                                 });
                                 main.getMessenger().sendEmbed(channel, EmbedTemplates.CHANNEL_LOCKED.getBuilt());
                                 main.getLogger().info("Locked channel: " + channel.getName());
-                                event.getReaction().removeReaction(event.getUser()).queue();
+                                if (event.getReaction().getUsers().complete().contains(event.getUser()))
+                                    event.getReaction().removeReaction(event.getUser()).queue();
                             } else {
                                 if (event.getUser().getIdLong() == Long.valueOf(userId) || event.getMember().getRoles().stream().map(Role::getName).anyMatch(s -> s.equalsIgnoreCase("Owner") || s.equalsIgnoreCase("Staff") || s.equalsIgnoreCase("Developer"))) {
                                     channel.getManager().sync().queue();
                                     main.getMessenger().sendEmbed(channel, EmbedTemplates.CHANNEL_UNLOCKED.getBuilt());
                                     main.getLogger().info("Fully unlocked channel: " + channel.getName());
-                                    event.getReaction().removeReaction(event.getUser()).queue();
+                                    if (event.getReaction().getUsers().complete().contains(event.getUser()))
+                                        event.getReaction().removeReaction(event.getUser()).queue();
                                 } else {
                                     main.getMessenger().sendEmbed(channel, EmbedTemplates.ERROR.getEmbed().setDescription(event.getMember().getAsMention() + " You do not have the ability to unlock this channel!").build(), 10);
                                 }
