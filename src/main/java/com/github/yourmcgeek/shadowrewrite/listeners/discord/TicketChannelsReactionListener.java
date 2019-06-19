@@ -16,6 +16,7 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.requests.RestAction;
 
 import java.awt.*;
+import java.util.Collections;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -102,6 +103,7 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
                             return;
                         if (event.getUser().getIdLong() == Long.valueOf(userId) || event.getMember().getRoles().stream().map(Role::getName).anyMatch(s -> s.equalsIgnoreCase("Owner") || s.equalsIgnoreCase("Staff") || s.equalsIgnoreCase("Developer"))) {
                             channel.getManager().putPermissionOverride(channel.getGuild().getMemberById(userId), 101440L, 0L).complete();
+                            channel.getManager().putPermissionOverride(channel.getGuild().getPublicRole(), null, Collections.singleton(Permission.VIEW_CHANNEL)).queue();
                             channel.getGuild().getRoles().stream().forEach(role -> {
                                 if (role.getName().equalsIgnoreCase("Owner") || role.getName().equalsIgnoreCase("Staff") || role.getName().equalsIgnoreCase("Developer")) {
                                     channel.putPermissionOverride(role).setAllow(Permission.VIEW_CHANNEL, Permission.MESSAGE_READ, Permission.MESSAGE_WRITE, Permission.MESSAGE_HISTORY).queue();
