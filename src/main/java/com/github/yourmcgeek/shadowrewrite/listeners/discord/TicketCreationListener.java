@@ -64,7 +64,7 @@ public class TicketCreationListener extends ListenerAdapter {
                 .setFooter("If you are finished, please click \u2705. All staff and developers can close the ticket also.", event.getJDA().getSelfUser().getEffectiveAvatarUrl())
                 .setColor(new Color(main.getMainConfig().getConfigValue("Red").getAsInt(), main.getMainConfig().getConfigValue("Blue").getAsInt(), main.getMainConfig().getConfigValue("Green").getAsInt()));
 
-        ReactionMenu supportMessage = new ReactionMenu.Builder(event.getJDA()).setStartingReactions("\u2705", "\uD83D\uDD12", "\uD83D\uDD13").setEmbed(message.build()).buildAndDisplay(supportChannel);
+        ReactionMenu supportMessage = new ReactionMenu.Builder(event.getJDA()).setStartingReactions("\u2705", "\uD83D\uDD12").setEmbed(message.build()).buildAndDisplay(supportChannel);
         supportChannel.getManager().setTopic("Creation date: " + supportChannel.getCreationTime().format(dateFormat) + " Authors ID: " + event.getAuthor().getIdLong() + " Message ID: " + supportMessage.getMessage().getIdLong() + " Channel ID: " + supportChannel.getIdLong()).queue();
 
         for (Message.Attachment attachment : event.getMessage().getAttachments()) {
