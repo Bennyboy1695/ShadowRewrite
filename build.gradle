@@ -29,6 +29,10 @@ dependencies {
     compile 'net.dv8tion:JDA:3.8.3_462'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
     compile 'me.bhop:bJdaUtilities:1.4.9'
+    
+//   Redis
+    compile 'redis.clients:jedis:3.0.0'
+
 //   Google
     implementation group: 'com.google.inject', name: 'guice', version: '4.1.0'
     implementation group: 'com.google.guava', name: 'guava', version: '24.0-jre'

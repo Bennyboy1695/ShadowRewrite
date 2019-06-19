@@ -1,4 +1,4 @@
-package com.github.yourmcgeek.shadowrewrite.listeners;
+package com.github.yourmcgeek.shadowrewrite.listeners.discord;
 
 import com.github.yourmcgeek.shadowrewrite.ShadowRewrite;
 import net.dv8tion.jda.core.EmbedBuilder;

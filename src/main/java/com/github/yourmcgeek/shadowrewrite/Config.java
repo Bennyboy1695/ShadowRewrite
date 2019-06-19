@@ -1,6 +1,5 @@
-package com.github.yourmcgeek.shadowrewrite.objects.configNew;
+package com.github.yourmcgeek.shadowrewrite;
 
-import com.github.yourmcgeek.shadowrewrite.ShadowRewrite;
 import com.google.gson.*;
 
 import java.io.BufferedReader;
@@ -10,14 +9,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
 
-public class ConfigNew {
+public class Config {
 
     private ShadowRewrite main;
     private Path configDirectory;
     private JsonElement conf;
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    public ConfigNew(ShadowRewrite main, Path configDirectory) {
+    public Config(ShadowRewrite main, Path configDirectory) {
         this.main = main;
         this.configDirectory = configDirectory;
         Path config = configDirectory.resolve("conf.json");
@@ -72,7 +71,15 @@ public class ConfigNew {
         jo.addProperty("supportCategoryId", "add_me");
         jo.addProperty("guildID", "add_me");
         jo.addProperty("logChannelId", "add_me");
-         jo.addProperty("TicketCreationChannelID", "add_me");
+        jo.addProperty("TicketCreationChannelID", "add_me");
+        JsonObject redisSettings = new JsonObject();
+        redisSettings.addProperty("hostname", "localhost");
+        redisSettings.addProperty("port", 6379);
+        redisSettings.addProperty("database", 0);
+        redisSettings.addProperty("password", "password");
+        redisSettings.addProperty("poolname", "master");
+        redisSettings.add("sentinels", new JsonArray());
+        jo.add("redis", redisSettings);
         jo.addProperty("Red", 0);
         jo.addProperty("Blue", 0);
         jo.addProperty("Green", 0);
@@ -111,14 +118,24 @@ public class ConfigNew {
         return (count == writeDefaults().size());
      }
 
-     public <T extends JsonElement> T getConfigValue(String key) {
-        JsonObject object = (JsonObject) conf;
-        if (object.get(key).isJsonObject()) {
-            return (T) object.get(key).getAsJsonObject();
+    public <T extends JsonElement> T getConfigValue(String... keys) {
+        JsonObject parent = (JsonObject) conf;
+        JsonElement temp = parent.get(keys[0]);
+        if (temp.isJsonArray())
+            return (T) temp.getAsJsonArray();
+        JsonObject object = temp.getAsJsonObject();
+        try {
+            for (int i = 1; i < keys.length; i++) {
+                temp = object.get(keys[i]);
+                if (temp.isJsonArray())
+                    return (T) temp.getAsJsonArray();
+                if (temp.isJsonPrimitive())
+                    return (T) temp.getAsJsonPrimitive();
+                object = temp.getAsJsonObject();
+            }
+        } catch (NullPointerException e) {
+            return (T) object;
         }
-        if (object.get(key).isJsonArray()) {
-            return (T) object.get(key).getAsJsonArray();
-        }
-        return (T) object.get(key);
-     }
+        return (T) object;
+    }
 }

@@ -6,11 +6,12 @@ import com.github.yourmcgeek.shadowrewrite.commands.support.ServerCommand;
 import com.github.yourmcgeek.shadowrewrite.commands.support.SupportSetup;
 import com.github.yourmcgeek.shadowrewrite.commands.support.UsernameCommand;
 import com.github.yourmcgeek.shadowrewrite.commands.wiki.*;
-import com.github.yourmcgeek.shadowrewrite.listeners.SuggestionListener;
-import com.github.yourmcgeek.shadowrewrite.listeners.SupportCategoryListener;
-import com.github.yourmcgeek.shadowrewrite.listeners.TicketChannelsReactionListener;
-import com.github.yourmcgeek.shadowrewrite.listeners.TicketCreationListener;
-import com.github.yourmcgeek.shadowrewrite.objects.configNew.ConfigNew;
+import com.github.yourmcgeek.shadowrewrite.listeners.discord.SuggestionListener;
+import com.github.yourmcgeek.shadowrewrite.listeners.discord.SupportCategoryListener;
+import com.github.yourmcgeek.shadowrewrite.listeners.discord.TicketChannelsReactionListener;
+import com.github.yourmcgeek.shadowrewrite.listeners.discord.TicketCreationListener;
+import com.github.yourmcgeek.shadowrewrite.listeners.redis.RedisClient;
+import com.github.yourmcgeek.shadowrewrite.listeners.redis.TicketsListener;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import me.bhop.bjdautilities.Messenger;
@@ -42,9 +43,10 @@ public class ShadowRewrite {
     private Path directory;
     private Path configDirectory;
     private ShadowRewrite bot = this;
-    private ConfigNew config;
+    private Config config;
     private Logger logger;
     private JDA jda;
+    private RedisClient redisClient;
 
     public void init(Path directory, Path configDirectory) throws Exception {
         this.directory = directory;
@@ -56,6 +58,11 @@ public class ShadowRewrite {
             initConfig(configDirectory);
         } catch (Exception e) {
             throw new RuntimeException("Failed to initialize config!", e);
+        }
+
+        redisClient = new RedisClient(this);
+        if (redisClient.load()) {
+            new TicketsListener(this).register();
         }
 
         try {
@@ -159,7 +166,7 @@ public class ShadowRewrite {
 
     public void initConfig(Path configDirectory) {
         try {
-            config = new ConfigNew(this, configDirectory);
+            config = new Config(this, configDirectory);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -169,7 +176,7 @@ public class ShadowRewrite {
         return this.jda;
     }
 
-    public ConfigNew getConfig() {
+    public Config getConfig() {
         return config;
     }
 
@@ -179,6 +186,10 @@ public class ShadowRewrite {
 
     public Logger getLogger() {
         return logger;
+    }
+
+    public RedisClient getClient() {
+        return redisClient;
     }
 
     public Path getLogDirectory() {

@@ -1,4 +1,4 @@
-package com.github.yourmcgeek.shadowrewrite.listeners;
+package com.github.yourmcgeek.shadowrewrite.listeners.discord;
 
 import com.github.yourmcgeek.shadowrewrite.EmbedTemplates;
 import com.github.yourmcgeek.shadowrewrite.ShadowRewrite;
