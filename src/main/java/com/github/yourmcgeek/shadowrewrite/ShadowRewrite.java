@@ -1,10 +1,7 @@
 package com.github.yourmcgeek.shadowrewrite;
 
 import com.github.yourmcgeek.shadowrewrite.commands.EmbedCommand;
-import com.github.yourmcgeek.shadowrewrite.commands.support.LogChannelCommand;
-import com.github.yourmcgeek.shadowrewrite.commands.support.ServerCommand;
-import com.github.yourmcgeek.shadowrewrite.commands.support.SupportSetup;
-import com.github.yourmcgeek.shadowrewrite.commands.support.UsernameCommand;
+import com.github.yourmcgeek.shadowrewrite.commands.support.*;
 import com.github.yourmcgeek.shadowrewrite.commands.wiki.*;
 import com.github.yourmcgeek.shadowrewrite.listeners.discord.SuggestionListener;
 import com.github.yourmcgeek.shadowrewrite.listeners.discord.SupportCategoryListener;
@@ -47,6 +44,7 @@ public class ShadowRewrite {
     private Logger logger;
     private JDA jda;
     private RedisClient redisClient;
+    private boolean ticketsEnabled = true;
 
     public void init(Path directory, Path configDirectory) throws Exception {
         this.directory = directory;
@@ -100,6 +98,7 @@ public class ShadowRewrite {
             handler.register(new UsernameCommand());
             handler.register(new ServerCommand());
             handler.register(new EmbedCommand());
+            handler.register(new TicketToggleCommand());
 
             logger.info("Registering Listeners...");
             this.jda.addEventListener(new TicketCreationListener(this));
@@ -187,6 +186,14 @@ public class ShadowRewrite {
 
     public Logger getLogger() {
         return logger;
+    }
+
+    public boolean isTicketsEnabled() {
+        return ticketsEnabled;
+    }
+
+    public void setTicketsEnabled(boolean ticketsEnabled) {
+        this.ticketsEnabled = ticketsEnabled;
     }
 
     public RedisClient getClient() {
